@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://cwnmsodul5i0w"]
+
+[ext_resource type="Texture2D" uid="uid://dd00nx1kl8a0d" path="res://project assets/Assets only for a demo/Characters/Female Lead/Angry Face.png" id="1_o8wxw"]
+[ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="2_0vf5t"]
+[ext_resource type="Texture2D" uid="uid://dsbbhf7p20k44" path="res://project assets/Assets only for a demo/Characters/Female Lead/Sad Opened Eyes.png" id="3_jj2ce"]
+[ext_resource type="Texture2D" uid="uid://be10eqjmw22u5" path="res://project assets/Assets only for a demo/Characters/Female Lead/Smile Closed Eyes.png" id="4_2tjhk"]
+[ext_resource type="Texture2D" uid="uid://y0ndo3iu2b0h" path="res://project assets/Assets only for a demo/Characters/Female Lead/Smile Open Eyes.png" id="5_5pftj"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_o8wxw")
+}],
+"loop": true,
+"name": &"AngryFace",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_0vf5t")
+}],
+"loop": true,
+"name": &"MoreSerious",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_jj2ce")
+}],
+"loop": true,
+"name": &"SadOpened",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2tjhk")
+}],
+"loop": true,
+"name": &"SmilingClosed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_5pftj")
+}],
+"loop": true,
+"name": &"SmilingOpened",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_5pftj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

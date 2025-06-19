@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://t4mc0i620wdx"]
+
+[ext_resource type="Script" uid="uid://cljlah6x6hfcw" path="res://character_sprite.gd" id="1_pjt0s"]
+[ext_resource type="SpriteFrames" uid="uid://3j0modncvljn" path="res://Protoganist.tres" id="2_pjt0s"]
+[ext_resource type="SpriteFrames" uid="uid://cwnmsodul5i0w" path="res://Kami.tres" id="2_wa5vi"]
+[ext_resource type="SpriteFrames" uid="uid://dob7xr3c23vof" path="res://fujiwara.tres" id="4_wfnr8"]
+
+[node name="CharacterSprite" type="Node2D"]
+script = ExtResource("1_pjt0s")
+
+[node name="protoganist" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_pjt0s")
+animation = &"idle"
+
+[node name="kami" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(757, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_wa5vi")
+animation = &"SmilingOpened"
+
+[node name="Fujiwara" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(757, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("4_wfnr8")
+animation = &"UnamusedBuddy"

@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=3 uid="uid://xu5ilh4owv26"]
+
+[ext_resource type="Theme" uid="uid://cm5obfroyilew" path="res://DialogueTheme.tres" id="1_njptv"]
+[ext_resource type="Script" uid="uid://ctc4erpgmvfuh" path="res://dialogue_ui.gd" id="2_2x5cq"]
+[ext_resource type="PackedScene" uid="uid://dymahw1n8f05q" path="res://PlayerChoice.tscn" id="3_v6amk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njptv"]
+bg_color = Color(0.0646965, 0.0646965, 0.0646965, 0.615686)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.792157, 0.419608, 0.0941176, 1)
+
+[node name="DialogueUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_njptv")
+script = ExtResource("2_2x5cq")
+
+[node name="TextBox" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DialogeLines" type="RichTextLabel" parent="TextBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+theme_override_font_sizes/mono_font_size = 25
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_font_size = 25
+bbcode_enabled = true
+scroll_following = true
+
+[node name="Choiceslist" type="VBoxContainer" parent="TextBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" parent="TextBox/Choiceslist" instance=ExtResource("3_v6amk")]
+visible = false
+layout_mode = 2
+
+[node name="SpeakerBox" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -199.0
+offset_right = 200.0
+offset_bottom = -149.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_njptv")
+
+[node name="SpeakerName" type="Label" parent="SpeakerBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Control"]
+visible = false
+position = Vector2(-30, -19)
+scale = Vector2(0.8, 0.8)
+polygon = PackedVector2Array(0, 0, 40, 20, 0, 40)

@@ -1,0 +1,329 @@
+[
+  {
+	"speaker": "Narration",
+	"text": "[i]The new school semester starts tomorrow. You're feeling anxious because you spent most of the summer break preparing for your final semester of high school before college. Your parents have been nagging you to study more often than you did before.[/i]"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]What direction should your life go in? You turn on your computer to research the most lucrative jobs for after you finish school and college in about five years. They are all lined up neatly and prepared by your school's careers adviser and your parents. None of those jobs seem to be your cup of tea.[/i]"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]Just as you are pondering the biggest decision of your life, you receive a message:[/i]"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]It's from your online friend Kami.[/i]"
+  },
+  {
+	"speaker": "kami",
+	"text": "Hey, I see you're online. I… found something interesting, it's a server and a seemingly a good one at that. It says its more realistic and gorier than the official licensed servers and maybe other we visited! That sounds like something you, me and Fujiwara should check out…today. Reply quickly — I want to play before Fujiwara uses the 'I'm tired and I want to go to sleep' excuse.",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "Narration",
+	"text": "Kami: Age 17. She's an online friend of yours. You've never met her in person, and you don't even know her real name. She is active on the internet and enjoys exploring the net, even if it isnt safe to do."
+  },
+  {
+	"choices": [
+	  {
+		"text": "OK, I'll message him.",
+		"goto": "choice_1"
+	  },
+	  {
+		"text": "I'm sure it's not always an excuse.",
+		"goto": "choice_2"
+	  },
+	  {
+		"text": "I'm tired and I want to go to sleep.",
+		"goto": "choice_3"
+	  }
+	]
+  },
+  {
+	"anchor": "choice_1"
+  },
+  {
+	"speaker": "kami",
+	"text": "Great! Tell him that reading from the description, its looking to be great and that he absolutely needs to experience it with us. It's our last day before the school semester starts — we should end it with a bang!",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "Narration",
+	"text": "You decided to message Fujiwara with extra oomph so that he won't miss out."
+  },
+  {
+	"goto": "continue_story"
+  },
+  {
+	"anchor": "choice_2"
+  },
+  {
+	"speaker": "kami",
+	"text": "Well, if he's that tired, he won't answer, but it can't hurt to call him just to be sure. Come on, you know it works. Sometimes you're not in the mood, so you make up an excuse to be alone. I found something amazing — make sure he doesn't miss it: message him first, let's see what he's up to!",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "Narration",
+	"text": "You decided to message Fujiwara."
+  },
+  {
+	"goto": "continue_story"
+  },
+  {
+	"anchor": "choice_3"
+  },
+  {
+	"speaker": "kami",
+	"text": "Very funny! That was totally not the most predictable joke ever. You need to work on your sense of humour.",
+	"animation": "AngryFace"
+  },
+  {
+	"speaker": "Narration",
+	"text": "Kami sends a bunch of emojis. It seems she's describing your sense of humour as unfunny."
+  },
+  {
+	"speaker": "kami",
+	"text": "Anyway, I'll message him right myself.",
+	"animation": "AngryFace"
+  },
+  {
+	"goto": "continue_story"
+  },
+  {
+	"anchor": "continue_story"
+  },
+  {
+	"speaker": "Narration",
+	"text": "Fujiwara logs on and starts typing in your private group."
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Hey guys, I'm actually in the mood for some simple demon slaying. My boss had mercy on me today and decided that I don't need to work hard because he values education. He said I should prepare for my final year of school, which starts tomorrow. So… I'll just spend the time with you guys.",
+	"animation": "SmilingClosed",
+	"replace_character": "kami"
+  },
+  {
+	"speaker": "Narration",
+	"text": "Fujiwara: Age 17. He's your good buddy from the first year of high school. He's responsible and hard-working and makes the best of his situation with his sick mother."
+  },
+{
+	"speaker": "kami",	
+	"text": "You made a good decision to join us. However, please take school seriously at some point, preferably in the first week, k?",
+	"animation": "SmilingOpened",
+	"replace_character": "protoganist"
+  },
+{
+	"speaker": "fujiwara",
+	"text": "Of course, but it would be difficult given my responsibilities. What can you do? I'll just keep working hard.",
+	"animation": "SmilingOpened"
+  },
+{
+	"speaker": "kami",
+	"text": "We are rooting for you! BTW, here the link.",
+	"animation": "SmilingOpened"
+  },
+{
+	"speaker": "Narration",
+	"text": "[i]Kami sent a link to the server she mentioned. The game Digital Real Story is massively popular around the world, with players joining from all over to play, meet new people, and of course, slay demons! This game is especially popular with Japan's youth. It's racing towards a player base of 1 billion."
+  },
+{
+	"speaker": "fujiwara",
+	"text": "I never really understood why we play the illegal servers of this game when the official ones are exciting enough. I didn't even finish the main story, let alone the new content added in the last year. Just saying’.",
+	"animation": "UnamusedBuddy"
+  },
+{
+	"speaker": "kami",
+	"text": "I've played through most of it; it's boring and safe. That's the best we can expect from 5 Revolution Studios nowadays. Ever since governments around the world started criticising this game for utilising morally questionable tactics to make players as addicted as possible, the company has tried so hard to rebrand itself as a safe, non-violent or addictive game, with restricting how much you can play a day, removing ‘controversial’ stuff, which is just blood or skeletons. They are just removing anything exciting from the game so that the government wont have many points to critize. It really pisses me off.",
+	"animation": "MoreSerious"
+  },
+{
+	"speaker": "kami",
+	"text": "[i]Kami proceeds to rant about how the game has become soft over time…",
+	"animation": "AngryFace"
+  },
+{
+	"speaker": "fujiwara",
+	"text": "Why wouldn't they play it safe? I would do the same. Having multiple governments utilise anything, no matter how small, against you would make me try to counter that by doing the same thing as 5 Revolution Studios. Dont forget, they have about 42.000 employees for that game only. Thats a lot of people who rely on this game being successful for their financial safety.",
+	"animation": "UnamusedBuddy"
+  },
+{
+	"speaker": "kami",
+	"text": "Wow! After the player base protested and fend off a regulation that would destroy their privacy, where everyone has to show their ID before playing, the game studio has decided to reward its players….by making the gaming experience worse. They are also as important as the employees or not? Why should they get the short end of the stick?",
+	"animation": "AngryFace"
+  },
+{
+	"speaker": "fujiwara",
+	"text": " I don't see anyone complaining about the 'safe' experience that the game is trying to offer recently. Only you, some content creators, and a bunch of other people online, who are frankly irrelevant. The game is pretty much the same for me; not much has changed since the hidden rebranding. And on top of that, hardworking employees have a steady income. Everyone wins, right?",
+	"animation": "UnamusedBuddy"
+  },
+{
+	"speaker": "kami",
+	"text": "Of course they don't complain; they're too ignorant to see how the company is going behind their backs. They don’t even pay their employees THAT good, you think the company cares that much about employees? It’s about the money.",
+	"animation": "AngryFace"
+  },
+{
+	"speaker": "fujiwara",
+	"text": "Yup, i mean, that’s the point of a company. They still get paid well. Players enjoy a good game. Company makes very good money from the game. I say that’s good stuff, everyone wins. Didn’t you say 5 Revolution Studios is the best video game studio?",
+	"animation": "UnamusedBuddy"
+  },
+{
+	"speaker": "kami",
+	"text": "Yeah, but that does not mean they are perfect. Ill link you a video you can watch later critising them and their practices.",
+	"animation": "AngryFace"
+  },
+{
+	"speaker": "Narration",
+	"text": "[i]You decide to chime in.",
+  },
+{
+  "choices": [
+	{
+	  "text": "Guys, could we not talk about this again?",
+	  "goto": "choice_1_1"
+	},
+	{
+	  "text": "I really don't think it's that big of a deal.", 
+	  "goto": "choice_2_2"
+	},
+	{
+	  "text": "We should strive for companies to be as consumer friendly as possible.", 
+	  "goto": "choice_3_3"
+	}
+  ],
+  "replace_character": "fujiwara",
+  "new_character": "protoganist",
+  "animation": "Angry"
+},
+ {
+	"anchor": "choice_1_1"
+  },
+  {
+	"speaker": "kami",
+	"text": "Maybe we should! You shouldn't treat this lightly. It's a big issue!",
+	"animation": "MoreSerious",
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Nah, let's do what we wanted to do. Let's all log on to that server.",
+	"animation": "SmilingOpened",
+	"replace_character":"protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": "Sigh, I suppose so. We'll talk about this later though — it's serious stuff!",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]Kami sends a bunch of emojis describing her furious state. Everyone prepares to join the server"
+	},
+	{
+	"goto": "continue_story_1"
+  },
+{
+	"anchor": "choice_2_2"
+  },
+  {
+	"speaker": "kami",
+	"text": "There's no way you think it's not a big deal. It's the biggest thing ever, guys! How can you not see it? Microtransactions, Subscriptions, DLC, that all started recently, they just trying to get as much money as possible by delivering only a mid game experience!",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "I don't really care. Are we not going to an illegal server where modders have as much freedom as possible anyway? Can't people just do that if they want to play something more exciting? Its free, too.",
+	"animation": "SmilingOpened",
+	"replace_character":"protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": "Well, you do have to homebrew your VR set, though. I don't think people even know you can do that, so how are they supposed to know?",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "By searching online. You literally sent me a link back then to a website with a guide — anyone can find it. So, if people want to, they can get the experience they want. But these sites aren't very popular. Why? Because people don't really care. So, it's not a big deal. If people are not ok with something, they’ll do something about it.",
+	"animation": "SmilingOpened"
+  },
+  {
+	"speaker": "kami",
+	"text": "Not always true, but whatever. Should we go into the server?",
+	"animation": "SadOpened"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Yes, let's go! Don't forget that if you ask people on that server and they agree with you, it doesn't prove your point.",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "kami",
+	"text": "Yeah, yeah",
+	"animation": "SadOpened"
+  },
+  {
+	"speaker": "protoganist",
+	"text": "[i]Fujiwara caught Kami red-handed. He knew she would have asked people to support her argument. Regardless, everyone prepared to hop into the server.",
+	"animation": "FourthWall",
+	"replace_character":"kami"
+  },
+{
+	"goto": "continue_story_1"
+  },
+{
+	"anchor": "choice_3_3"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Come on, you can’t expect the game studio to look out for small people like that. If they really don’t like the direction, they will just leave. Leave it to people to broadcast their opinions.",
+	"animation": "DisinteresedBuddy",
+	"replace_character":"protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": "Thats now how it usually works, so i think companies should take responsibility and try to not utilise people’s ignorance for monetary benefit!",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "I don’t think a world like that could insist. We humans like to be efficient and it’s darn efficient to take advantage of people’s weaknesses.",
+	"animation": "DisinterestedBuddy"
+  },
+  {
+	"speaker": "kami",
+	"text": "It’s the easy thing to do. You can be successful without doing that.",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Not going to argue that. For most people though, it’s the only way to get ahead. Not everyone is born equal, so we have to offset our weaknesses by…using someone else’s weaknesses against them, to a certain extent. Oh, should we join the server now? I'm in the mood slaying demons, not arguing.",
+	"animation": "DisinterestedBuddy"
+  },
+  {
+	"speaker": "kami",
+	"text": "All right all right, join my group and let's enjoy our last day. Im going to back this topic though the next time we play, got it?",
+	"animation": "MoreSerious"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Mmmmm-No. Are you ready,Protagonist?",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "protoganist",
+	"text": "[i]You send a thumbs-up emoji. Everyone started joining the server",
+	"animation": "FourthWall",
+	"replace_character":"kami"
+  },
+{
+	"goto": "continue_story_1"
+  },
+{
+	"anchor": "continue_story_1"
+  },
+  {
+	"speaker": "protoganist",
+	"text": "[i]To join, you got to put your VR headset on. You and your friends have a VR headset with Homebrew installed, which allows you to join unlicensed servers. According to Kami, the homebrew scene is still in its infancy.",
+	"animation": "idle",
+	"show_only": "protoganist"
+ }
+  ]

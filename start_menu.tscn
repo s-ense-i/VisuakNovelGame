@@ -1,0 +1,157 @@
+[gd_scene load_steps=15 format=3 uid="uid://cygy41joryndn"]
+
+[ext_resource type="Script" uid="uid://bfvqq15bytd5c" path="res://new_game.gd" id="2_ia0g5"]
+[ext_resource type="FontFile" uid="uid://ckkrsgec1dgh3" path="res://project assets/Cutscene/Manufaktur-BoldIt.ttf" id="2_vpdu5"]
+[ext_resource type="VideoStream" uid="uid://bv3ol66koynyf" path="res://project assets/Image-to-video-丨-Make-the-gears-of-this-image-move-_online-video-cutter.com_.ogv" id="3_vpdu5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgi0o"]
+bg_color = Color(0.6, 0.176471, 0.6, 0.607843)
+border_width_top = 5
+border_width_bottom = 5
+border_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ia0g5"]
+bg_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vpdu5"]
+bg_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2mkm"]
+bg_color = Color(0.6, 0.176471, 0.6, 1)
+border_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ctwoq"]
+bg_color = Color(0.6, 0.176471, 0.6, 0.607843)
+border_width_top = 5
+border_width_bottom = 5
+border_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppfnh"]
+bg_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7boi2"]
+bg_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pgi0o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vpdu5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73a2t"]
+bg_color = Color(0.6, 0.176471, 0.6, 0.607843)
+border_width_top = 5
+border_width_bottom = 5
+border_color = Color(0.6, 0.176471, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xsckg"]
+bg_color = Color(0.6, 0.176471, 0.6, 0.607843)
+border_width_top = 5
+border_width_bottom = 5
+border_color = Color(0.6, 0.176471, 0.6, 1)
+
+[node name="StartMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_ia0g5")
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1.0
+offset_bottom = -67.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("3_vpdu5")
+autoplay = true
+expand = true
+loop = true
+
+[node name="Buttons" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -481.0
+offset_bottom = -228.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 50
+
+[node name="NewGame" type="Button" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../LoadGame")
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_vpdu5")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxFlat_pgi0o")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ia0g5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_vpdu5")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_v2mkm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ctwoq")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_ppfnh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7boi2")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_pgi0o")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vpdu5")
+text = "New Game"
+
+[node name="LoadGame" type="Button" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../NewGame")
+focus_neighbor_bottom = NodePath("../Quit")
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_vpdu5")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxFlat_73a2t")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ia0g5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_vpdu5")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_v2mkm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ctwoq")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_ppfnh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7boi2")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_pgi0o")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vpdu5")
+text = "Load Game"
+
+[node name="Quit" type="Button" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../NewGame")
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_vpdu5")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxFlat_xsckg")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_ia0g5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_vpdu5")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_v2mkm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ctwoq")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_ppfnh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7boi2")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_pgi0o")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vpdu5")
+text = "Quit"
+
+[connection signal="mouse_entered" from="Buttons/VBoxContainer/NewGame" to="Buttons/VBoxContainer/NewGame" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Buttons/VBoxContainer/NewGame" to="Buttons/VBoxContainer/NewGame" method="_on_mouse_exited"]
+[connection signal="pressed" from="Buttons/VBoxContainer/NewGame" to="." method="_on_new_game_pressed"]
+[connection signal="mouse_entered" from="Buttons/VBoxContainer/LoadGame" to="Buttons/VBoxContainer/LoadGame" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Buttons/VBoxContainer/LoadGame" to="Buttons/VBoxContainer/LoadGame" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Buttons/VBoxContainer/Quit" to="Buttons/VBoxContainer/Quit" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Buttons/VBoxContainer/Quit" to="Buttons/VBoxContainer/Quit" method="_on_mouse_exited"]

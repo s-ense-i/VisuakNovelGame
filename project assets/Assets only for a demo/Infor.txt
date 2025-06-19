@@ -1,0 +1,90 @@
+Damage Formula Overview
+Goal: Calculate attack damage with:
+
+Stat scaling (STR/MAG vs. VIT/MAG).
+
+15% global damage reduction (to lower numbers).
+
+RNG variation (±15%).
+
+8% crit chance (1.8x multiplier).
+
+Formula Steps
+Base Damage:
+
+text
+baseDamage = movePower * (attackerStat / defenderStat) * 0.85f  
+The 0.85f reduces all damage by 15% (as requested).
+
+RNG Variation:
+
+Multiply by a random value between 0.85 and 1.15:
+
+text
+finalDamage = baseDamage * Random.Range(0.85f, 1.15f)  
+Critical Hit Check:
+
+8% chance to multiply damage by 1.8x:
+
+csharp
+if (Random.Range(0, 100) < 8) {  
+    finalDamage *= 1.8f;  
+}  
+Round to Integer:
+
+Final damage is rounded to a whole number.
+
+Unity Implementation (C#)
+csharp
+using UnityEngine;  
+
+public static class DamageCalculator  
+{  
+    public static int CalculateDamage(  
+        int movePower,  
+        int attackerStat,  
+        int defenderStat  
+    )  
+    {  
+        // 1. Base damage (with 15% global reduction)  
+        float baseDamage = movePower * (attackerStat / (float)defenderStat) * 0.85f;  
+
+        // 2. Apply RNG variation  
+        float rngMultiplier = Random.Range(0.85f, 1.15f);  
+        float finalDamage = baseDamage * rngMultiplier;  
+
+        // 3. Check for crit (8% chance, 1.8x multiplier)  
+        if (Random.Range(0, 100) < 8)  
+        {  
+            finalDamage *= 1.8f;  
+        }  
+
+        // 4. Round to integer  
+        return Mathf.RoundToInt(finalDamage);  
+    }  
+}  
+Usage Example
+csharp
+// Physical attack (STR vs. VIT)  
+int damage = DamageCalculator.CalculateDamage(  
+    movePower: 15,  
+    attackerStat: 4,  // User's STR  
+    defenderStat: 3   // Enemy's VIT  
+);  
+
+// Magical attack (MAG vs. MAG)  
+int magicDamage = DamageCalculator.CalculateDamage(  
+    movePower: 17,  
+    attackerStat: 4,  // User's MAG  
+    defenderStat: 4   // Enemy's MAG  
+);  
+Expected Output Ranges
+Attack Type	Normal Hit	Critical Hit
+STR (15 Power)	14–20	26–35
+MAG (17 Power)	12–17	22–30
+Key Notes
+DefenderStat is cast to float to avoid integer division.
+
+Random.Range is inclusive for float (0.85 and 1.15 are possible).
+
+Crits are rolled first, then RNG is applied (order matters for clarity).

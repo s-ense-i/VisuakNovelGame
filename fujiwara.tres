@@ -1,0 +1,41 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://dob7xr3c23vof"]
+
+[ext_resource type="Texture2D" uid="uid://cfat3uion0quu" path="res://project assets/Assets only for a demo/Characters/Male Friend/Disinterested Buddy.png" id="1_q6vmu"]
+[ext_resource type="Texture2D" uid="uid://b08w1fs0lo3d6" path="res://project assets/Assets only for a demo/Characters/Male Friend/Smiling Closed Eyes Buddy.png" id="2_kenmw"]
+[ext_resource type="Texture2D" uid="uid://kf5fvuccsaks" path="res://project assets/Assets only for a demo/Characters/Male Friend/Smiling Opened Eyes Buddy.png" id="3_cr2dn"]
+[ext_resource type="Texture2D" uid="uid://deek61wsnovqc" path="res://project assets/Assets only for a demo/Characters/Male Friend/Unamused Buddy.png" id="4_706in"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_q6vmu")
+}],
+"loop": true,
+"name": &"DisinterestedBuddy",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_kenmw")
+}],
+"loop": true,
+"name": &"SmilingClosed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cr2dn")
+}],
+"loop": true,
+"name": &"SmilingOpened",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_706in")
+}],
+"loop": true,
+"name": &"UnamusedBuddy",
+"speed": 5.0
+}]
