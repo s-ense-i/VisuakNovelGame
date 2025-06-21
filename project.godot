@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Fade="*res://fade_layer.tscn"
+SceneManager="*res://SceneManager.gd"
 
 [dialogic]
 

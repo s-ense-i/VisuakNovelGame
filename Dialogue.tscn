@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://d3vl25p7aoan0"]
 
-[ext_resource type="Texture2D" uid="uid://de4kckx3eaiqx" path="res://project assets/Assets only for a demo/Bedroom_protagonist/Protagonist Bedroom; until they enter VR World.jpg" id="1_4xg4g"]
 [ext_resource type="Script" uid="uid://c12rbiurnkfa8" path="res://dialogue.gd" id="1_qn0no"]
 [ext_resource type="PackedScene" uid="uid://t4mc0i620wdx" path="res://character.tscn" id="2_4xg4g"]
+[ext_resource type="Texture2D" uid="uid://bfdcxwfnl2lhv" path="res://project assets/Assets only for a demo/Backgrounds/apartment-bed-bedroom-raining.png" id="2_qn0no"]
 [ext_resource type="PackedScene" uid="uid://xu5ilh4owv26" path="res://dialogue_ui.tscn" id="3_qtnsr"]
 
 [node name="Dialogue" type="Node2D"]
@@ -11,13 +11,14 @@ script = ExtResource("1_qn0no")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="Background" type="TextureRect" parent="CanvasLayer"]
+unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_4xg4g")
+texture = ExtResource("2_qn0no")
 expand_mode = 1
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]

@@ -96,6 +96,7 @@ mouse_filter = 2
 theme_override_constants/separation = 50
 
 [node name="NewGame" type="Button" parent="Buttons/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../Quit")
 focus_neighbor_bottom = NodePath("../LoadGame")

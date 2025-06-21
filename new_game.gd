@@ -1,13 +1,11 @@
 extends Control
-
+@onready var new_game_button=%NewGame
 func _ready():
-	pass
- 
+	new_game_button.pressed.connect(_on_new_game_button_pressed)
+	SceneManager.transition_out_completed.connect(_on_transition_out_completed, CONNECT_ONE_SHOT)
 
+func _on_new_game_button_pressed():
+	SceneManager.transition_out()
 
-func _on_new_game_pressed() -> void:
-	var NextScene=load("res://Dialogue.tscn")
-	await Fade.fade_out()
-	get_tree().change_scene_to_packed(NextScene)
-	#await get_tree().process_frame
-	Fade.fade_in()
+func _on_transition_out_completed():
+	SceneManager.change_scene("res://Dialogue.tscn")

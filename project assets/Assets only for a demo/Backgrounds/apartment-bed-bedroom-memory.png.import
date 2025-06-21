@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de4kckx3eaiqx"
-path="res://.godot/imported/Protagonist Bedroom; until they enter VR World.jpg-7ff57e48b1327d8e1aaa5a376952739f.ctex"
+uid="uid://4vmluiql56e1"
+path="res://.godot/imported/apartment-bed-bedroom-memory.png-913999bc42b4f2ae45d5926bf2f13d3c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project assets/Assets only for a demo/Bedroom_protagonist/Protagonist Bedroom; until they enter VR World.jpg"
-dest_files=["res://.godot/imported/Protagonist Bedroom; until they enter VR World.jpg-7ff57e48b1327d8e1aaa5a376952739f.ctex"]
+source_file="res://project assets/Assets only for a demo/Backgrounds/apartment-bed-bedroom-memory.png"
+dest_files=["res://.godot/imported/apartment-bed-bedroom-memory.png-913999bc42b4f2ae45d5926bf2f13d3c.ctex"]
 
 [params]
 

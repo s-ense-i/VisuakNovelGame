@@ -1,0 +1,96 @@
+[
+  { "location": "apartment-bed-bedroom-night" },
+  {
+	"speaker": "Narration",
+	"text": "[i]You put on your VR headset and launch the custom loader. A bright loading screen flashes before your eyes as the new server boots up.[/i]"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]The server is surprisingly stable. After a few seconds, you find yourself in a strange, misty forest. It's eerily quiet, unlike the official servers that play upbeat music during loading.[/i]"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "This place looks kinda spooky... in a cool way. I like it already.",
+	"animation": "SmilingOpened"
+  },
+  {
+	"speaker": "kami",
+	"text": "Right? I knew you’d both be impressed. And look! We already have starter weapons. That’s not something you get on official servers anymore.",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]A floating UI pops up in front of you. It asks you to select a starter weapon: a massive broadsword, twin daggers, or a magic staff.[/i]"
+  },
+  {
+	"choices": [
+	  {
+		"text": "Choose the broadsword.",
+		"goto": "test_choice_1"
+	  },
+	  {
+		"text": "Pick the twin daggers.",
+		"goto": "test_choice_2"
+	  },
+	  {
+		"text": "Go with the magic staff.",
+		"goto": "test_choice_3"
+	  }
+	]
+  },
+  {
+	"anchor": "test_choice_1"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]You select the broadsword. It appears in your hands, heavy but powerful.[/i]"
+  },
+  {
+	"speaker": "kami",
+	"text": "Ooo, going for the classic tank build, huh? I dig it.",
+	"animation": "SmilingOpened"
+  },
+  {
+	"goto": "continue_test"
+  },
+  {
+	"anchor": "test_choice_2"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]You select the twin daggers. They’re lightweight and shimmer faintly with some kind of dark energy.[/i]"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Fast and deadly — looks like you're going for the rogue type. Nice pick.",
+	"animation": "SmilingOpened"
+  },
+  {
+	"goto": "continue_test"
+  },
+  {
+	"anchor": "test_choice_3"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]You choose the magic staff. It hums in your hand as if alive, and your vision briefly flickers with arcane runes.[/i]"
+  },
+  {
+	"speaker": "kami",
+	"text": "Mage protagonist? That’s rare for you. Gonna summon meteors next?",
+	"animation": "SmilingOpened"
+  },
+  {
+	"goto": "continue_test"
+  },
+  {
+	"anchor": "continue_test"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]With weapons in hand, the three of you venture deeper into the misty forest, ready to face whatever this strange server throws your way.[/i]",
+	"animation": "idle",
+	"show_only": "protoganist"
+  },
+{"next_scene": "third_scene" , "transition": "fade"}
+]

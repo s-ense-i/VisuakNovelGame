@@ -37,6 +37,7 @@ var replaced_characters = {}
 var active_tweens = {}
 
 func _ready() -> void:
+	self.modulate.a=0
 	Fade.fade_in()	# Get screen width for off-screen calculations
 	screen_width = get_viewport().get_visible_rect().size.x
 	
@@ -58,6 +59,10 @@ func _ready() -> void:
 	character_replacements.clear()
 	replaced_characters.clear()
 	active_tweens.clear()
+	
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 1.0, 0.2)
+
 
 # ENHANCED: Determine slide direction based on character position
 func get_character_slide_direction(character_node: AnimatedSprite2D) -> bool:
@@ -530,3 +535,41 @@ func parse_dialogue_line(dialogue_line: String):
 		animation = parts[1].strip_edges()
 	
 	show_speaker(character_enum, animation)
+# ADD THIS METHOD TO YOUR character_sprite.gd script
+
+func reset_for_new_scene():
+	"""Reset character system state for a new scene"""
+	print("Resetting character system for new scene")
+	
+	# Reset appearance flags
+	kami_has_appeared = false
+	fujiwara_has_appeared = false
+	protagonist_frames_set = false
+	kami_frames_set = false
+	fujiwara_frames_set = false
+	
+	# Clear tracking arrays and dictionaries
+	recent_speakers.clear()
+	character_replacements.clear()
+	replaced_characters.clear()
+	
+	# Stop all active tweens
+	for tween_name in active_tweens.keys():
+		if active_tweens[tween_name]:
+			active_tweens[tween_name].kill()
+	active_tweens.clear()
+	
+	# Reset positions to original
+	protoganist.position = original_protagonist_position
+	kami.position = original_kami_position
+	fujiwara.position = original_fujiwara_position
+	
+	# Hide all characters initially
+	hide_all_characters(false)  # No animation, immediate hide
+	
+	# Reset modulation
+	protoganist.modulate = Color.WHITE
+	kami.modulate = Color.WHITE  
+	fujiwara.modulate = Color.WHITE
+	
+	print("Character system reset complete")

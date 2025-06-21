@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4vmluiql56e1"
-path="res://.godot/imported/apartment-bed-bedroom-memory.png-2dd15bce4f4edd5e6a91260b568e778d.ctex"
+uid="uid://b6mvxogdd8jyn"
+path="res://.godot/imported/apartment-bed-bedroom-night.png-e06303eea8c693f2e1579454662aebcd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project assets/Assets only for a demo/Bedroom_protagonist/apartment-bed-bedroom-memory.png"
-dest_files=["res://.godot/imported/apartment-bed-bedroom-memory.png-2dd15bce4f4edd5e6a91260b568e778d.ctex"]
+source_file="res://project assets/Assets only for a demo/Backgrounds/apartment-bed-bedroom-night.png"
+dest_files=["res://.godot/imported/apartment-bed-bedroom-night.png-e06303eea8c693f2e1579454662aebcd.ctex"]
 
 [params]
 

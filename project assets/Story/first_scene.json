@@ -1,4 +1,5 @@
 [
+{ "location": "apartment-bed-bedroom-raining" },
   {
 	"speaker": "Narration",
 	"text": "[i]The new school semester starts tomorrow. You're feeling anxious because you spent most of the summer break preparing for your final semester of high school before college. Your parents have been nagging you to study more often than you did before.[/i]"
@@ -325,5 +326,6 @@
 	"text": "[i]To join, you got to put your VR headset on. You and your friends have a VR headset with Homebrew installed, which allows you to join unlicensed servers. According to Kami, the homebrew scene is still in its infancy.",
 	"animation": "idle",
 	"show_only": "protoganist"
- }
+ },
+{"next_scene": "second_scene" , "transition": "fade"}
   ]

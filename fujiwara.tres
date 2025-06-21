@@ -38,4 +38,12 @@ animations = [{
 "loop": true,
 "name": &"UnamusedBuddy",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cr2dn")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
 }]

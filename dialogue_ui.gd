@@ -10,6 +10,8 @@ var animate_text : bool = false
 var current_visible_characters : int = 0
 
 func _ready() -> void:
+	DialogueLines.text= ""
+	SpeakerName.text= ""
 	choice_list.hide()
 	Fade.fade_in()
 
