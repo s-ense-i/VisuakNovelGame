@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxtr8p3rron80"
-path="res://.godot/imported/Export-1 Yatsufusa other.png-d234fae29884b446aec66566403e309d.ctex"
+uid="uid://meoj3jp7lrnl"
+path="res://.godot/imported/NW.png-23b51117b2b406cca5f40049bd8c5cfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project assets/Assets only for a demo/Demons/Sprites/Export-1 Yatsufusa other.png"
-dest_files=["res://.godot/imported/Export-1 Yatsufusa other.png-d234fae29884b446aec66566403e309d.ctex"]
+source_file="res://project assets/Assets only for a demo/Sprites/NW.png"
+dest_files=["res://.godot/imported/NW.png-23b51117b2b406cca5f40049bd8c5cfd.ctex"]
 
 [params]
 

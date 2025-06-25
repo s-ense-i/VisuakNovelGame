@@ -4,6 +4,9 @@ extends Node2D
 @onready var Background= %Background
 @onready var character = %CharacterSprite
 @onready var dialogue_ui = %DialogueUi
+@onready var BackgroundEffect1 = $CanvasLayer/Background/BackgroundEffect1
+@onready var BackgroundEffect2 = $CanvasLayer/Background/BackgroundEffect2
+@onready var BackgroundEffect3 = $CanvasLayer/Background/BackgroundEffect3
 
 var dialogue_index: int = 0
 var DialogueLines: Array = []
@@ -35,6 +38,11 @@ func _ready() -> void:
 	Fade.fade_in()
 	await get_tree().process_frame
 	SceneManager.transition_in()
+	# خفيهم على طول
+	BackgroundEffect1.visible = false
+	BackgroundEffect2.visible = false
+	BackgroundEffect3.visible = false
+
 
 func start_scene_sequence():
 	"""Start the visual sequence: background -> character -> dialogue"""
@@ -252,18 +260,40 @@ func _on_choice_selected(anchor: String):
 		process_current_line()
 	else:
 		printerr("Failed to find anchor: " + anchor)
+		
+
 
 func _on_transition_out_cpmpleted():
-	if !dialogue_file.is_empty():
-		DialogueLines= load_dialogue(dialogue_file)
-		dialogue_index= 0
-		var first_line= DialogueLines[dialogue_index]
-		if first_line.has("location"):
-			Background.texture= load("res://project assets/Assets only for a demo/Backgrounds/" + first_line["location"] + ".png")
-			dialogue_index+=1
-		SceneManager.transition_in(transition_effect)
-	else:
+	if dialogue_file.is_empty():
 		print("End")
+		return
+
+	# حمّل كل سطور الحوار
+	DialogueLines = load_dialogue(dialogue_file)
+	dialogue_index = 0
+	var first_line = DialogueLines[dialogue_index]
+
+	# غيّر الخلفية لو فيه location
+	if first_line.has("location"):
+		Background.texture = load("res://project assets/Assets only for a demo/Backgrounds/" + first_line["location"] + ".png")
+
+	# لو هذا هو ملف المشهد التاني
+	if dialogue_file.ends_with("second_scene.json"):
+		show_background_characters()
+
+	dialogue_index += 1
+	SceneManager.transition_in(transition_effect)
+
+func show_background_characters():
+	BackgroundEffect1.visible = true
+	BackgroundEffect1.play("default")
+
+	BackgroundEffect2.visible = true
+	BackgroundEffect2.play("default")
+
+	BackgroundEffect3.visible = true
+	BackgroundEffect3.play("default")
+
 
 func _on_transition_in_cpmpleted():
 	# Start the visual sequence instead of immediately processing dialogue

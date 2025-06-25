@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://840d64altp0t"]
+
+[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="1_6v1lr"]
+[ext_resource type="Texture2D" uid="uid://d00kk7gokp6vg" path="res://project assets/Assets only for a demo/Sprites/NE.png" id="2_3brom"]
+
+[node name="424c0841-0250-41e1-9180-90463220e1e8" type="Sprite2D"]
+position = Vector2(576.5, 325.5)
+scale = Vector2(0.751953, 0.629883)
+texture = ExtResource("1_6v1lr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-107.055, -110.338)
+scale = Vector2(2.90485, 2.90485)
+texture = ExtResource("2_3brom")
+hframes = 13
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(-36.5714, 30.9582)
+scale = Vector2(2.90485, 2.90485)
+texture = ExtResource("2_3brom")
+hframes = 13
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+position = Vector2(52.5299, -38.8961)
+scale = Vector2(2.90485, 2.90485)
+texture = ExtResource("2_3brom")
+hframes = 13
