@@ -35,7 +35,7 @@ func get_players() -> Array:
 func trigger_enemy_movement():
 	
 	$Enemy1.start_movement([
-		Vector2i(12, 11)
+		Vector2i(47, 23)
 ])
 
 
