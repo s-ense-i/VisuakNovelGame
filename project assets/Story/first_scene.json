@@ -276,7 +276,7 @@
   {
 	"speaker": "fujiwara",
 	"text": "Come on, you can’t expect the game studio to look out for small people like that. If they really don’t like the direction, they will just leave. Leave it to people to broadcast their opinions.",
-	"animation": "DisinteresedBuddy",
+	"animation": "DisinterestedBuddy",
 	"replace_character":"protoganist"
   },
   {
@@ -310,10 +310,10 @@
 	"animation": "SmilingClosed"
   },
   {
-	"speaker": "protoganist",
+	"speaker": "Narration",
 	"text": "[i]You send a thumbs-up emoji. Everyone started joining the server",
 	"animation": "FourthWall",
-	"replace_character":"kami"
+	"show_only":"protoganist"
   },
 {
 	"goto": "continue_story_1"
@@ -322,9 +322,8 @@
 	"anchor": "continue_story_1"
   },
   {
-	"speaker": "protoganist",
+	"speaker": "Narration",
 	"text": "[i]To join, you got to put your VR headset on. You and your friends have a VR headset with Homebrew installed, which allows you to join unlicensed servers. According to Kami, the homebrew scene is still in its infancy.",
-	"animation": "idle",
 	"show_only": "protoganist"
  },
 {"next_scene": "second_scene" , "transition": "fade"}

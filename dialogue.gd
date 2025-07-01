@@ -185,7 +185,19 @@ func process_current_line():
 		dialogue_index += 1
 		process_current_line()
 		return
-
+		
+	if line.has("hide_character"):
+		var character_to_hide_enum = Character.get_enum_from_string(line["hide_character"])
+		if character_to_hide_enum != -1:
+			character.hide_character(character_to_hide_enum)
+	
+	if line.has("show_only"):
+		var character_to_show_enum = Character.get_enum_from_string(line["show_only"])
+		if character_to_show_enum != -1:
+			var animation = line.get("animation", "idle")
+			character.show_only_character(character_to_show_enum, animation)
+		
+			
 	if line.has("choices"):
 		waiting_for_choice = true
 		
@@ -280,6 +292,9 @@ func _on_transition_out_cpmpleted():
 	# لو هذا هو ملف المشهد التاني
 	if dialogue_file.ends_with("second_scene.json"):
 		show_background_characters()
+		# Set initial flips for second scene
+		character.kami.flip_h = false  # Make kami face right
+		character.fujiwara.flip_h = false  # Make fujiwara face right
 
 	dialogue_index += 1
 	SceneManager.transition_in(transition_effect)

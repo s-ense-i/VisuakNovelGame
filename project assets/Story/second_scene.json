@@ -17,112 +17,283 @@
   },
   {
 	"speaker": "Narration",
-	"text": "[i]Thank you for reading the rules. To start a character on this server, please select it as your primary server in the menu. Playing on this server will not put you at risk of being banned when interacting with the official servers, and nothing will be displayed when admins check your servers list. Please use an exciting character that you have already created on an official server. "
+	"text": "[i]Thank you for reading the rules. To start a character on this server, please select it as your primary server in the menu. Playing on this server will not put you at risk of being banned when interacting with the official servers, and nothing will be displayed when admins check your servers list. Please use an exciting character that you have already created on an official server. ",
+	"hide_character": "kami"
    },
   {
-	"speaker": "Fujiwara",
+	"speaker": "fujiwara",
 	"text": " Oh, that's something new. So we don't even need to create a new identity? ",
 	"animation": "SmilingOpened",
-	"replace_character": "Kami"
-	},
+	"replace_character": "kami"
+},
   {
 	"speaker": "kami",
 	"text": " Wow! How do they even mask this server in the server menu? That's something new. The homebrew scene is coming along pretty well. ",
 	"animation": "SmilingClosed",
 	"replace_character": "protoganist"
-	 },
-	{
-	"new_character": "Fujiwara",
- 	"animation": "idle"
-	 },
-	
-	 {
-	"choices": [
-	  {
-		"text": "You can never underestimate homebrewers.",
-		"goto": "choice_1"
-	  },
-	  {
-		"text": "It looks like you won't be able to create a new funny nickname, Kami.",
-		"goto": "choice_2"
-	  },
-	  {
-		"text": "At least i won’t have to look at the confusing guide again.",
-		"goto": "choice_3"
-	  }
-	]
 },
-  {
-	"anchor": "choice_1"
+{
+  "choices": [
+	{
+	  "text": "You can never underestimate homebrewers.",
+	  "goto": "choice_1_1_1"
+	},
+	{
+	  "text": "It looks like you won't be able to create a new funny nickname, Kami.", 
+	  "goto": "choice_2_2_2"
+	},
+	{
+	  "text": "At least i won’t have to look at the confusing guide again.", 
+	  "goto": "choice_3_3_3"
+	}
+  ],
+  "replace_character": "fujiwara",
+  "new_character": "protoganist",
+  "animation": "idle"
+},
+{
+	"anchor": "choice_1_1_1"
   },
   {
 	"speaker": "kami",
-	"text": "Definitely",
-	"animation": "idle",
-	"replace_character": "Fujiwara"
-
+	"text": "Definitely!",
+	"animation": "SmilingClosed",
   },
   {
-	"speaker": "Fujiwara",
+	"speaker": "fujiwara",
 	"text": "Now that's the kind of people I can respect. Limits or not, they will achieve what they want.",
-	"animation": "SmilingOpened",
-	"replace_character": "protoganist"
-
-  },
-  {
-	"goto": "continue_story"
-  },
-  {
-	"anchor": "choice_2"
-  },
-
-  {
-	"speaker": "kami",
-	"text": "Oh my God, you're right! This is both convenient and horrible; I'm torn. ",
-	"animation": "idle"
-  },
-  {
-	"speaker": "Fujiwara",
-	"text": " Just use one of the characters you have with a funny name. You have much more than one... ",
-	"animation": "UnamusedBuddy",
-	"replace_character": "protoganist"
-
-  },
-  {
-	"goto": "continue_test"
-  },
-  {
-	"anchor": "test_choice_3"
-  },
- 
-  {
-	"speaker": "kami",
-	"text": " I don’t have that problem.",
-	"animation": "MoreSerious",
-	"replace_character": "Fujiwara"
-
-  },
-  {
-	"speaker": "Fujiwara",
-	"text": " Oh, i know, halleluiah to that.",
 	"animation": "SmilingClosed",
 	"replace_character": "protoganist"
-
   },
-  {
-	"goto": "continue_test"
+{
+	"goto": "continue_story_1_1"
   },
-  {
-	"speaker": "Fujiwara",
-	"text": " Anyway. I'm going to use my rather undeveloped character, Parkour Battle Dude.",
-	"animation": "SmilingOpened",
-	"replace_character": "protoganist"
-
+{
+	"anchor": "choice_2_2_2"
   },
   {
 	"speaker": "kami",
-	"text": " Oh, I'm going to use the Deep Diva of the Beyond. The name oozes mystery and power.",
+	"text": "Oh my God, you're right! This is both convenient and horrible; I'm torn.",
 	"animation": "SmilingClosed"
   },
-	{"next_scene": "third_scene" , "transition": "fade"},
+  {
+	"speaker": "fujiwara",
+	"text": "Just use one of the characters you have with a funny name. You have much more than one...",
+	"animation": "DisinterestedBuddy",
+	"replace_character":"protoganist"
+  },
+{
+	"goto": "continue_story_1_1"
+  },
+{
+	"anchor": "choice_3_3_3"
+  },
+  {
+	"speaker": "kami",
+	"text": "I don’t have that problem.",
+	"animation": "MoreSerious",
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Oh, i know, halleluiah to that.",
+	"animation": "SmilingClosed",
+	"replace_character":"protoganist"
+  },
+
+{
+	"goto": "continue_story_1_1"
+  },
+{
+	"anchor": "continue_story_1_1"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Anyway. I'm going to use my rather undeveloped character, Parkour Battle Dude.",
+	"animation": "SmilingOpened",
+  },
+  {
+	"speaker": "kami",
+	"text": "Oh, I'm going to use the Deep Diva of the Beyond. The name oozes mystery and power.",
+	"animation": "SmilingClosed"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]Which of your characters are you going to use? You're going to stick with the nickname for a while...",
+	"show_only": "protoganist"
+  },
+{
+  "choices": [
+	{
+	  "text": "Digital Messiah",
+	  "goto": "choice_1+1"
+	},
+	{
+	  "text": "Wild Punisher", 
+	  "goto": "choice_2+2"
+	},
+	{
+	  "text": "United Warrior", 
+	  "goto": "choice_3+3"
+	}
+  ],
+},
+{
+	"anchor": "choice_1+1"
+  },
+  {
+	"speaker": "kami",
+	"text": "Digital Messiah is still a very try hard name, maybe pick something more casual?",
+	"animation": "MoreSerious",
+	"replace_character": "fujiwara"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "It certainly sounds like a video game nickname. I'll give you that.",
+	"animation": "SmilingClosed",
+	"replace_character": "protoganist"
+  },
+{
+	"goto": "continue_story_1+1"
+  },
+{
+	"anchor": "choice_2+2"
+  },
+  {
+	"speaker": "kami",
+	"text": "Yes, I remember that one.",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Sick name, bro! You gonna intimated demons with that one for sure.",
+	"animation": "SmilingClosed",
+	"replace_character": "protoganist"
+  },
+{
+	"goto": "continue_story_1+1"
+  },
+{
+	"anchor": "choice_3+3"
+  },
+  {
+	"speaker": "kami",
+	"text": "if only the world had more United Warriors, it could be a more stable and fairer place.",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "These Fists are rated E for everyone, am i right?",
+	"animation": "SmilingClosed",
+	"replace_character": "protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": "Oh, is that what you name means?",
+	"animation": "SmilingOpened",
+  },
+{
+	"goto": "continue_story_1+1"
+  },
+{
+	"anchor": "continue_story_1+1"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]In order to create a character here, we will have to wipe all save data assigned to your character. Do you wish to proceed?",
+	"show_only": "protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": " Wow, er, I suppose I should have expected that. It's OK; this character only took me 15 hours to max out.",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Only 15 hours? You're crazy good at this game! My character isn't important; I'm fine with wiping it.",
+	"animation": "DisinterestedBuddy",
+	"replace_character": "protoganist"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]You all agreed to the stipulations needed to access this server.",
+	"show_only": "protoganist"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]Now, I have one question for you. Are you ready to experience a ‘True Digital Real Story?’ May your journey from now on be full of decisions that prove whether you truly regret your current life and want to change things, or whether you simply come to the conclusion that the cycle of life is perfect. Wander between two worlds of endless perspectives and forge your own path. Just…Survive.",
+  },
+  {
+	"speaker": "kami",
+	"text": " It's very ominous. Do you think that in this story, we get to have many choices that will affect the game?",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+{
+  "choices": [
+	{
+	  "text": "Maybe",
+	  "goto": "choice_1-1"
+	},
+	{
+	  "text": "I dont really care.", 
+	  "goto": "choice_2-2"
+	},
+	{
+	  "text": "The server has two worlds?", 
+	  "goto": "choice_3-3"
+	}
+  ],
+},
+{
+	"anchor": "choice_1-1"
+  },
+  {
+	"speaker": "kami",
+	"text": " Well, let's see...",
+	"animation": "MoreSerious",
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "It sounds like it. Let's get to the gameplay already!",
+	"animation": "SmilingOpened",
+	"replace_character": "protoganist"
+  },
+{
+	"goto": "continue_story_1-1"
+  },
+{
+	"anchor": "choice_2-2"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Haha, yup, I in for the gameplay! Just let me kill some demons.",
+	"animation": "SmilingOpened",
+	"replace_character": "protoganist"
+  },
+{
+	"goto": "continue_story_1-1"
+  },
+{
+	"anchor": "choice_3-3"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": " Every server has multiple worlds.",
+	"animation": "SmilingOpened",
+	"replace_character": "protoganist"
+  },
+  {
+	"speaker": "kami",
+	"text": " Maybe this one has two expansive worlds, unlike other servers that just have tens of small ones.",
+	"animation": "SmilingClosed",
+  },
+{
+	"goto": "continue_story_1-1"
+  },
+{
+	"anchor": "continue_story_1-1"
+  },
 ]
