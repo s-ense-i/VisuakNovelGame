@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://4q5hmhw11xmx"]
+
+[sub_resource type="GDScript" id="GDScript_exvs5"]
+script/source = "extends Node2D
+
+@onready var tile_map: TileMap = null  # هنوصلها من المشهد الرئيسي
+
+func update_position(world_mouse_position: Vector2):
+	if tile_map == null:
+		return
+
+	var tile_coords = tile_map.local_to_map(tile_map.to_local(world_mouse_position))
+	var tile_pos = tile_map.map_to_local(tile_coords)
+	position = tile_map.to_global(tile_pos)
+"
+
+[node name="MouseCursor" type="Node2D"]
+script = SubResource("GDScript_exvs5")
+
+[node name="HighlightRect" type="ColorRect" parent="."]
+offset_right = 80.0
+offset_bottom = 80.0
+mouse_filter = 2
+color = Color(1, 0.0470588, 1, 0.2)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+rotation_smoothing_speed = 1.0

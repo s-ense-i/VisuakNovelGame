@@ -1,4 +1,4 @@
-# ENHANCED character_sprite.gd with automatic character facing
+# ENHANCED character_sprite.gd with consistent character facing
 extends Node2D
 
 @onready var protoganist = %protoganist
@@ -46,8 +46,6 @@ func _ready() -> void:
 	original_kami_position = kami.position
 	original_fujiwara_position = fujiwara.position
 	
-	# Initial facing will be set by update_character_facing()
-	
 	# Ensure initial state
 	hide_all_characters()
 	protoganist.visible = true
@@ -62,51 +60,25 @@ func _ready() -> void:
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 1.0, 0.2)
 
-# NEW: Auto-facing system based on character positions
+# FIXED: Consistent auto-facing system - left characters unflipped, right characters flipped
 func update_character_facing():
-	"""Update all visible characters to face each other based on their positions"""
+	"""Update all visible characters to face consistently: left=unflipped, right=flipped"""
 	var visible_chars = get_visible_character_nodes()
+	var screen_center = screen_width / 2
 	
-	# If only one character is visible, face them towards center/camera
-	if visible_chars.size() == 1:
-		var char_node = visible_chars[0]
-		var screen_center = screen_width / 2
-		# Face towards center (false = face right, true = face left)
-		char_node.flip_h = char_node.global_position.x > screen_center
-		return
+	print("Updating character facing for ", visible_chars.size(), " visible characters")
 	
-	# For multiple characters, make them face each other
-	for i in range(visible_chars.size()):
-		var current_char = visible_chars[i]
-		var other_chars = visible_chars.duplicate()
-		other_chars.remove_at(i)
+	for char_node in visible_chars:
+		var char_name = get_character_name_from_node(char_node)
+		var char_x = char_node.global_position.x
+		var is_on_right_side = char_x >= screen_center
 		
-		if other_chars.size() > 0:
-			# Find the closest character to face
-			var closest_char = find_closest_character(current_char, other_chars)
-			
-			# Determine facing direction
-			var should_face_left = current_char.global_position.x > closest_char.global_position.x
-			current_char.flip_h = should_face_left
-			
-			print("Character ", get_character_name_from_node(current_char), 
-				  " at x:", current_char.global_position.x, 
-				  " facing ", "left" if should_face_left else "right",
-				  " towards ", get_character_name_from_node(closest_char),
-				  " at x:", closest_char.global_position.x)
-
-func find_closest_character(target_char: AnimatedSprite2D, other_chars: Array) -> AnimatedSprite2D:
-	"""Find the closest character to the target character"""
-	var closest_char = other_chars[0]
-	var min_distance = abs(target_char.global_position.x - closest_char.global_position.x)
-	
-	for char in other_chars:
-		var distance = abs(target_char.global_position.x - char.global_position.x)
-		if distance < min_distance:
-			min_distance = distance
-			closest_char = char
-	
-	return closest_char
+		# CONSISTENT RULE: Left side = no flip (false), Right side = flip (true)
+		char_node.flip_h = is_on_right_side
+		
+		print("Character ", char_name, " at x:", char_x, 
+			  " (", "right" if is_on_right_side else "left", " side)",
+			  " flip_h set to:", char_node.flip_h)
 
 func get_visible_character_nodes() -> Array[AnimatedSprite2D]:
 	"""Get array of currently visible character nodes"""
@@ -127,13 +99,13 @@ func get_character_slide_direction(character_node: AnimatedSprite2D) -> bool:
 	var screen_center = screen_width / 2
 	return character_node.global_position.x >= screen_center
 
-# ENHANCED: Function to create sliding entrance animation with proper positioning
+# ENHANCED: Function to create sliding entrance animation with consistent facing
 func slide_character_in(character_node: AnimatedSprite2D, target_position: Vector2, from_right: bool = true):
 	# Stop any existing tween for this character
 	var character_name = get_character_name_from_node(character_node)
 	if active_tweens.has(character_name):
 		active_tweens[character_name].kill()
-	
+
 	# Calculate start position (completely off-screen)
 	var start_position = target_position
 	var sprite_width = 100.0  # Default fallback
@@ -143,10 +115,18 @@ func slide_character_in(character_node: AnimatedSprite2D, target_position: Vecto
 			sprite_width = texture.get_width() * character_node.scale.x
 	else:
 		sprite_width = 100.0 * character_node.scale.x  # Fallback width
-	
-	# Determine slide direction based on target position (same side approach)
+
+	# Determine slide direction based on target position
 	var screen_center = screen_width / 2
 	var slide_from_right = target_position.x >= screen_center
+	
+	# CONSISTENT FACING: Set based on final position, not slide direction
+	var is_target_on_right = target_position.x >= screen_center
+	character_node.flip_h = is_target_on_right
+	
+	print("Sliding in ", character_name, " to position x:", target_position.x,
+		  " (", "right" if is_target_on_right else "left", " side)",
+		  " flip_h:", character_node.flip_h)
 	
 	if slide_from_right:
 		# Start from right edge of screen plus sprite width
@@ -154,16 +134,11 @@ func slide_character_in(character_node: AnimatedSprite2D, target_position: Vecto
 	else:
 		# Start from left edge of screen minus sprite width
 		start_position.x = -sprite_width
-	
-# Determine the correct facing direction before showing
-	screen_center = screen_width / 2
-	character_node.flip_h = target_position.x > screen_center  # Face toward center
 
-# Set initial position and make visible
+	# Set initial position and make visible
 	character_node.position = start_position
 	character_node.visible = true
 
-	
 	# Create and configure tween
 	var tween = create_tween()
 	active_tweens[character_name] = tween
@@ -174,9 +149,10 @@ func slide_character_in(character_node: AnimatedSprite2D, target_position: Vecto
 	# Animate to target position
 	tween.tween_property(character_node, "position", target_position, slide_duration)
 	
-	# Update facing when slide completes
+	# Clean up when animation completes
 	tween.finished.connect(func(): 
 		active_tweens.erase(character_name)
+		# Final facing update to ensure consistency
 		update_character_facing()
 	)
 
@@ -278,7 +254,7 @@ func update_recent_speakers(speaker_name: Character.Name):
 	
 	print("Recent speakers updated: ", recent_speakers, " - Latest speaker: ", Character.Name.keys()[speaker_name])
 
-# ENHANCED: Replace character with improved directional sliding
+# ENHANCED: Replace character with consistent facing
 func replace_character(character_to_replace: Character.Name, new_character: Character.Name, animation: String = "idle"):
 	print("Replacing ", Character.Name.keys()[character_to_replace], " with ", Character.Name.keys()[new_character])
 	
@@ -350,7 +326,7 @@ func replace_character(character_to_replace: Character.Name, new_character: Char
 	elif new_character == Character.Name.fujiwara:
 		fujiwara_has_appeared = true
 	
-	# Wait for slide in to complete, then dim other characters and update facing
+	# Wait for slide in to complete, then dim other characters
 	await get_tree().create_timer(slide_duration).timeout
 	dim_non_speakers(new_character)
 
@@ -371,7 +347,7 @@ func dim_non_speakers(current_speaker: Character.Name):
 	if fujiwara.visible and current_speaker != Character.Name.fujiwara:
 		fujiwara.modulate = Color(0.7, 0.7, 0.7)
 
-# ENHANCED: Show speaker with auto-facing
+# ENHANCED: Show speaker with consistent auto-facing
 func show_speaker(character_name: Character.Name, animation: String = "idle"):
 	print("show_speaker called with: ", Character.Name.keys()[character_name], " animation: ", animation)
 	
@@ -547,7 +523,7 @@ func show_narration_mode():
 	
 	print("Narration mode: all visible characters dimmed")
 
-# ENHANCED: Show only character with auto-facing
+# ENHANCED: Show only character with consistent auto-facing
 func show_only_character(character_name: Character.Name, animation: String = "idle"):
 	print("Showing only: ", Character.Name.keys()[character_name])
 	
@@ -607,7 +583,25 @@ func parse_dialogue_line(dialogue_line: String):
 	show_speaker(character_enum, animation)
 
 func reset_for_new_scene():
-	print("Resetting character system for new scene")
+	# Stop all animations
+	for tween in active_tweens.values():
+		tween.kill()
+	active_tweens.clear()
+	
+	# Reset all characters
+	protoganist.visible = false
+	kami.visible = false
+	fujiwara.visible = false
+	
+	# Reset positions
+	protoganist.position = original_protagonist_position
+	kami.position = original_kami_position
+	fujiwara.position = original_fujiwara_position
+	
+	# IMPORTANT: Reset flipping to default state
+	protoganist.flip_h = false
+	kami.flip_h = false
+	fujiwara.flip_h = false
 	
 	# Reset appearance flags
 	kami_has_appeared = false
@@ -616,33 +610,12 @@ func reset_for_new_scene():
 	kami_frames_set = false
 	fujiwara_frames_set = false
 	
-	# Clear tracking arrays and dictionaries
-	recent_speakers.clear()
-	character_replacements.clear()
-	replaced_characters.clear()
-	
-	# Stop all active tweens
-	for tween_name in active_tweens.keys():
-		if active_tweens[tween_name]:
-			active_tweens[tween_name].kill()
-	active_tweens.clear()
-	
-	# Reset positions to original
-	protoganist.position = original_protagonist_position
-	kami.position = original_kami_position
-	fujiwara.position = original_fujiwara_position
-	
-	# Hide all characters initially
-	hide_all_characters(false)  # No animation, immediate hide
-	
 	# Reset modulation
 	protoganist.modulate = Color.WHITE
-	kami.modulate = Color.WHITE  
+	kami.modulate = Color.WHITE
 	fujiwara.modulate = Color.WHITE
-	
-	print("Character system reset complete")
 
-# ENHANCED: Hide character with auto-facing update
+# ENHANCED: Hide character with consistent auto-facing update
 func hide_character(character_name: Character.Name, animate: bool = true):
 	print("Hiding character: ", Character.Name.keys()[character_name])
 	

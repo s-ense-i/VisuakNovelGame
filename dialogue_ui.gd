@@ -74,3 +74,9 @@ func on_choice_button_pressed(anchor: String):
 	DialogueLines.show()
 	SpeakerName.show()
 	SpeakerBox.show()
+
+func hide_all_ui():
+	hide_speaker_box()
+	hide_speaker_name()
+	%DialogeLines.text = ""
+	%SpeakerName.text = ""

@@ -19,7 +19,7 @@ unique_name_in_owner = true
 position = Vector2(757, 0)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("2_wa5vi")
-animation = &"MoreSerious"
+animation = &"SmilingOpened"
 
 [node name="Fujiwara" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true

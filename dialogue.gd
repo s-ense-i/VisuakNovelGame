@@ -1,4 +1,4 @@
-# main_dialogue.gd - FIXED VERSION
+# main_dialogue.gd - MODIFIED VERSION WITH SCENE TRANSITION
 extends Node2D
 
 @onready var Background= %Background
@@ -8,6 +8,8 @@ extends Node2D
 @onready var BackgroundEffect2 = $CanvasLayer/Background/BackgroundEffect2
 @onready var BackgroundEffect3 = $CanvasLayer/Background/BackgroundEffect3
 
+
+var dialogue_ended: bool = false
 var dialogue_index: int = 0
 var DialogueLines: Array = []
 var waiting_for_choice: bool = false
@@ -22,6 +24,9 @@ func _ready() -> void:
 	dialogue_ui.hide_speaker_box()
 	dialogue_ui.hide_speaker_name()
 	
+	Background.add_to_group("FadeGroup")
+	character.add_to_group("FadeGroup")
+	dialogue_ui.add_to_group("FadeGroup")
 	# Make sure protagonist is completely hidden initially
 	character.protoganist.visible = false
 	
@@ -34,6 +39,8 @@ func _ready() -> void:
 	SceneManager.transition_out_completed.connect(_on_transition_out_cpmpleted)
 	SceneManager.transition_in_completed.connect(_on_transition_in_cpmpleted)
 	
+	# Connect fade signals
+	
 	# Start the sequence: fade in background first
 	Fade.fade_in()
 	await get_tree().process_frame
@@ -43,14 +50,13 @@ func _ready() -> void:
 	BackgroundEffect2.visible = false
 	BackgroundEffect3.visible = false
 
-
 func start_scene_sequence():
 	"""Start the visual sequence: background -> character -> dialogue"""
 	scene_initialized = true
 	
 	# Step 1: Show background (already visible from transition)
 	# Wait a moment to let player see the background
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.3).timeout
 	
 	# Step 2: NEW - Reset character system for new scene
 	character.reset_for_new_scene()
@@ -117,20 +123,40 @@ func _input(event):
 	if waiting_for_choice:
 		return
 
-	var line = DialogueLines[dialogue_index]
-	var has_choices = line.has("choices")
+	# Handle dialogue end - SINGLE check here only
+	if dialogue_ended:
+		if event.is_action_pressed("next_line"):
+			dialogue_ended = false  # Reset the flag
+			transition_to_next_scene()
+		return
 
-	if event.is_action_pressed("next_line") and not has_choices:
-		if dialogue_ui.animate_text:
-			dialogue_ui.skip_animation_text()
-		elif dialogue_index < len(DialogueLines) - 1:
-			dialogue_index += 1
-			process_current_line()
-		else:
-			print("End of dialogue")
-			dialogue_ui.hide_speaker_box()
-			dialogue_ui.hide_speaker_name()
-			character.hide_all_characters()
+	# Normal dialogue processing
+	if dialogue_index < DialogueLines.size():
+		var line = DialogueLines[dialogue_index]
+		var has_choices = line.has("choices")
+
+		if event.is_action_pressed("next_line") and not has_choices:
+			if dialogue_ui.animate_text:
+				dialogue_ui.skip_animation_text()
+			else:
+				dialogue_index += 1
+				# Check if this was the last line BEFORE processing
+				if dialogue_index >= DialogueLines.size():
+					dialogue_ended = true
+					return
+				process_current_line()
+
+func transition_to_next_scene():
+	# Hide UI elements immediately (but they'll fade)
+	dialogue_ui.hide_speaker_box()
+	dialogue_ui.hide_speaker_name()
+	character.hide_all_characters()
+	
+	# Start the transition process after current frame
+	await get_tree().process_frame
+	Fade.transition_to_scene("res://map.tscn")
+
+
 
 func load_dialogue(file_path):
 	if not FileAccess.file_exists(file_path):
@@ -154,19 +180,42 @@ func load_dialogue(file_path):
 
 func process_current_line():
 	if dialogue_index >= DialogueLines.size():
-		print("Dialogue index out of bounds")
+		print("Dialogue ended - waiting for user input to transition")
+		dialogue_ended = true
+		# Don't return here - let it show the last line first
 		return
 
 	var line = DialogueLines[dialogue_index]
 	
+	# Handle end key - set flag instead of transitioning immediately
+	if line.has("end"):
+		print("End key found - waiting for user input to transition")
+		dialogue_ended = true
+		return
+	
+	# Handle scene transitions defined in JSON
 	if line.has("next_scene"):
 		var next_scene= line["next_scene"]
-		dialogue_file= "res://project assets/Story/" + next_scene + ".json" if !next_scene.is_empty() else ""
+		
+		# Check if next_scene is empty or indicates end of story
+		if next_scene.is_empty() or next_scene == "END":
+			# If we're ending the second scene, transition to another scene
+			if dialogue_file.ends_with("second_scene.json"):
+				print("Second scene marked as ended, waiting for user input...")
+				dialogue_ended = true
+				return
+			else:
+				print("Story ended, waiting for user input...")
+				dialogue_ended = true
+				return
+		
+		dialogue_file= "res://project assets/Story/" + next_scene + ".json"
 		transition_effect= line.get("transition", "fade")
 		scene_initialized = false  # Reset for next scene
 		SceneManager.transition_out(transition_effect)
 		return
 	
+	# Rest of your existing code for processing dialogue lines...
 	if line.has("location"):
 		var background_file= "res://project assets/Assets only for a demo/Backgrounds/" + line["location"] + ".png"
 		Background.texture= load(background_file)
@@ -256,6 +305,7 @@ func process_current_line():
 
 		dialogue_ui.change_line(line["speaker"], line["text"])
 
+
 func get_anchor_position(anchor: String) -> int:
 	for i in range(DialogueLines.size()):
 		if DialogueLines[i].has("anchor") and DialogueLines[i]["anchor"] == anchor:
@@ -272,29 +322,32 @@ func _on_choice_selected(anchor: String):
 		process_current_line()
 	else:
 		printerr("Failed to find anchor: " + anchor)
-		
-
 
 func _on_transition_out_cpmpleted():
+	# 1. Completely hide everything before loading new scene
+	character.hide_all_characters(false)  # Immediate hide, no animation
+	dialogue_ui.hide_all_ui()  # Add this function to your UI script
+	
 	if dialogue_file.is_empty():
-		print("End")
 		return
 
-	# حمّل كل سطور الحوار
+	# 2. Load new dialogue
 	DialogueLines = load_dialogue(dialogue_file)
 	dialogue_index = 0
 	var first_line = DialogueLines[dialogue_index]
 
-	# غيّر الخلفية لو فيه location
+	# 3. Change background if needed
 	if first_line.has("location"):
 		Background.texture = load("res://project assets/Assets only for a demo/Backgrounds/" + first_line["location"] + ".png")
 
-	# لو هذا هو ملف المشهد التاني
+	# 4. For second scene specifically
 	if dialogue_file.ends_with("second_scene.json"):
 		show_background_characters()
-		# Set initial flips for second scene
-		character.kami.flip_h = false  # Make kami face right
-		character.fujiwara.flip_h = false  # Make fujiwara face right
+		# Reset character states
+		character.reset_for_new_scene()
+		# Ensure initial flips
+		character.kami.flip_h = false  
+		character.fujiwara.flip_h = false
 
 	dialogue_index += 1
 	SceneManager.transition_in(transition_effect)
@@ -308,7 +361,6 @@ func show_background_characters():
 
 	BackgroundEffect3.visible = true
 	BackgroundEffect3.play("default")
-
 
 func _on_transition_in_cpmpleted():
 	# Start the visual sequence instead of immediately processing dialogue

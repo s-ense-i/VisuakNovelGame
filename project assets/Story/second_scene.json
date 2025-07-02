@@ -13,7 +13,8 @@
   {
 	"speaker": "Kami",
 	"text": " Standard rules. Non-harassment. No racism. All that stuff. Skip!",
-	"animation": "SmilingOpened"
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
   },
   {
 	"speaker": "Narration",
@@ -259,7 +260,7 @@
 	"speaker": "fujiwara",
 	"text": "It sounds like it. Let's get to the gameplay already!",
 	"animation": "SmilingOpened",
-	"replace_character": "protoganist"
+	"replace_character": "protoganist",
   },
 {
 	"goto": "continue_story_1-1"
@@ -271,7 +272,8 @@
 	"speaker": "fujiwara",
 	"text": "Haha, yup, I in for the gameplay! Just let me kill some demons.",
 	"animation": "SmilingOpened",
-	"replace_character": "protoganist"
+	"replace_character": "protoganist",
+	"end": true
   },
 {
 	"goto": "continue_story_1-1"

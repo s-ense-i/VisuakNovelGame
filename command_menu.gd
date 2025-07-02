@@ -9,15 +9,16 @@ signal end_turn_selected
 func _ready():
 	visible = false
 	
-	move_button.pressed.connect(func():
-		visible = false
-		move_selected.emit()
-	)
+	move_button.pressed.connect(_on_move_pressed)
+	end_turn_button.pressed.connect(_on_end_turn_pressed)
 
-	end_turn_button.pressed.connect(func():
-		visible = false
-		end_turn_selected.emit()
-	)
+func _on_move_pressed():
+	visible = false
+	move_selected.emit()
+
+func _on_end_turn_pressed():
+	visible = false
+	end_turn_selected.emit()
 
 func open():
 	visible = true
@@ -28,5 +29,5 @@ func close():
 func disable_move_button():
 	move_button.disabled = true
 
-func enable_move_button():  # ← أضفنا دي لحل الخطأ
+func enable_move_button():
 	move_button.disabled = false
