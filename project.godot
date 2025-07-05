@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Fade="*res://fade_layer.tscn"
 SceneManager="*res://SceneManager.gd"
+State="*res://State.gd"
 
 [dialogic]
 

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://j5an2x3k83aw"]
+
+[ext_resource type="Script" uid="uid://c1sfg2arxjae3" path="res://BaseEnemy.gd" id="1_qvtb0"]
+[ext_resource type="Texture2D" uid="uid://oyel0g4ctjre" path="res://project assets/Assets only for a demo/Demons/DeSum_Yatsufusa_Artwork.png" id="2_ortbd"]
+
+[resource]
+script = ExtResource("1_qvtb0")
+name = "enemy"
+texture = ExtResource("2_ortbd")
+health = 30
+damage = 15

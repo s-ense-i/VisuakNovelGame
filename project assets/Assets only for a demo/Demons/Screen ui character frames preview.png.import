@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hxxwi64sjbd1"
-path="res://.godot/imported/Screen ui character frames raw.png-176d47d085743c976dbc48bfe9fe8ecc.ctex"
+uid="uid://b0pdfn177qpob"
+path="res://.godot/imported/Screen ui character frames preview.png-099224e19c5d097e8b6fe3fe4d2385ea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project assets/Assets only for a demo/Menu/Screen ui character frames raw.png"
-dest_files=["res://.godot/imported/Screen ui character frames raw.png-176d47d085743c976dbc48bfe9fe8ecc.ctex"]
+source_file="res://project assets/Assets only for a demo/Demons/Screen ui character frames preview.png"
+dest_files=["res://.godot/imported/Screen ui character frames preview.png-099224e19c5d097e8b6fe3fe4d2385ea.ctex"]
 
 [params]
 
