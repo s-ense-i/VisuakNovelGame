@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-enum State { IDLE, SELECTED, MOVING, WAITING }
-var state: State = State.IDLE
+enum PlayerState { IDLE, SELECTED, MOVING, WAITING }
+var state: PlayerState = PlayerState.IDLE
 
 var move_path: Array[Vector2i] = []
 var move_speed := 100
@@ -16,8 +16,7 @@ var pathfinder: PathFinder
 @onready var move_overlay := get_parent().get_node("MoveOverlay")
 @onready var command_menu := get_parent().get_node("CommandMenu")
 @onready var anim := $AnimatedSprite2D
-@onready var battlemap := get_parent()  
-
+@onready var battlemap := get_parent()
 
 func _ready():
 	current_tile = tile_map.local_to_map(tile_map.to_local(global_position))
@@ -31,15 +30,12 @@ func _ready():
 			walkable_cells.append(cell)
 
 	pathfinder = PathFinder.new(tile_map, walkable_cells)
-	
+
 	add_to_group("players")  # ✅ لازم قبل أي استخدام لـ get_players()
-	
-
-
 
 
 func _physics_process(delta):
-	if state == State.MOVING and move_path.size() > 0:
+	if state == PlayerState.MOVING and move_path.size() > 0:
 		var next_tile = move_path[0]
 		var tile_size = tile_map.tile_set.tile_size
 		var next_pos = tile_map.map_to_local(next_tile)
@@ -54,7 +50,7 @@ func _physics_process(delta):
 			move_path.remove_at(0)
 
 			if move_path.is_empty():
-				state = State.WAITING
+				state = PlayerState.WAITING
 				velocity = Vector2.ZERO
 				anim.play("idle")
 				move_overlay.clear()
@@ -66,14 +62,15 @@ func _physics_process(delta):
 
 func _input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-		if state == State.IDLE:
-			var battlemap = get_parent()  # ✅ الصح
+		if state == PlayerState.IDLE:
+			var battlemap = get_parent()
 			battlemap.selected_player = self
-			state = State.SELECTED
+			state = PlayerState.SELECTED
 			command_menu.open()
 
+
 func _unhandled_input(event):
-	if event is InputEventMouseButton and event.pressed and state == State.MOVING:
+	if event is InputEventMouseButton and event.pressed and state == PlayerState.MOVING:
 		var click_pos = get_global_mouse_position()
 		var tile = tile_map.local_to_map(tile_map.to_local(click_pos))
 
@@ -84,16 +81,17 @@ func _unhandled_input(event):
 
 			if path.size() > 1 and path.size() - 1 <= move_range:
 				move_path = path
-				state = State.MOVING
+				state = PlayerState.MOVING
 				anim.play("walk")
 				move_overlay.clear()
 
+
 func _on_move_selected():
 	if battlemap.selected_player != self:
-		return  # ⛔ مش أنا اللاعب المحدد، تجاهل الإشارة
+		return
 
 	if move_clicks < MAX_MOVE_CLICKS:
-		state = State.MOVING
+		state = PlayerState.MOVING
 		show_movement_range()
 		command_menu.close()
 		move_clicks += 1
@@ -104,9 +102,9 @@ func _on_move_selected():
 
 func _on_end_turn_selected():
 	if battlemap.selected_player != self:
-		return  # ⛔ مش أنا اللاعب المحدد، تجاهل الإشارة
+		return
 
-	state = State.IDLE
+	state = PlayerState.IDLE
 	move_clicks = 0
 	command_menu.close()
 	command_menu.enable_move_button()
@@ -127,7 +125,6 @@ func is_walkable(tile_pos: Vector2i) -> bool:
 	if data.get_custom_data("walkable") != true:
 		return false
 
-	# 🔥 تحقق إذا كان في لاعب تاني واقف على نفس البلاطة
 	for player in battlemap.get_players():
 		if player != self and player.current_tile == tile_pos:
 			return false

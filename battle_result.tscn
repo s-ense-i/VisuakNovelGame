@@ -1,0 +1,166 @@
+[gd_scene load_steps=7 format=3 uid="uid://6hqe3ihyax1e"]
+
+[ext_resource type="Texture2D" uid="uid://bkesxn2jqwuqv" path="res://project assets/Assets only for a demo/Characters/Protagonist/Almost Angry.png" id="2_ipi4t"]
+[ext_resource type="Script" uid="uid://ci25ywkliwwjb" path="res://level_label.gd" id="3_ipi4t"]
+[ext_resource type="Texture2D" uid="uid://b08w1fs0lo3d6" path="res://project assets/Assets only for a demo/Characters/Male Friend/Smiling Closed Eyes Buddy.png" id="3_qaodg"]
+[ext_resource type="Texture2D" uid="uid://y0ndo3iu2b0h" path="res://project assets/Assets only for a demo/Characters/Female Lead/Smile Open Eyes.png" id="4_inql0"]
+
+[sub_resource type="GDScript" id="GDScript_tiarl"]
+script/source = "extends Control
+
+@onready var level_label = $ResultPanel/CharacterBox1/LevelLabel
+var level_displayed := 1
+
+func _ready():
+	animate_level_up(1, 3)
+
+func animate_level_up(from_level: int, to_level: int):
+	level_displayed = from_level
+	level_label.text = str(level_displayed)
+
+	var tween := create_tween()
+	tween.tween_method(update_level_display, from_level, to_level, 1.0)
+
+func update_level_display(value: float):
+	level_displayed = round(value)
+	level_label.text = str(level_displayed)
+"
+
+[sub_resource type="GDScript" id="GDScript_ipi4t"]
+script/source = "extends TextureRect
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			scale *= 1.1  # Zoom In
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			scale *= 0.9  # Zoom Out
+"
+
+[node name="BattleResult" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_tiarl")
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1.15514e-06, 0, 0.974815, 1)
+theme_override_colors/font_shadow_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "BATTLE RESULTS"
+horizontal_alignment = 1
+
+[node name="ResultPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 8.0
+offset_top = -91.0
+offset_right = 8.0
+offset_bottom = 111.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 0
+offset_right = 214.0
+offset_bottom = 223.0
+
+[node name="TeamLabel" type="Label" parent="ResultPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "Team
+1"
+horizontal_alignment = 1
+
+[node name="CharacterBox1" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -276.0
+offset_top = -101.0
+offset_right = 748.0
+offset_bottom = 1037.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.176572, 0.176572)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CharacterImage" type="TextureRect" parent="ResultPanel/CharacterBox1"]
+layout_mode = 2
+texture = ExtResource("2_ipi4t")
+flip_h = true
+script = SubResource("GDScript_ipi4t")
+
+[node name="LevelLabel" type="Label" parent="ResultPanel/CharacterBox1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+script = ExtResource("3_ipi4t")
+
+[node name="CharacterBox2" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -104.0
+offset_right = 1016.0
+offset_bottom = 1034.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.176572, 0.176572)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CharacterImage" type="TextureRect" parent="ResultPanel/CharacterBox2"]
+layout_mode = 2
+texture = ExtResource("3_qaodg")
+flip_h = true
+
+[node name="LevelLabel" type="Label" parent="ResultPanel/CharacterBox2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+script = ExtResource("3_ipi4t")
+
+[node name="CharacterBox3" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 271.0
+offset_top = -101.0
+offset_right = 1295.0
+offset_bottom = 1037.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.176572, 0.176572)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CharacterImage" type="TextureRect" parent="ResultPanel/CharacterBox3"]
+layout_mode = 2
+texture = ExtResource("4_inql0")
+flip_h = true
+
+[node name="LevelLabel" type="Label" parent="ResultPanel/CharacterBox3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+script = ExtResource("3_ipi4t")

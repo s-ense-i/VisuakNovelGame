@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgag5jf7dkid6"
-path="res://.godot/imported/Screen ui command menu preview.png-b3749cd96e9cd2b278490491a4d1a6fb.ctex"
+uid="uid://c6p7mq2muuhie"
+path="res://.godot/imported/Screen ui command menu preview6.png-c12752630f8aaf8f031706b44dd94ade.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project assets/Assets only for a demo/Menu/Screen ui command menu preview.png"
-dest_files=["res://.godot/imported/Screen ui command menu preview.png-b3749cd96e9cd2b278490491a4d1a6fb.ctex"]
+source_file="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png"
+dest_files=["res://.godot/imported/Screen ui command menu preview6.png-c12752630f8aaf8f031706b44dd94ade.ctex"]
 
 [params]
 
