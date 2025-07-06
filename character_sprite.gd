@@ -4,9 +4,13 @@ extends Node2D
 @onready var protoganist = %protoganist
 @onready var kami = %kami
 @onready var fujiwara = %Fujiwara
+@onready var Yatufusta = %Yatufusta
+@onready var PigEnemy = %PigEnemy
+@onready var BirdEnemy = %BirdEnemy
+
 
 # Enhanced Animation settings - increased slide distance for off-screen effect
-var slide_duration: float = 0.6  # Slightly longer for better effect
+var slide_duration: float = 0.4 # Slightly longer for better effect
 var slide_distance: float = 400.0  # Increased from 200 to ensure off-screen
 var slide_ease_type: Tween.EaseType = Tween.EASE_OUT
 var slide_transition_type: Tween.TransitionType = Tween.TRANS_CUBIC
@@ -17,10 +21,15 @@ var screen_width: float
 # Track if characters have already appeared in the scene
 var kami_has_appeared: bool = false
 var fujiwara_has_appeared: bool = false
+var yatufusta_has_appeared: bool = false
+var PigEnemy_has_appeared: bool = false
+var BirdEnemy_has_appeared: bool = false
 var protagonist_frames_set: bool = false
 var kami_frames_set: bool = false
 var fujiwara_frames_set: bool = false
-
+var yatufusta_frames_set: bool = false
+var PigEnemy_frames_set: bool = false
+var BirdEnemy_frames_set: bool = false
 # Track recent speakers for narration mode
 var recent_speakers = []
 
@@ -28,6 +37,9 @@ var recent_speakers = []
 var original_protagonist_position: Vector2
 var original_kami_position: Vector2
 var original_fujiwara_position: Vector2
+var original_yatufusta_position: Vector2
+var original_PigEnemy_position: Vector2
+var original_BirdEnemy_position: Vector2
 
 # Track which characters have been replaced and what replaced them
 var character_replacements = {}
@@ -38,13 +50,15 @@ var active_tweens = {}
 
 func _ready() -> void:
 	self.modulate.a=0
-	Fade.fade_in()	# Get screen width for off-screen calculations
 	screen_width = get_viewport().get_visible_rect().size.x
 	
 	# Store original positions
 	original_protagonist_position = protoganist.position
 	original_kami_position = kami.position
 	original_fujiwara_position = fujiwara.position
+	original_yatufusta_position = Yatufusta.position
+	original_PigEnemy_position = PigEnemy.position
+	original_BirdEnemy_position = BirdEnemy.position
 	
 	# Ensure initial state
 	hide_all_characters()
@@ -52,6 +66,7 @@ func _ready() -> void:
 	protoganist.modulate = Color.WHITE
 	kami_has_appeared = false
 	fujiwara_has_appeared = false
+	yatufusta_has_appeared = false
 	recent_speakers.clear()
 	character_replacements.clear()
 	replaced_characters.clear()
@@ -62,23 +77,23 @@ func _ready() -> void:
 
 # FIXED: Consistent auto-facing system - left characters unflipped, right characters flipped
 func update_character_facing():
-	"""Update all visible characters to face consistently: left=unflipped, right=flipped"""
 	var visible_chars = get_visible_character_nodes()
 	var screen_center = screen_width / 2
-	
-	print("Updating character facing for ", visible_chars.size(), " visible characters")
 	
 	for char_node in visible_chars:
 		var char_name = get_character_name_from_node(char_node)
 		var char_x = char_node.global_position.x
-		var is_on_right_side = char_x >= screen_center
 		
-		# CONSISTENT RULE: Left side = no flip (false), Right side = flip (true)
-		char_node.flip_h = is_on_right_side
+		# Special case for BirdEnemy - always face left (unflipped)
+		if char_name == "BirdEnemy":
+			char_node.flip_h = false
+		else:
+			# Normal facing logic for other characters
+			char_node.flip_h = char_x >= screen_center
 		
 		print("Character ", char_name, " at x:", char_x, 
-			  " (", "right" if is_on_right_side else "left", " side)",
-			  " flip_h set to:", char_node.flip_h)
+			  " (", "right" if char_node.flip_h else "left", " side)",
+			  " flip_h:", char_node.flip_h)
 
 func get_visible_character_nodes() -> Array[AnimatedSprite2D]:
 	"""Get array of currently visible character nodes"""
@@ -90,6 +105,12 @@ func get_visible_character_nodes() -> Array[AnimatedSprite2D]:
 		visible_chars.append(kami)
 	if fujiwara.visible:
 		visible_chars.append(fujiwara)
+	if Yatufusta.visible:
+		visible_chars.append(Yatufusta)
+	if PigEnemy.visible:
+		visible_chars.append(PigEnemy)
+	if BirdEnemy.visible:
+		visible_chars.append(BirdEnemy)	
 	
 	return visible_chars
 
@@ -101,38 +122,28 @@ func get_character_slide_direction(character_node: AnimatedSprite2D) -> bool:
 
 # ENHANCED: Function to create sliding entrance animation with consistent facing
 func slide_character_in(character_node: AnimatedSprite2D, target_position: Vector2, from_right: bool = true):
-	# Stop any existing tween for this character
+	# Calculate sprite width properly for AnimatedSprite2D
+	var sprite_width = 100.0  # Default fallback width
+	if character_node.sprite_frames and character_node.sprite_frames.has_animation(character_node.animation):
+		var frame_texture = character_node.sprite_frames.get_frame_texture(character_node.animation, character_node.frame)
+		if frame_texture:
+			sprite_width = frame_texture.get_width() * character_node.scale.x
+	
+	var screen_center = screen_width / 2
+	var is_target_on_right = target_position.x >= screen_center
+	character_node.flip_h = is_target_on_right
+	
 	var character_name = get_character_name_from_node(character_node)
 	if active_tweens.has(character_name):
 		active_tweens[character_name].kill()
 
 	# Calculate start position (completely off-screen)
 	var start_position = target_position
-	var sprite_width = 100.0  # Default fallback
-	if character_node.sprite_frames and character_node.sprite_frames.has_animation(character_node.animation):
-		var texture = character_node.sprite_frames.get_frame_texture(character_node.animation, character_node.frame)
-		if texture:
-			sprite_width = texture.get_width() * character_node.scale.x
-	else:
-		sprite_width = 100.0 * character_node.scale.x  # Fallback width
-
-	# Determine slide direction based on target position
-	var screen_center = screen_width / 2
 	var slide_from_right = target_position.x >= screen_center
 	
-	# CONSISTENT FACING: Set based on final position, not slide direction
-	var is_target_on_right = target_position.x >= screen_center
-	character_node.flip_h = is_target_on_right
-	
-	print("Sliding in ", character_name, " to position x:", target_position.x,
-		  " (", "right" if is_target_on_right else "left", " side)",
-		  " flip_h:", character_node.flip_h)
-	
 	if slide_from_right:
-		# Start from right edge of screen plus sprite width
 		start_position.x = screen_width + sprite_width
 	else:
-		# Start from left edge of screen minus sprite width
 		start_position.x = -sprite_width
 
 	# Set initial position and make visible
@@ -146,34 +157,27 @@ func slide_character_in(character_node: AnimatedSprite2D, target_position: Vecto
 	tween.set_ease(slide_ease_type)
 	tween.set_trans(slide_transition_type)
 	
-	# Animate to target position
 	tween.tween_property(character_node, "position", target_position, slide_duration)
 	
-	# Clean up when animation completes
 	tween.finished.connect(func(): 
 		active_tweens.erase(character_name)
-		# Final facing update to ensure consistency
 		update_character_facing()
 	)
 
 # ENHANCED: Function to slide character out based on their screen position
 func slide_character_out(character_node: AnimatedSprite2D, force_direction: String = "auto"):
-	"""
-	Slides character out of screen
-	force_direction: "auto" (based on position), "left", "right"
-	"""
-	var character_name = get_character_name_from_node(character_node)
-	if active_tweens.has(character_name):
-		active_tweens[character_name].kill()
+	var char_name = get_character_name_from_node(character_node)
+	if active_tweens.has(char_name):
+		return
+	
+	# Calculate sprite width properly for AnimatedSprite2D
+	var sprite_width = 100.0  # Default fallback width
+	if character_node.sprite_frames and character_node.sprite_frames.has_animation(character_node.animation):
+		var frame_texture = character_node.sprite_frames.get_frame_texture(character_node.animation, character_node.frame)
+		if frame_texture:
+			sprite_width = frame_texture.get_width() * character_node.scale.x
 	
 	var current_position = character_node.position
-	var sprite_width = 100.0  # Default fallback
-	if character_node.sprite_frames and character_node.sprite_frames.has_animation(character_node.animation):
-		var texture = character_node.sprite_frames.get_frame_texture(character_node.animation, character_node.frame)
-		if texture:
-			sprite_width = texture.get_width() * character_node.scale.x
-	else:
-		sprite_width = 100.0 * character_node.scale.x  # Fallback width
 	var slide_right: bool
 	
 	# Determine slide direction
@@ -185,32 +189,26 @@ func slide_character_out(character_node: AnimatedSprite2D, force_direction: Stri
 		"auto", _:
 			slide_right = get_character_slide_direction(character_node)
 	
-	# Calculate end position (completely off-screen)
+	# Calculate end position
 	var end_position = current_position
 	if slide_right:
-		# Slide to right edge of screen plus sprite width
 		end_position.x = screen_width + sprite_width
 	else:
-		# Slide to left edge of screen minus sprite width
 		end_position.x = -sprite_width
 	
 	var tween = create_tween()
-	active_tweens[character_name] = tween
+	active_tweens[char_name] = tween
 	
 	tween.set_ease(slide_ease_type)
 	tween.set_trans(slide_transition_type)
 	
-	# Animate to off-screen position
 	tween.tween_property(character_node, "position", end_position, slide_duration)
 	
-	# Hide when tween finishes and update facing for remaining characters
 	tween.finished.connect(func(): 
 		character_node.visible = false
-		active_tweens.erase(character_name)
-		# Update facing for remaining visible characters
+		active_tweens.erase(char_name)
 		update_character_facing()
 	)
-
 # Helper function to get character name from node
 func get_character_name_from_node(node: AnimatedSprite2D) -> String:
 	if node == protoganist:
@@ -219,6 +217,12 @@ func get_character_name_from_node(node: AnimatedSprite2D) -> String:
 		return "kami"
 	elif node == fujiwara:
 		return "fujiwara"
+	elif node == Yatufusta:
+		return "yatufusta"
+	elif node == PigEnemy:
+		return "PigEnemy"
+	elif node == BirdEnemy:
+		return "BirdEnemy"	
 	return ""
 
 # ENHANCED: Hide all characters with directional sliding based on position
@@ -231,16 +235,28 @@ func hide_all_characters(animate: bool = false):
 			slide_character_out(kami, "auto")
 		if fujiwara.visible:
 			slide_character_out(fujiwara, "auto")
+		if Yatufusta.visible:
+			slide_character_out(Yatufusta, "auto")
+		if PigEnemy.visible:
+			slide_character_out(PigEnemy, "auto")	
+		if BirdEnemy.visible:
+			slide_character_out(BirdEnemy, "auto")	
 	else:
 		# Immediate hide
 		protoganist.visible = false
 		kami.visible = false
 		fujiwara.visible = false
+		Yatufusta.visible = false
+		PigEnemy.visible = false
+		BirdEnemy.visible = false
 	
 	# Reset modulation
 	protoganist.modulate = Color.WHITE
 	kami.modulate = Color.WHITE
 	fujiwara.modulate = Color.WHITE
+	Yatufusta.modulate = Color.WHITE
+	PigEnemy.modulate = Color.WHITE
+	BirdEnemy.modulate = Color.WHITE
 
 # Track speakers for narration mode
 func update_recent_speakers(speaker_name: Character.Name):
@@ -291,6 +307,30 @@ func replace_character(character_to_replace: Character.Name, new_character: Char
 			else:
 				replacement_position = original_fujiwara_position
 			slide_from_right = replacement_position.x < screen_width / 2
+		
+		Character.Name.yatufusta:
+			if Yatufusta.visible:
+				replacement_position = Yatufusta.position
+				slide_character_out(Yatufusta, "auto")
+			else:
+				replacement_position = original_yatufusta_position
+			slide_from_right = replacement_position.x < screen_width / 2
+			
+		Character.Name.PigEnemy:
+			if PigEnemy.visible:
+				replacement_position = PigEnemy.position
+				slide_character_out(PigEnemy, "auto")
+			else:
+				replacement_position = original_PigEnemy_position
+			slide_from_right = replacement_position.x < screen_width / 2	
+			
+		Character.Name.BirdEnemy:
+			if BirdEnemy.visible:
+				replacement_position = BirdEnemy.position
+				slide_character_out(BirdEnemy, "auto")
+			else:
+				replacement_position = original_BirdEnemy_position
+			slide_from_right = replacement_position.x < screen_width / 2		
 	
 	# Wait for the slide out to progress, then slide in the new character
 	await get_tree().create_timer(slide_duration * 0.4).timeout
@@ -319,13 +359,43 @@ func replace_character(character_to_replace: Character.Name, new_character: Char
 			fujiwara_frames_set = true
 			fujiwara.play(animation)
 			slide_character_in(fujiwara, replacement_position, slide_from_right)
+		
+		Character.Name.yatufusta:
+			Yatufusta.modulate = Color.WHITE
+			yatufusta_has_appeared = true
+			Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+			yatufusta_frames_set = true
+			Yatufusta.play(animation)
+			slide_character_in(Yatufusta, replacement_position, slide_from_right)
+			
+		Character.Name.PigEnemy:
+			PigEnemy.modulate = Color.WHITE
+			PigEnemy_has_appeared = true
+			PigEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.PigEnemy]["animation"]
+			PigEnemy_frames_set = true
+			PigEnemy.play(animation)
+			slide_character_in(PigEnemy, replacement_position, slide_from_right)
+			
+		Character.Name.BirdEnemy:
+			BirdEnemy.modulate = Color.WHITE
+			BirdEnemy_has_appeared = true
+			BirdEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.BirdEnemy]["animation"]
+			BirdEnemy_frames_set = true
+			BirdEnemy.play(animation)
+			slide_character_in(BirdEnemy, replacement_position, slide_from_right)
 	
 	# Update appearance flags
 	if new_character == Character.Name.kami:
 		kami_has_appeared = true
 	elif new_character == Character.Name.fujiwara:
 		fujiwara_has_appeared = true
-	
+	elif new_character == Character.Name.yatufusta:
+		yatufusta_has_appeared = true
+	elif new_character == Character.Name.PigEnemy:
+		PigEnemy_has_appeared = true
+	elif new_character == Character.Name.BirdEnemy:
+		BirdEnemy_has_appeared = true	
+		
 	# Wait for slide in to complete, then dim other characters
 	await get_tree().create_timer(slide_duration).timeout
 	dim_non_speakers(new_character)
@@ -346,6 +416,12 @@ func dim_non_speakers(current_speaker: Character.Name):
 		kami.modulate = Color(0.7, 0.7, 0.7)
 	if fujiwara.visible and current_speaker != Character.Name.fujiwara:
 		fujiwara.modulate = Color(0.7, 0.7, 0.7)
+	if Yatufusta.visible and current_speaker != Character.Name.yatufusta:
+		Yatufusta.modulate = Color(0.7, 0.7, 0.7)
+	if PigEnemy.visible and current_speaker != Character.Name.PigEnemy:
+		PigEnemy.modulate = Color(0.7, 0.7, 0.7)	
+	if BirdEnemy.visible and current_speaker != Character.Name.BirdEnemy:
+		BirdEnemy.modulate = Color(0.7, 0.7, 0.7)	
 
 # ENHANCED: Show speaker with consistent auto-facing
 func show_speaker(character_name: Character.Name, animation: String = "idle"):
@@ -356,39 +432,31 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 	match character_name:
 		Character.Name.protoganist:
 			if should_character_be_visible(Character.Name.protoganist):
-				if kami_has_appeared or fujiwara_has_appeared:
-					# Show other appeared characters, but respect replacements
-					if not protoganist.visible:
-						slide_character_in(protoganist, original_protagonist_position, false)
-					else:
-						protoganist.visible = true
-					
-					if kami_has_appeared and should_character_be_visible(Character.Name.kami):
-						if not kami.visible:
-							slide_character_in(kami, original_kami_position, true)
-						else:
-							kami.visible = true
-					
-					if fujiwara_has_appeared and should_character_be_visible(Character.Name.fujiwara):
-						if not fujiwara.visible:
-							slide_character_in(fujiwara, original_fujiwara_position, true)
-						else:
-							fujiwara.visible = true
-					
-					highlight_speaker(Character.Name.protoganist)
+				# Only slide in protagonist if not visible
+				if not protoganist.visible:
+					slide_character_in(protoganist, original_protagonist_position, false)
 				else:
-					hide_all_characters()
-					if not protoganist.visible:
-						slide_character_in(protoganist, original_protagonist_position, false)
-					else:
-						protoganist.visible = true
-						protoganist.modulate = Color.WHITE
+					protoganist.visible = true
+				
+				# Keep other characters static if already visible
+				if kami.visible and should_character_be_visible(Character.Name.kami):
+					kami.visible = true
+				if fujiwara.visible and should_character_be_visible(Character.Name.fujiwara):
+					fujiwara.visible = true
+				if Yatufusta.visible and should_character_be_visible(Character.Name.yatufusta):
+					Yatufusta.visible = true
+				if PigEnemy.visible and should_character_be_visible(Character.Name.PigEnemy):
+					PigEnemy.visible = true	
+				if BirdEnemy.visible and should_character_be_visible(Character.Name.BirdEnemy):
+					BirdEnemy.visible = true		
+				
+				highlight_speaker(Character.Name.protoganist)
 				
 				protoganist.frames = Character.CHARACTER_DETAILS[Character.Name.protoganist]["animation"]
 				protagonist_frames_set = true
 				protoganist.play(animation)
 				
-				# Update facing after a short delay to ensure positioning is complete
+				# Update facing after delay
 				await get_tree().create_timer(0.1).timeout
 				update_character_facing()
 			else:
@@ -397,27 +465,26 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				return
 		
 		Character.Name.kami:
-			# Mark as appeared and show with animation if first time
-			var first_appearance = not kami_has_appeared
 			kami_has_appeared = true
 			
-			if should_character_be_visible(Character.Name.protoganist):
-				if not protoganist.visible:
-					slide_character_in(protoganist, original_protagonist_position, false)
-				else:
-					protoganist.visible = true
-			
+			# Only slide in kami if not visible
 			if should_character_be_visible(Character.Name.kami):
 				if not kami.visible:
 					slide_character_in(kami, original_kami_position, true)
 				else:
 					kami.visible = true
 			
-			if fujiwara_has_appeared and should_character_be_visible(Character.Name.fujiwara):
-				if not fujiwara.visible:
-					slide_character_in(fujiwara, original_fujiwara_position, true)
-				else:
-					fujiwara.visible = true
+			# Keep other characters static if already visible
+			if protoganist.visible and should_character_be_visible(Character.Name.protoganist):
+				protoganist.visible = true
+			if fujiwara.visible and should_character_be_visible(Character.Name.fujiwara):
+				fujiwara.visible = true
+			if Yatufusta.visible and should_character_be_visible(Character.Name.yatufusta):
+				Yatufusta.visible = true
+			if PigEnemy.visible and should_character_be_visible(Character.Name.PigEnemy):
+				PigEnemy.visible = true	
+			if BirdEnemy.visible and should_character_be_visible(Character.Name.BirdEnemy):
+				BirdEnemy.visible = true			
 			
 			highlight_speaker(Character.Name.kami)
 			
@@ -430,32 +497,31 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				protagonist_frames_set = true
 				protoganist.play("idle")
 			
-			# Update facing after a short delay
+			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
 			update_character_facing()
 		
 		Character.Name.fujiwara:
-			# Mark as appeared and show with animation if first time
-			var first_appearance = not fujiwara_has_appeared
 			fujiwara_has_appeared = true
 			
-			if kami_has_appeared and should_character_be_visible(Character.Name.kami):
-				if not kami.visible:
-					slide_character_in(kami, original_kami_position, true)
-				else:
-					kami.visible = true
-			
-			if should_character_be_visible(Character.Name.protoganist):
-				if not protoganist.visible:
-					slide_character_in(protoganist, original_protagonist_position, false)
-				else:
-					protoganist.visible = true
-			
+			# Only slide in fujiwara if not visible
 			if should_character_be_visible(Character.Name.fujiwara):
 				if not fujiwara.visible:
 					slide_character_in(fujiwara, original_fujiwara_position, true)
 				else:
 					fujiwara.visible = true
+			
+			# Keep other characters static if already visible
+			if protoganist.visible and should_character_be_visible(Character.Name.protoganist):
+				protoganist.visible = true
+			if kami.visible and should_character_be_visible(Character.Name.kami):
+				kami.visible = true
+			if Yatufusta.visible and should_character_be_visible(Character.Name.yatufusta):
+				Yatufusta.visible = true
+			if PigEnemy.visible and should_character_be_visible(Character.Name.PigEnemy):
+				PigEnemy.visible = true	
+			if BirdEnemy.visible and should_character_be_visible(Character.Name.BirdEnemy):
+				BirdEnemy.visible = true			
 			
 			highlight_speaker(Character.Name.fujiwara)
 			
@@ -472,9 +538,155 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				kami_frames_set = true
 				kami.play("idle")
 			
-			# Update facing after a short delay
+			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
 			update_character_facing()
+		
+		Character.Name.yatufusta:
+			yatufusta_has_appeared = true
+			
+			# Only slide in Yatufusta if not visible
+			if should_character_be_visible(Character.Name.yatufusta):
+				if not Yatufusta.visible:
+					slide_character_in(Yatufusta, original_yatufusta_position, true)
+				else:
+					Yatufusta.visible = true
+			
+			# Keep other characters static if already visible
+			if protoganist.visible and should_character_be_visible(Character.Name.protoganist):
+				protoganist.visible = true
+			if kami.visible and should_character_be_visible(Character.Name.kami):
+				kami.visible = true
+			if fujiwara.visible and should_character_be_visible(Character.Name.fujiwara):
+				fujiwara.visible = true
+			if PigEnemy.visible and should_character_be_visible(Character.Name.PigEnemy):
+				PigEnemy.visible = true	
+			if BirdEnemy.visible and should_character_be_visible(Character.Name.BirdEnemy):
+				BirdEnemy.visible = true			
+			
+			highlight_speaker(Character.Name.yatufusta)
+			
+			Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+			yatufusta_frames_set = true
+			Yatufusta.play(animation)
+			
+			if protoganist.visible and not protagonist_frames_set:
+				protoganist.frames = Character.CHARACTER_DETAILS[Character.Name.protoganist]["animation"]
+				protagonist_frames_set = true
+				protoganist.play("idle")
+			if kami.visible and not kami_frames_set:
+				kami.frames = Character.CHARACTER_DETAILS[Character.Name.kami]["animation"]
+				kami_frames_set = true
+				kami.play("idle")
+			if fujiwara.visible and not fujiwara_frames_set:
+				fujiwara.frames = Character.CHARACTER_DETAILS[Character.Name.fujiwara]["animation"]
+				fujiwara_frames_set = true
+				fujiwara.play("idle")
+				
+			await get_tree().create_timer(0.1).timeout
+			update_character_facing()
+			
+		Character.Name.PigEnemy:
+			PigEnemy_has_appeared = true
+			
+			# Only slide in Yatufusta if not visible
+			if should_character_be_visible(Character.Name.PigEnemy):
+				if not PigEnemy.visible:
+					slide_character_in(PigEnemy, original_PigEnemy_position, true)
+				else:
+					PigEnemy.visible = true
+			
+			# Keep other characters static if already visible
+			if protoganist.visible and should_character_be_visible(Character.Name.protoganist):
+				protoganist.visible = true
+			if kami.visible and should_character_be_visible(Character.Name.kami):
+				kami.visible = true
+			if fujiwara.visible and should_character_be_visible(Character.Name.fujiwara):
+				fujiwara.visible = true
+			if Yatufusta.visible and should_character_be_visible(Character.Name.yatufusta):
+				Yatufusta.visible = true	
+			if BirdEnemy.visible and should_character_be_visible(Character.Name.BirdEnemy):
+				BirdEnemy.visible = true			
+			
+			highlight_speaker(Character.Name.PigEnemy)
+			
+			PigEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.PigEnemy]["animation"]
+			PigEnemy_frames_set = true
+			PigEnemy.play(animation)
+			
+			if protoganist.visible and not protagonist_frames_set:
+				protoganist.frames = Character.CHARACTER_DETAILS[Character.Name.protoganist]["animation"]
+				protagonist_frames_set = true
+				protoganist.play("idle")
+			if kami.visible and not kami_frames_set:
+				kami.frames = Character.CHARACTER_DETAILS[Character.Name.kami]["animation"]
+				kami_frames_set = true
+				kami.play("idle")
+			if fujiwara.visible and not fujiwara_frames_set:
+				fujiwara.frames = Character.CHARACTER_DETAILS[Character.Name.fujiwara]["animation"]
+				fujiwara_frames_set = true
+				fujiwara.play("idle")
+			if Yatufusta.visible and not yatufusta_frames_set:
+				Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+				yatufusta_frames_set = true
+				Yatufusta.play("idle")	
+				
+			# Update facing after delay
+			await get_tree().create_timer(0.1).timeout
+			update_character_facing()
+			
+		Character.Name.BirdEnemy:
+			BirdEnemy_has_appeared = true
+			
+			# Only slide in Yatufusta if not visible
+			if should_character_be_visible(Character.Name.BirdEnemy):
+				if not BirdEnemy.visible:
+					slide_character_in(BirdEnemy, original_BirdEnemy_position, true)
+				else:
+					BirdEnemy.visible = true
+			
+			# Keep other characters static if already visible
+			if protoganist.visible and should_character_be_visible(Character.Name.protoganist):
+				protoganist.visible = true
+			if kami.visible and should_character_be_visible(Character.Name.kami):
+				kami.visible = true
+			if fujiwara.visible and should_character_be_visible(Character.Name.fujiwara):
+				fujiwara.visible = true
+			if Yatufusta.visible and should_character_be_visible(Character.Name.yatufusta):
+				Yatufusta.visible = true	
+			if PigEnemy.visible and should_character_be_visible(Character.Name.PigEnemy):
+				PigEnemy.visible = true			
+			
+			highlight_speaker(Character.Name.BirdEnemy)
+			
+			BirdEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.BirdEnemy]["animation"]
+			BirdEnemy_frames_set = true
+			BirdEnemy.play(animation)
+			
+			if protoganist.visible and not protagonist_frames_set:
+				protoganist.frames = Character.CHARACTER_DETAILS[Character.Name.protoganist]["animation"]
+				protagonist_frames_set = true
+				protoganist.play("idle")
+			if kami.visible and not kami_frames_set:
+				kami.frames = Character.CHARACTER_DETAILS[Character.Name.kami]["animation"]
+				kami_frames_set = true
+				kami.play("idle")
+			if fujiwara.visible and not fujiwara_frames_set:
+				fujiwara.frames = Character.CHARACTER_DETAILS[Character.Name.fujiwara]["animation"]
+				fujiwara_frames_set = true
+				fujiwara.play("idle")
+			if Yatufusta.visible and not yatufusta_frames_set:
+				Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+				yatufusta_frames_set = true
+				Yatufusta.play("idle")			
+			if PigEnemy.visible and not PigEnemy_frames_set:
+				PigEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.PigEnemy]["animation"]
+				PigEnemy_frames_set  = true
+				PigEnemy.play("idle")		
+				
+			# Update facing after delay
+			await get_tree().create_timer(0.1).timeout
+			update_character_facing()	
 
 func highlight_speaker(character_name: Character.Name):
 	# First, dim all visible characters
@@ -484,6 +696,12 @@ func highlight_speaker(character_name: Character.Name):
 		kami.modulate = Color(0.7, 0.7, 0.7)
 	if fujiwara.visible:
 		fujiwara.modulate = Color(0.7, 0.7, 0.7)
+	if Yatufusta.visible:
+		Yatufusta.modulate = Color(0.7, 0.7, 0.7)	
+	if PigEnemy.visible:
+		PigEnemy.modulate = Color(0.7, 0.7, 0.7)	
+	if BirdEnemy.visible:
+		BirdEnemy.modulate = Color(0.7, 0.7, 0.7)		
 	
 	# Then highlight the speaker
 	match character_name:
@@ -493,6 +711,12 @@ func highlight_speaker(character_name: Character.Name):
 			kami.modulate = Color.WHITE
 		Character.Name.fujiwara:
 			fujiwara.modulate = Color.WHITE
+		Character.Name.yatufusta:
+			Yatufusta.modulate = Color.WHITE
+		Character.Name.PigEnemy:
+			PigEnemy.modulate = Color.WHITE	
+		Character.Name.BirdEnemy:
+			BirdEnemy.modulate = Color.WHITE		
 
 func show_narration_mode():
 	print("Narration mode: preserving current character visibility and dimming all")
@@ -518,6 +742,27 @@ func show_narration_mode():
 			fujiwara_frames_set = true
 			fujiwara.play("idle")
 	
+	if Yatufusta.visible:
+		Yatufusta.modulate = Color(0.7, 0.7, 0.7)
+		if not yatufusta_frames_set:
+			Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+			yatufusta_frames_set = true
+			Yatufusta.play("idle")
+			
+	if PigEnemy.visible:
+		PigEnemy.modulate = Color(0.7, 0.7, 0.7)
+		if not PigEnemy_frames_set:
+			PigEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.PigEnemy]["animation"]
+			PigEnemy_frames_set = true
+			PigEnemy.play("idle")		
+	
+	if BirdEnemy.visible:
+		BirdEnemy.modulate = Color(0.7, 0.7, 0.7)
+		if not BirdEnemy_frames_set:
+			BirdEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.BirdEnemy]["animation"]
+			BirdEnemy_frames_set = true
+			BirdEnemy.play("idle")		
+			
 	# Update facing even in narration mode
 	update_character_facing()
 	
@@ -555,6 +800,27 @@ func show_only_character(character_name: Character.Name, animation: String = "id
 			fujiwara_frames_set = true
 			fujiwara.play(animation)
 			slide_character_in(fujiwara, original_fujiwara_position, true)
+		
+		Character.Name.yatufusta:
+			Yatufusta.modulate = Color.WHITE
+			Yatufusta.frames = Character.CHARACTER_DETAILS[Character.Name.yatufusta]["animation"]
+			yatufusta_frames_set = true
+			Yatufusta.play(animation)
+			slide_character_in(Yatufusta, original_yatufusta_position, true)
+			
+		Character.Name.PigEnemy:
+			PigEnemy.modulate = Color.WHITE
+			PigEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.PigEnemy]["animation"]
+			PigEnemy_frames_set = true
+			PigEnemy.play(animation)
+			slide_character_in(PigEnemy, original_PigEnemy_position, true)	
+			
+		Character.Name.BirdEnemy:
+			BirdEnemy.modulate = Color.WHITE
+			BirdEnemy.frames = Character.CHARACTER_DETAILS[Character.Name.BirdEnemy]["animation"]
+			BirdEnemy_frames_set = true
+			BirdEnemy.play(animation)
+			slide_character_in(BirdEnemy, original_BirdEnemy_position, true)						
 	
 	# Wait for slide in to complete, then update facing
 	await get_tree().create_timer(slide_duration).timeout
@@ -592,28 +858,47 @@ func reset_for_new_scene():
 	protoganist.visible = false
 	kami.visible = false
 	fujiwara.visible = false
+	Yatufusta.visible = false
+	BirdEnemy.visible = false
+	PigEnemy.visible = false	
 	
 	# Reset positions
 	protoganist.position = original_protagonist_position
 	kami.position = original_kami_position
 	fujiwara.position = original_fujiwara_position
+	Yatufusta.position = original_yatufusta_position
+	PigEnemy.position = original_PigEnemy_position
+	BirdEnemy.position = original_BirdEnemy_position	
 	
 	# IMPORTANT: Reset flipping to default state
 	protoganist.flip_h = false
 	kami.flip_h = false
 	fujiwara.flip_h = false
+	Yatufusta.flip_h = false
+	PigEnemy.flip_h = false
+	BirdEnemy.flip_h = false
+
 	
 	# Reset appearance flags
 	kami_has_appeared = false
 	fujiwara_has_appeared = false
+	yatufusta_has_appeared = false
+	PigEnemy_has_appeared = false
+	BirdEnemy_has_appeared = false
 	protagonist_frames_set = false
 	kami_frames_set = false
 	fujiwara_frames_set = false
+	yatufusta_frames_set = false
+	PigEnemy_frames_set = false	
+	BirdEnemy_frames_set = false	
 	
 	# Reset modulation
 	protoganist.modulate = Color.WHITE
 	kami.modulate = Color.WHITE
 	fujiwara.modulate = Color.WHITE
+	Yatufusta.modulate = Color.WHITE
+	PigEnemy.modulate = Color.WHITE	
+	BirdEnemy.modulate = Color.WHITE	
 
 # ENHANCED: Hide character with consistent auto-facing update
 func hide_character(character_name: Character.Name, animate: bool = true):
@@ -638,3 +923,23 @@ func hide_character(character_name: Character.Name, animate: bool = true):
 			else:
 				fujiwara.visible = false
 				update_character_facing()
+		Character.Name.yatufusta:
+			if animate:
+				slide_character_out(Yatufusta, "auto")
+			else:
+				Yatufusta.visible = false
+				update_character_facing()
+
+		Character.Name.PigEnemy:
+			if animate:
+				slide_character_out(PigEnemy, "auto")
+			else:
+				PigEnemy.visible = false
+				update_character_facing()
+				
+		Character.Name.BirdEnemy:
+			if animate:
+				slide_character_out(BirdEnemy, "auto")
+			else:
+				BirdEnemy.visible = false
+				update_character_facing()			

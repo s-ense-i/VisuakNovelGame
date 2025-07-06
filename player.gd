@@ -5,7 +5,7 @@ var state: State = State.IDLE
 
 var move_path: Array[Vector2i] = []
 var move_speed := 100
-var move_range := 10
+var move_range := 20
 var move_clicks := 0
 const MAX_MOVE_CLICKS := 2
 

@@ -1,4 +1,4 @@
-# main_dialogue.gd - MODIFIED VERSION WITH SCENE TRANSITION
+# main_dialogue.gd - FIXED VERSION
 extends Node2D
 
 @onready var Background= %Background
@@ -8,8 +8,6 @@ extends Node2D
 @onready var BackgroundEffect2 = $CanvasLayer/Background/BackgroundEffect2
 @onready var BackgroundEffect3 = $CanvasLayer/Background/BackgroundEffect3
 
-
-var dialogue_ended: bool = false
 var dialogue_index: int = 0
 var DialogueLines: Array = []
 var waiting_for_choice: bool = false
@@ -24,9 +22,6 @@ func _ready() -> void:
 	dialogue_ui.hide_speaker_box()
 	dialogue_ui.hide_speaker_name()
 	
-	Background.add_to_group("FadeGroup")
-	character.add_to_group("FadeGroup")
-	dialogue_ui.add_to_group("FadeGroup")
 	# Make sure protagonist is completely hidden initially
 	character.protoganist.visible = false
 	
@@ -39,8 +34,6 @@ func _ready() -> void:
 	SceneManager.transition_out_completed.connect(_on_transition_out_cpmpleted)
 	SceneManager.transition_in_completed.connect(_on_transition_in_cpmpleted)
 	
-	# Connect fade signals
-	
 	# Start the sequence: fade in background first
 	Fade.fade_in()
 	await get_tree().process_frame
@@ -50,13 +43,14 @@ func _ready() -> void:
 	BackgroundEffect2.visible = false
 	BackgroundEffect3.visible = false
 
+
 func start_scene_sequence():
 	"""Start the visual sequence: background -> character -> dialogue"""
 	scene_initialized = true
 	
 	# Step 1: Show background (already visible from transition)
 	# Wait a moment to let player see the background
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.5).timeout
 	
 	# Step 2: NEW - Reset character system for new scene
 	character.reset_for_new_scene()
@@ -123,40 +117,20 @@ func _input(event):
 	if waiting_for_choice:
 		return
 
-	# Handle dialogue end - SINGLE check here only
-	if dialogue_ended:
-		if event.is_action_pressed("next_line"):
-			dialogue_ended = false  # Reset the flag
-			transition_to_next_scene()
-		return
+	var line = DialogueLines[dialogue_index]
+	var has_choices = line.has("choices")
 
-	# Normal dialogue processing
-	if dialogue_index < DialogueLines.size():
-		var line = DialogueLines[dialogue_index]
-		var has_choices = line.has("choices")
-
-		if event.is_action_pressed("next_line") and not has_choices:
-			if dialogue_ui.animate_text:
-				dialogue_ui.skip_animation_text()
-			else:
-				dialogue_index += 1
-				# Check if this was the last line BEFORE processing
-				if dialogue_index >= DialogueLines.size():
-					dialogue_ended = true
-					return
-				process_current_line()
-
-func transition_to_next_scene():
-	# Hide UI elements immediately (but they'll fade)
-	dialogue_ui.hide_speaker_box()
-	dialogue_ui.hide_speaker_name()
-	character.hide_all_characters()
-	
-	# Start the transition process after current frame
-	await get_tree().process_frame
-	Fade.transition_to_scene("res://map.tscn")
-
-
+	if event.is_action_pressed("next_line") and not has_choices:
+		if dialogue_ui.animate_text:
+			dialogue_ui.skip_animation_text()
+		elif dialogue_index < len(DialogueLines) - 1:
+			dialogue_index += 1
+			process_current_line()
+		else:
+			print("End of dialogue")
+			dialogue_ui.hide_speaker_box()
+			dialogue_ui.hide_speaker_name()
+			character.hide_all_characters()
 
 func load_dialogue(file_path):
 	if not FileAccess.file_exists(file_path):
@@ -180,42 +154,19 @@ func load_dialogue(file_path):
 
 func process_current_line():
 	if dialogue_index >= DialogueLines.size():
-		print("Dialogue ended - waiting for user input to transition")
-		dialogue_ended = true
-		# Don't return here - let it show the last line first
+		print("Dialogue index out of bounds")
 		return
 
 	var line = DialogueLines[dialogue_index]
 	
-	# Handle end key - set flag instead of transitioning immediately
-	if line.has("end"):
-		print("End key found - waiting for user input to transition")
-		dialogue_ended = true
-		return
-	
-	# Handle scene transitions defined in JSON
 	if line.has("next_scene"):
 		var next_scene= line["next_scene"]
-		
-		# Check if next_scene is empty or indicates end of story
-		if next_scene.is_empty() or next_scene == "END":
-			# If we're ending the second scene, transition to another scene
-			if dialogue_file.ends_with("second_scene.json"):
-				print("Second scene marked as ended, waiting for user input...")
-				dialogue_ended = true
-				return
-			else:
-				print("Story ended, waiting for user input...")
-				dialogue_ended = true
-				return
-		
-		dialogue_file= "res://project assets/Story/" + next_scene + ".json"
+		dialogue_file= "res://project assets/Story/" + next_scene + ".json" if !next_scene.is_empty() else ""
 		transition_effect= line.get("transition", "fade")
 		scene_initialized = false  # Reset for next scene
 		SceneManager.transition_out(transition_effect)
 		return
 	
-	# Rest of your existing code for processing dialogue lines...
 	if line.has("location"):
 		var background_file= "res://project assets/Assets only for a demo/Backgrounds/" + line["location"] + ".png"
 		Background.texture= load(background_file)
@@ -234,19 +185,7 @@ func process_current_line():
 		dialogue_index += 1
 		process_current_line()
 		return
-		
-	if line.has("hide_character"):
-		var character_to_hide_enum = Character.get_enum_from_string(line["hide_character"])
-		if character_to_hide_enum != -1:
-			character.hide_character(character_to_hide_enum)
-	
-	if line.has("show_only"):
-		var character_to_show_enum = Character.get_enum_from_string(line["show_only"])
-		if character_to_show_enum != -1:
-			var animation = line.get("animation", "idle")
-			character.show_only_character(character_to_show_enum, animation)
-		
-			
+
 	if line.has("choices"):
 		waiting_for_choice = true
 		
@@ -273,8 +212,19 @@ func process_current_line():
 
 		var animation = line.get("animation", "idle")
 
+		# Handle show_only first, regardless of speaker
+		if line.has("show_only"):
+			var show_only_char = line["show_only"]
+			var show_only_enum = Character.get_enum_from_string(show_only_char)
+			if show_only_enum != -1:
+				character.show_only_character(show_only_enum, animation)
+			else:
+				push_warning("Unknown character in show_only: " + show_only_char)
+
 		if line["speaker"] == "Narration":
-			character.show_narration_mode()
+			# Only show narration mode if we're not showing a specific character
+			if not line.has("show_only"):
+				character.show_narration_mode()
 			dialogue_ui.hide_speaker_box()
 			dialogue_ui.hide_speaker_name()
 		else:
@@ -289,22 +239,21 @@ func process_current_line():
 					if visible_characters.size() > 2:
 						visible_characters.pop_front()
 
-				if line.has("replace_character"):
-					var replace_enum = Character.get_enum_from_string(line["replace_character"])
-					if replace_enum != -1:
-						print("Replacing ", line["replace_character"], " with ", line["speaker"])
-						character.replace_character(replace_enum, character_enum, animation)
+				# Only process speaker display if we're not showing a specific character
+				if not line.has("show_only"):
+					if line.has("replace_character"):
+						var replace_enum = Character.get_enum_from_string(line["replace_character"])
+						if replace_enum != -1:
+							print("Replacing ", line["replace_character"], " with ", line["speaker"])
+							character.replace_character(replace_enum, character_enum, animation)
+						else:
+							character.show_speaker(character_enum, animation)
 					else:
 						character.show_speaker(character_enum, animation)
-				else:
-					character.show_speaker(character_enum, animation)
 			else:
 				push_warning("Unknown character name in dialogue: " + line["speaker"])
-				if line["speaker"] == "Narration":
-					character.show_only(visible_characters)
 
 		dialogue_ui.change_line(line["speaker"], line["text"])
-
 
 func get_anchor_position(anchor: String) -> int:
 	for i in range(DialogueLines.size()):
@@ -322,32 +271,26 @@ func _on_choice_selected(anchor: String):
 		process_current_line()
 	else:
 		printerr("Failed to find anchor: " + anchor)
+		
+
 
 func _on_transition_out_cpmpleted():
-	# 1. Completely hide everything before loading new scene
-	character.hide_all_characters(false)  # Immediate hide, no animation
-	dialogue_ui.hide_all_ui()  # Add this function to your UI script
-	
 	if dialogue_file.is_empty():
+		print("End")
 		return
 
-	# 2. Load new dialogue
+	# حمّل كل سطور الحوار
 	DialogueLines = load_dialogue(dialogue_file)
 	dialogue_index = 0
 	var first_line = DialogueLines[dialogue_index]
 
-	# 3. Change background if needed
+	# غيّر الخلفية لو فيه location
 	if first_line.has("location"):
 		Background.texture = load("res://project assets/Assets only for a demo/Backgrounds/" + first_line["location"] + ".png")
 
-	# 4. For second scene specifically
+	# لو هذا هو ملف المشهد التاني
 	if dialogue_file.ends_with("second_scene.json"):
 		show_background_characters()
-		# Reset character states
-		character.reset_for_new_scene()
-		# Ensure initial flips
-		character.kami.flip_h = false  
-		character.fujiwara.flip_h = false
 
 	dialogue_index += 1
 	SceneManager.transition_in(transition_effect)
@@ -361,6 +304,7 @@ func show_background_characters():
 
 	BackgroundEffect3.visible = true
 	BackgroundEffect3.play("default")
+
 
 func _on_transition_in_cpmpleted():
 	# Start the visual sequence instead of immediately processing dialogue

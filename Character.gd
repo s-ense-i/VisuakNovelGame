@@ -5,7 +5,10 @@ extends Node
 enum Name {
 	protoganist,
 	kami,
-	fujiwara
+	fujiwara,
+	yatufusta,
+	PigEnemy,
+	BirdEnemy
 }
 
 # Preload resources as separate variables
@@ -25,7 +28,22 @@ static var CHARACTER_DETAILS : Dictionary = {
 		"name": "fujiwara",
 		"gender" : "male",
 		"animation" : preload("res://fujiwara.tres")
-	}
+	},
+	Name.yatufusta: {
+		"name": "yatufusta",
+		"gender" : "male",
+		"animation" : preload("res://yatufusta.tres")
+	},
+	Name.PigEnemy: {
+		"name": "PigEnemy",
+		"gender" : "male",
+		"animation" : preload("res://PigEnemy.tres")
+	},
+	Name.BirdEnemy: {
+		"name": "BirdEnemy",
+		"gender" : "male",
+		"animation" : preload("res://BirdEnemy.tres")
+	},
 }
 static func get_enum_from_string(string_value: String) -> int:
 	# Convert to lowercase to match enum names

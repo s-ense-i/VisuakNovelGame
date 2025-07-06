@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://7q8t2yp24qkw"]
+
+[ext_resource type="Texture2D" uid="uid://oyel0g4ctjre" path="res://project assets/Assets only for a demo/Demons/DeSum_Yatsufusa_Artwork.png" id="1_2l1em"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2l1em")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

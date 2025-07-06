@@ -80,3 +80,7 @@ func hide_all_ui():
 	hide_speaker_name()
 	%DialogeLines.text = ""
 	%SpeakerName.text = ""
+
+func show_all_ui():
+	show_speaker_box()
+	show_speaker_name()

@@ -1,0 +1,148 @@
+[
+  {
+	"speaker": "Narration",
+	"text": "[i]You see something approaching you…"
+  },
+  {
+	"action": "show_character",
+	"character": "yatufusta"
+  },
+  {
+	"speaker": "yatufusta",
+	"text": "Grrr!",
+	"animation": "idle"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]The demon notices you."
+  },
+  {
+	"speaker": "yatufusta",
+	"text": "Auu!!!!!!!",
+	"animation": "idle"
+  },
+  {
+	"speaker": "kami",
+	"text": "A Yatsufusa... I think that's your tutorial demon.",
+	"animation": "SmilingOpened"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "It looks awesome.",
+	"animation": "SmilingOpened",
+	"replace_character": "yatufusta"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]Just as you start talking, other demons appear."
+  },
+  {
+	"action": "show_character",
+	"character": ["bird", "pig"]
+  },
+  {
+	"speaker": "BirdEnemy",
+	"text": "Oh, what are those humans doing here? How can they invade this place?",
+	"replace_character": "fujiwara"
+  },
+  {
+	"speaker": "PigEnemy",
+	"text": "Oink! They'd better not be trying to change reality! Oink!",
+	"replace_character": "kami"
+  },
+  {
+	"speaker": "BirdEnemy",
+	"text": "Let's kill them",
+	"animation": "idle"
+  },
+  {
+	"speaker": "Narration",
+	"text": "The demons are preparing to attack!"
+  },
+  {
+	"speaker": "kami",
+	"text": "All right, this already feels a little more exciting, don't you think? I'm kind of scared, actually.",
+	"show_only": "kami",
+	"animation": "SmilingOpened"
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "Yeah, I feel it too. I can't quite put it into words, but their presence feels real.",
+	"animation": "SmilingOpened",
+	"replace_character": "BirdEnemy"
+  },
+  {
+	"speaker": "Narration",
+	"text": "[i]The demons you encounter are Yatsufusa, Caladrius and Katakirauwa."
+  },
+{
+  "choices": [
+	{
+	  "text": "You can never underestimate homebrewers.",
+	  "goto": "choice1"
+	},
+	{
+	  "text": "It looks like you won't be able to create a new funny nickname, Kami.", 
+	  "goto": "choice2"
+	},
+  ],
+  "replace_character": "kami",
+  "new_character": "protoganist",
+  "animation": "idle"
+},
+  {
+	"anchor": "choice1",},
+	
+	{
+	"speaker": "fujiwara",
+	"text": "It's time for some good old-fashioned violence.",
+	"animation": "SmilingOpened",
+  },
+  {
+	"speaker": "kami",
+	"text": "Yeah, done that, been there, nothing new. Let's go.",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+{
+	"goto": "continue_story1"
+  },
+  {
+	"anchor": "choice2",},
+	
+	{
+	"speaker": "fujiwara",
+	"text": "I'm going to go wild on this playthrough — watch me!",
+	"animation": "SmilingOpened",
+  },
+  {
+	"speaker": "kami",
+	"text": "Yeah, let's make this one epic!",
+	"animation": "SmilingOpened",
+	"replace_character": "fujiwara"
+  },
+{
+	"goto": "continue_story1"
+  },
+{
+	"anchor": "continue_story1"
+  },
+  {
+	"speaker": "Narration",
+	"text": "BATTLE STARTS!",
+	"show_only":"protoganist",	
+  },
+  {
+	"speaker": "Narration",
+	"text": "Tutorial Bot: Welcome to the real-life story. We are the definitive upgrade to the original game! Here are some of the changes we've made.",
+  },
+  {
+	"speaker": "Narration",
+	"text": "Firstly, you will only use your bodies to attack, defend or interact with the demons! Our immersion system allows you to throw punches and kicks with near-realistic detail. Just use your body as you would in real life!",
+  },
+  {
+	"speaker": "Narration",
+	"text": "Firstly, you will only use your bodies to attack, defend or interact with the demons! Our immersion system allows you to throw punches and kicks with near-realistic detail. Just use your body as you would in real life!",
+  },
+
+]

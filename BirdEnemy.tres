@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ews2f0makq1l"]
+
+[ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="1_67w13"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_67w13")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

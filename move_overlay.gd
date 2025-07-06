@@ -1,5 +1,10 @@
 extends TileMap
 
+
+
+
+
+#################
 ## يرسم البلاطات في الأماكن المسموح بها
 func draw_cells(cells: Array) -> void:
 	clear()
