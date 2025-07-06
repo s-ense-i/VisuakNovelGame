@@ -1200,7 +1200,7 @@ position = Vector2(988, 189)
 
 [node name="Player3" parent="." instance=ExtResource("3_e0an3")]
 z_index = 1
-position = Vector2(991, 346)
+position = Vector2(991, 316)
 
 [node name="Player2" parent="." instance=ExtResource("3_e0an3")]
 z_index = 1
@@ -1235,7 +1235,7 @@ frame_progress = 0.0605279
 flip_h = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(600, 324)
+position = Vector2(599, 324)
 
 [node name="candle" type="Node" parent="."]
 

@@ -1,13 +1,13 @@
-[gd_scene load_steps=31 format=3 uid="uid://bmhxn83kvb147"]
+[gd_scene load_steps=31 format=3 uid="uid://i4b05c4a6mmd"]
 
-[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="1_7j4lf"]
-[ext_resource type="Script" uid="uid://b7quonml1venj" path="res://battle_2.gd" id="1_gwdth"]
-[ext_resource type="Texture2D" uid="uid://bkesxn2jqwuqv" path="res://project assets/Assets only for a demo/Characters/Protagonist/Almost Angry.png" id="2_7j4lf"]
-[ext_resource type="Resource" uid="uid://j5an2x3k83aw" path="res://enemy.tres" id="2_til4h"]
-[ext_resource type="Texture2D" uid="uid://oyel0g4ctjre" path="res://project assets/Assets only for a demo/Demons/DeSum_Yatsufusa_Artwork.png" id="3_gwdth"]
-[ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="4_nrb8v"]
-[ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="6_3yin5"]
-[ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="7_qxvvv"]
+[ext_resource type="Script" uid="uid://b7quonml1venj" path="res://battle_2.gd" id="1_lk858"]
+[ext_resource type="Resource" uid="uid://j5an2x3k83aw" path="res://enemy.tres" id="2_edj58"]
+[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="3_3om8u"]
+[ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="4_nfpig"]
+[ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="5_mf8wa"]
+[ext_resource type="Texture2D" uid="uid://kf5fvuccsaks" path="res://project assets/Assets only for a demo/Characters/Male Friend/Smiling Opened Eyes Buddy.png" id="6_lk858"]
+[ext_resource type="Texture2D" uid="uid://fbgf0upagop4" path="res://project assets/Assets only for a demo/Demons/DeSum_Katakirauwa_Artwork.png" id="7_edj58"]
+[ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="8_6akba"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_til4h"]
 bg_color = Color(0, 0, 0, 1)
@@ -121,21 +121,6 @@ _data = {
 &"shake": SubResource("Animation_nrb8v")
 }
 
-[sub_resource type="Animation" id="Animation_uju8r"]
-resource_name = "fade_out"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_x0pfn"]
 length = 0.001
 tracks/0/type = "value"
@@ -178,6 +163,36 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_vong4"]
+resource_name = "fade_in_ui"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_uju8r"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_oiieq"]
 resource_name = "fade_out_ui"
 tracks/0/type = "value"
@@ -196,21 +211,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_5o1yk"]
 resource_name = "new_animation"
 
-[sub_resource type="Animation" id="Animation_vong4"]
-resource_name = "fade_in_ui"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("..:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oiieq"]
 _data = {
 &"RESET": SubResource("Animation_x0pfn"),
@@ -228,15 +228,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_gwdth")
-enemy = ExtResource("2_til4h")
+script = ExtResource("1_lk858")
+enemy = ExtResource("2_edj58")
 
 [node name="BBG" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 1536.0
 offset_bottom = 1024.0
 scale = Vector2(0.750499, 0.632423)
-texture = ExtResource("1_7j4lf")
+texture = ExtResource("3_3om8u")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -245,7 +245,7 @@ offset_top = 1.0
 offset_right = 1978.0
 offset_bottom = 1081.0
 scale = Vector2(0.58296, 0.595359)
-texture = ExtResource("6_3yin5")
+texture = ExtResource("4_nfpig")
 
 [node name="enemy" type="TextureRect" parent="."]
 layout_mode = 0
@@ -255,7 +255,7 @@ offset_right = 3705.0
 offset_bottom = 3537.0
 scale = Vector2(0.0799707, 0.0799707)
 mouse_filter = 2
-texture = ExtResource("3_gwdth")
+texture = ExtResource("7_edj58")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -268,7 +268,7 @@ offset_right = 1980.0
 offset_bottom = 1080.0
 rotation = 0.00767529
 scale = Vector2(0.5821, 0.59976)
-texture = ExtResource("4_nrb8v")
+texture = ExtResource("5_mf8wa")
 
 [node name="Attack normally" type="Label" parent="Control"]
 layout_mode = 0
@@ -281,14 +281,14 @@ text = "Attack normally"
 
 [node name="protagonist" type="TextureRect" parent="Control"]
 layout_mode = 0
-offset_left = -5.0
-offset_top = 67.0
-offset_right = 1019.0
-offset_bottom = 1091.0
-scale = Vector2(0.449114, 0.449114)
+offset_left = -30.0
+offset_top = 104.0
+offset_right = 994.0
+offset_bottom = 1128.0
+scale = Vector2(0.41185, 0.41185)
 localize_numeral_system = false
 mouse_filter = 2
-texture = ExtResource("2_7j4lf")
+texture = ExtResource("6_lk858")
 
 [node name="CommandButtons" type="VBoxContainer" parent="Control"]
 layout_mode = 0
@@ -487,7 +487,7 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.744319, 3.63387e-06, 8.66354e-07, 1)
 theme_override_font_sizes/font_size = 30
 
-[node name="TurnMessage" parent="." instance=ExtResource("7_qxvvv")]
+[node name="TurnMessage" parent="." instance=ExtResource("8_6akba")]
 layout_mode = 1
 offset_left = -4.0
 offset_top = -6.0

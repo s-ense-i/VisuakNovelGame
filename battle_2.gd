@@ -1,6 +1,6 @@
 extends Control
-
 @export var enemy: EnemyData
+
 var current_player_health = 0
 var current_enemy_health = 0
 var is_defending = false
@@ -35,6 +35,8 @@ func _enemy_turn():
 	var result = DamageCalculator.calculate_damage(move_power, attacker_stat, defender_stat)
 	var damage = result["damage"]
 	var is_crit = result["is_crit"]
+	show_damage_number(damage, true)  # player اتضرب
+
 	if is_crit:
 		await show_enemy_crit()
 
@@ -59,19 +61,19 @@ func _enemy_turn():
 	else:
 		await get_tree().create_timer(1.0).timeout  # ⏳ فاصل بين الأدوار
 		await show_player_turn()
+		
 
 
 func _on_attack_pressed() -> void:
+
+	$UIAnimationPlayer.play("fade_out_ui")
+	await $UIAnimationPlayer.animation_finished
 	
-	var result = DamageCalculator.calculate_damage(
-	State.damage,
-	4,
-	3
-)
-
-
+	# الحسابات والضرب
+	var result = DamageCalculator.calculate_damage(State.damage, 4, 3)
 	var damage = result.damage
 	var is_extra_turn = result.is_extra_turn
+	show_damage_number(damage, false)
 
 	current_enemy_health = max(0, current_enemy_health - damage)
 	set_health($HP/ProgressBar, current_enemy_health, enemy.health)
@@ -91,14 +93,25 @@ func _on_attack_pressed() -> void:
 		show_extra_turn()
 		return
 
-	_enemy_turn()
 	await show_enemy_turn()
+
+
+	$UIAnimationPlayer.play("fade_in_ui")
+	await $UIAnimationPlayer.animation_finished
+
+	_enemy_turn()
+
+
+
+	
 
 
 func show_extra_turn():
 	await $TurnMessage.show_message("🎁 EXTRA TURN!")
 
-	
+	$UIAnimationPlayer.play("fade_in_ui")
+	await $UIAnimationPlayer.animation_finished
+
 func show_enemy_turn():
 	await $TurnMessage.show_message("🔴 ENEMY TURN")
 
@@ -111,8 +124,22 @@ func show_player_turn():
 func show_enemy_crit():
 	await $TurnMessage.show_message("💥 CRITICAL HIT!")
 
+func show_damage_number(amount: int, is_player: bool):
+	var damage_label = preload("res://damage_label.tscn").instantiate()
+	damage_label.text = "-" + str(amount)
+
+	# أضف العنصر داخل شريط الصحة المناسب
+	if is_player:
+		$HP2.add_child(damage_label)
+		damage_label.position = Vector2(100, -30)  # يمين فوق شريط اللاعب
+	else:
+		$HP.add_child(damage_label)
+		damage_label.position = Vector2(100, -30)  # يمين فوق شريط العدو
+
+	# شغل الأنيميشن
+	damage_label.get_node("AnimationPlayer").play("popup")
 
 
-func _on_guard_pressed() -> void:
-	is_defending = true
-	_enemy_turn()
+#func _on_guard_pressed() -> void:
+	#is_defending = true
+	#_enemy_turn()
