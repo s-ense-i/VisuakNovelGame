@@ -1,4 +1,4 @@
-# GameManager.gd - Create this as an autoload
+# GameManager.gd
 extends Node
 
 var stored_battle_state: Dictionary = {}
@@ -6,6 +6,7 @@ var stored_battle_state: Dictionary = {}
 func store_battle_state(state: Dictionary):
 	stored_battle_state = state
 	print("Battle state stored: ", state.keys())
+	store_enemy_states()
 
 func get_battle_state() -> Dictionary:
 	return stored_battle_state
@@ -17,7 +18,6 @@ func clear_battle_state():
 func has_battle_state() -> bool:
 	return not stored_battle_state.is_empty()
 
-# Add functions to store/restore character visibility
 func store_character_visibility(character_states: Dictionary):
 	if not stored_battle_state.has("character_visibility"):
 		stored_battle_state["character_visibility"] = {}
@@ -26,3 +26,27 @@ func store_character_visibility(character_states: Dictionary):
 
 func get_character_visibility() -> Dictionary:
 	return stored_battle_state.get("character_visibility", {})
+	
+func store_enemy_states():
+	var enemy_data = {}
+	for enemy_name in EnemyManager.enemy_states.keys():
+		var enemy = EnemyManager.enemy_states[enemy_name]
+		enemy_data[enemy_name] = {
+			"current_health": enemy.current_health,
+			"max_health": enemy.max_health,
+			"damage": enemy.damage,
+			"is_defeated": enemy.is_defeated
+		}
+	stored_battle_state["enemy_states"] = enemy_data
+	print("Enemy states stored")
+
+func restore_enemy_states():
+	if stored_battle_state.has("enemy_states"):
+		var enemy_data = stored_battle_state["enemy_states"]
+		for enemy_name in enemy_data.keys():
+			var data = enemy_data[enemy_name]
+			var enemy = EnemyManager.get_enemy_data(enemy_name)
+			if enemy:
+				enemy.current_health = data.get("current_health", enemy.max_health)
+				enemy.is_defeated = data.get("is_defeated", false)
+		print("Enemy states restored")

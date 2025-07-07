@@ -15,9 +15,9 @@ func initialize_battle(enemy_data: BattleEnemyData_1):
 	
 	if enemy:
 		current_player_health = State.current_health
-		current_enemy_health = enemy.health
+		current_enemy_health = enemy.current_health
 		
-		set_health($HP/ProgressBar, current_enemy_health, enemy.health)
+		set_health($HP/ProgressBar, current_enemy_health, enemy.max_health)
 		set_health($HP2/ProgressBar, current_player_health, State.max_health)
 
 func _ready():
@@ -87,7 +87,7 @@ func _on_attack_pressed() -> void:
 	var damage = result.damage
 	show_damage_number(damage, false)
 	current_enemy_health = max(0, current_enemy_health - damage)
-	set_health($HP/ProgressBar, current_enemy_health, enemy.health)
+	set_health($HP/ProgressBar, current_enemy_health, enemy.max_health)
 	$AnimationPlayer.play("enemy_damaged")
 	await $AnimationPlayer.animation_finished
 	
@@ -108,6 +108,8 @@ func end_fight(result: String):
 	match result:
 		"enemy_died":
 			print("Player won the fight!")
+			enemy.is_defeated = true
+			EnemyManager.update_enemy_health(enemy.enemy_name, 0)
 		"player_died":
 			print("Player lost the fight!")
 			current_player_health = max(1, current_player_health)
@@ -117,6 +119,8 @@ func end_fight(result: String):
 	# Save current health back to State
 	State.current_health = current_player_health
 	
+	if result != "enemy_died":
+		EnemyManager.update_enemy_health(enemy.enemy_name, current_enemy_health)
 	# Get the battle scene path from stored state
 	var stored_state = GameManager.get_battle_state()
 	var battle_scene_path = "res://battle_2.tscn"  # Default fallback

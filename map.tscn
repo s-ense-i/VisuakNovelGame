@@ -1226,7 +1226,7 @@ position = Vector2(732, 132)
 [node name="Player3" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true
 z_index = 1
-position = Vector2(733, 246)
+position = Vector2(731, 262)
 
 [node name="Player2" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true

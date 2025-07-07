@@ -15,9 +15,9 @@ func initialize_battle(enemy_data: BattleEnemyData_1):
 	
 	if enemy:
 		current_player_health = Statefge.current_health
-		current_enemy_health = enemy.health
+		current_enemy_health = enemy.current_health
 		
-		set_health($HP/ProgressBar, current_enemy_health, enemy.health)
+		set_health($HP/ProgressBar, current_enemy_health, enemy.max_health)
 		set_health($HP2/ProgressBar, current_player_health, Statefge.max_health)
 
 func _ready():
@@ -86,7 +86,7 @@ func _on_attack_pressed() -> void:
 	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)
 	current_enemy_health = max(0, current_enemy_health - damage)
-	set_health($HP/ProgressBar, current_enemy_health, enemy.health)
+	set_health($HP/ProgressBar, current_enemy_health, enemy.max_health)
 	$AnimationPlayer.play("enemy_damaged")
 	await $AnimationPlayer.animation_finished
 	
@@ -99,7 +99,9 @@ func _on_attack_pressed() -> void:
 	
 	if is_extra_turn:
 		print("🎁 Extra Turn - damage =", damage)
-		show_extra_turn()
+		await show_extra_turn()
+		$UIAnimationPlayer.play("fade_in_ui")
+		await $UIAnimationPlayer.animation_finished
 		return
 	
 	await show_enemy_turn()

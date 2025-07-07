@@ -147,7 +147,6 @@
 		"duration": 1.5,
 		"wait": true
 	}
-	
 },
 {
 	"fight": "yatufusta",
@@ -243,6 +242,7 @@
 	"speaker": "kami",
 	"text": "Caladrius is about to attack, its going for me i guess!",
 	"animation": "MoreSerious",
+	"replace_character": "protoganist"
   },
 {
 	"move_start": {
@@ -264,21 +264,106 @@
   },
 {
 	"speaker": "kami",
-	"text": "Caladrius is about to attack, its going for me i guess!",
-	"animation": "MoreSerious",
+	"text": "Oh, that felt real. Ouch! Is that what you meant, (Protagonist Name)? How did they even programme this? I actually feel pain! Seriously guys!",
+	"animation": "AngryFace",
+	"replace_character": "protoganist"
+  },
+{
+	"speaker": "fujiwara",
+	"text": "Is this not what you wanted? It's a bit more exciting, isn't it? Definetly not boring",
+	"animation": "SmilingOpened",
   },
 {
 	"speaker": "kami",
-	"text": "Caladrius is about to attack, its going for me i guess!",
-	"animation": "MoreSerious",
+	"text": "This server should have had a disclaimer about how realistic it is. It's an easy lawsuit for people who can't handle this. Actually endangering lives. I'm going to message the admin about this later. But it's true; it's more exciting — my heart is pumping!",
+	"animation": "AngryFace",
+
   },
+{
+	"speaker": "fujiwara",
+	"text": "Man, I'm interested in what you're experiencing now. Maybe i need a stronger enemy, i don’t feel all that different.",
+	"animation": "SmilingClosed",
+  },
+{
+	"move_start": {
+		"character": "player3",
+		"path": [[8,3],[7,3], [6,3], [5,3]],
+		"duration": 1.5,
+		"wait": true
+	}
+},
+
+{
+	"fight": "yatufusta",
+	"fight_scene": "res://attackp.tscn"
+  },
+{
+	"action": "show_character",
+	"character": ["bird", "pig","yatufusta"]
+  },
+{
+	"speaker": "yatufusta",
+	"text": "Grr!",
+  },
+{
+	"speaker": "yatufusta",
+	"text": "[i]Yatsufusa backs down. The demon seems to bow down to you...",
+  },
+{
+  "fade_out_enemy": "yatufusta",
+  "duration": 1.5,
+  "wait": true
+},
+{
+	"speaker": "fujiwara",
+	"text": ": All right, it's my turn. I want to know how powerful Caladrius is, so I'll go and meet him and have a little talk with my fists.",
+	"animation": "SmilingClosed",
+  },
+{
+	"move_start": {
+		"character": "player2",
+		"path": [[8,1],[7,1]],
+		"duration": 1.5,
+		"wait": true
+	}
+},
+{
+	"speaker": "fujiwara",
+	"text": "Damn it! I can't reach this bird!",
+	"animation": "DisinterestedBuddy",
+  },
+{
+	"move_start": {
+		"character": "player2",
+		"path": [[8,3],[7,3], [6,3], [5,3]],
+		"duration": 1.5,
+		"wait": true
+	}
+},
 {
 	"fight": "pig",
 	"fight_scene": "res://attackk.tscn"
   },
 {
-	"speaker": "kami",
-	"text": "Caladrius is about to attack, its going for me i guess!",
-	"animation": "MoreSerious",
+	"action": "show_character",
+	"character": ["bird", "pig"]
   },
+{
+	"speaker": "PigEnemy",
+	"text": "Oh man, i knew i shouldn’t battle. Those darn humans exploited my phys weakness.",
+  },
+{
+	"speaker": "PigEnemy",
+	"text": "Ill go and relax in your stock…",
+  },
+{
+  "fade_out_enemy": "pig",
+  "duration": 1.5,
+  "wait": true
+},
+{
+	"speaker": "PigEnemy",
+	"text": "Ill go and relax in your stock…",
+  },
+
 ]

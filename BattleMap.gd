@@ -280,6 +280,9 @@ func process_current_line():
 		handle_move_start(line)
 		return
 	
+	if line.has("fade_out_enemy"):
+		handle_fade_out_enemy(line)
+		return
 	# Handle actions before dialogue
 	if line.has("action"):
 		handle_action(line)
@@ -334,6 +337,95 @@ func process_current_line():
 	dialogue_ui.change_line(line["speaker"], line["text"])
 	dialogue_index += 1
 
+# Add this to your battle scene script
+
+# Add fade-out handling in your process_current_line() function
+# Insert this after the existing action handlers, around line 250
+
+
+# Add this new function to handle fade-out
+func handle_fade_out_enemy(line: Dictionary):
+	var enemy_name = line["fade_out_enemy"]
+	var duration = line.get("duration", 1.0)  # Default 1 second fade
+	var wait_for_completion = line.get("wait", true)  # Wait for fade to complete
+	
+	if enemy_name is String:
+		if wait_for_completion:
+			await fade_out_enemy_character(enemy_name, duration)
+		else:
+			# Call without await but still need to handle the coroutine
+			fade_out_enemy_character(enemy_name, duration)
+	elif enemy_name is Array:
+		# Handle multiple enemies fading out
+		if wait_for_completion:
+			# Wait for all fade-outs to complete sequentially
+			for name in enemy_name:
+				await fade_out_enemy_character(name, duration)
+		else:
+			# Start all fade-outs without waiting
+			for name in enemy_name:
+				fade_out_enemy_character(name, duration)
+	
+	dialogue_index += 1
+	process_current_line()
+	
+func fade_out_enemy_character(enemy_name: String, duration: float = 1.0):
+	var enemy_sprite = get_enemy_sprite_node(enemy_name)
+	if not enemy_sprite:
+		push_warning("Enemy sprite not found for fade-out: " + enemy_name)
+		return
+	
+	print("Fading out enemy: ", enemy_name, " over ", duration, " seconds")
+	
+	# Create tween for smooth fade
+	var tween = create_tween()
+	tween.tween_property(enemy_sprite, "modulate:a", 0.0, duration)
+	
+	# Wait for tween to complete
+	await tween.finished
+	
+	# Hide the enemy after fade completes
+	enemy_sprite.visible = false
+	
+	# Reset alpha for future use
+	enemy_sprite.modulate.a = 1.0
+	
+	print("Fade-out complete for: ", enemy_name)
+	
+func get_enemy_sprite_node(enemy_name: String) -> AnimatedSprite2D:
+	match enemy_name.to_lower():
+		"yatufusta", "yatsufusa":
+			return yatufusta
+		"bird", "birdenemy":
+			return bird
+		"pig", "pigenemy":
+			return pig
+		_:
+			push_warning("Unknown enemy sprite: " + enemy_name)
+			return null
+
+# Optional: Add a fade-in function if you want to bring enemies back
+func fade_in_enemy_character(enemy_name: String, duration: float = 1.0):
+	var enemy_sprite = get_enemy_sprite_node(enemy_name)
+	if not enemy_sprite:
+		push_warning("Enemy sprite not found for fade-in: " + enemy_name)
+		return
+	
+	print("Fading in enemy: ", enemy_name, " over ", duration, " seconds")
+	
+	# Make visible and start from transparent
+	enemy_sprite.visible = true
+	enemy_sprite.modulate.a = 0.0
+	
+	# Create tween for smooth fade
+	var tween = create_tween()
+	tween.tween_property(enemy_sprite, "modulate:a", 1.0, duration)
+	
+	# Wait for tween to complete
+	await tween.finished
+	
+	print("Fade-in complete for: ", enemy_name)		
+	
 func handle_action(action_data: Dictionary):
 	match action_data["action"]:
 		"show_character":
@@ -527,10 +619,14 @@ func trigger_fight(enemy_name: String):
 	print("Triggering fight with: ", enemy_name)
 	dialogue_paused_for_fight = true
 	
-	# Set the enemy data based on the enemy name
-	current_enemy_data = get_enemy_data(enemy_name)
-	
-	if current_enemy_data:
+	# Get enemy data from EnemyManager
+	var enemy_data = EnemyManager.get_enemy_data(enemy_name)
+	if enemy_data:
+		# If enemy is defeated, reset their health
+		if enemy_data.is_defeated:
+			enemy_data.reset_health()
+		
+		current_enemy_data = enemy_data
 		call_fight_scene()
 	else:
 		push_warning("No enemy data found for: " + enemy_name)
@@ -561,7 +657,7 @@ func get_enemy_data(enemy_name: String) -> BattleEnemyData_1:
 			enemy_data.damage = 10
 		"pig", "pigenemy":
 			enemy_data.enemy_name = "Pig"
-			enemy_data.health = 32
+			enemy_data.health = 55
 			enemy_data.damage = 10
 		_:
 			push_warning("Unknown enemy: " + enemy_name)

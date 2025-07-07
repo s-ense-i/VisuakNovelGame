@@ -24,6 +24,7 @@ BattleEnemyData="*res://BattleEnemyData.gd"
 GameManager="*res://GameManager.gd"
 Statekame="*res://statekame.gd"
 Statefge="*res://statefge.gd"
+EnemyManager="*res://EnemyManager.gd"
 
 [dialogic]
 
