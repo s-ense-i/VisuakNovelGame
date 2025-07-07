@@ -28,7 +28,13 @@ func _ready():
 	var stored_state = GameManager.get_battle_state()
 	if stored_state and stored_state.has("enemy_data"):
 		initialize_battle(stored_state["enemy_data"])
-
+	
+	await show_enemy_turn()
+	#$UIAnimationPlayer.play("fade_out_ui")
+	#await $UIAnimationPlayer.animation_finished
+	await get_tree().create_timer(0.5).timeout  # تأخير بسيط علشان شكل لطيف
+	enemy_turn()
+	
 func set_health(progress_bar, health, max_health):
 	if progress_bar and progress_bar.get_node("Label"):
 		progress_bar.value = health
@@ -46,7 +52,7 @@ func enemy_turn():
 	var move_power = enemy.damage
 	var attacker_stat = 4
 	var defender_stat = 4
-	var result = DamageCalculator.calculate_damage(move_power, attacker_stat, defender_stat)
+	var result = damagecckam.calculate_damage(move_power, attacker_stat, defender_stat)
 	var damage = result["damage"]
 	var is_crit = result["is_crit"]
 	show_damage_number(damage, true)
@@ -79,7 +85,7 @@ func _on_attack_pressed() -> void:
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
-	var result = DamageCalculator.calculate_damage(Statekame.damage, 4, 3)
+	var result = damagecckam.calculate_damage(Statekame.damage, 4, 3)
 	var damage = result.damage
 	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)

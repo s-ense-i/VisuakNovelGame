@@ -14,11 +14,11 @@ func initialize_battle(enemy_data: BattleEnemyData_1):
 	print("Battle initialized with enemy: ", enemy.enemy_name)
 	
 	if enemy:
-		current_player_health = State.current_health
+		current_player_health = Statefge.current_health
 		current_enemy_health = enemy.health
 		
 		set_health($HP/ProgressBar, current_enemy_health, enemy.health)
-		set_health($HP2/ProgressBar, current_player_health, State.max_health)
+		set_health($HP2/ProgressBar, current_player_health, Statefge.max_health)
 
 func _ready():
 	randomize()
@@ -29,11 +29,7 @@ func _ready():
 	if stored_state and stored_state.has("enemy_data"):
 		initialize_battle(stored_state["enemy_data"])
 	
-	await show_enemy_turn()
-	#$UIAnimationPlayer.play("fade_out_ui")
-	#await $UIAnimationPlayer.animation_finished
-	await get_tree().create_timer(0.5).timeout  # تأخير بسيط علشان شكل لطيف
-	enemy_turn()
+
 	
 func set_health(progress_bar, health, max_health):
 	if progress_bar and progress_bar.get_node("Label"):
@@ -52,37 +48,26 @@ func enemy_turn():
 	var move_power = enemy.damage
 	var attacker_stat = 4
 	var defender_stat = 4
-	
-	var enemy_extra_turn_range = Vector2(20, 30)
-	var result = DamageCalculator.calculate_damage(move_power, attacker_stat, defender_stat, enemy_extra_turn_range)
-	
+	var result = damagecafg.calculate_damage(move_power, attacker_stat, defender_stat)
 	var damage = result["damage"]
 	var is_crit = result["is_crit"]
 	show_damage_number(damage, true)
-
+	
 	if is_crit:
 		await show_enemy_crit()
-
+	
 	if is_defending:
 		damage /= 2
 		is_defending = false
 		$AnimationPlayer.play("mini_shake")
 	else:
 		$AnimationPlayer.play("shake")
-
+	
+	damage = result["damage"]
 	current_player_health -= damage
-	set_health($HP2/ProgressBar, current_player_health, State.max_health)
+	set_health($HP2/ProgressBar, current_player_health, Statefge.max_health)
 	await $AnimationPlayer.animation_finished
-
-	# 👇 Extra Turn Check
-	var is_extra_turn = result.get("is_extra_turn", false)
-	if is_extra_turn:
-		print("🛑 Enemy got extra turn!")
-		await $TurnMessage.show_message("🛑 ENEMY EXTRA TURN!")
-		await get_tree().create_timer(0.5).timeout
-		enemy_turn()
-		return
-
+	
 	if current_player_health <= 0:
 		$AnimationPlayer.play("player_died")
 		await $AnimationPlayer.animation_finished
@@ -91,13 +76,12 @@ func enemy_turn():
 	else:
 		await get_tree().create_timer(1.0).timeout
 		await show_player_turn()
-
 		
 func _on_attack_pressed() -> void:
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
-	var result = DamageCalculator.calculate_damage(State.damage, 4, 3)
+	var result = damagecafg.calculate_damage(Statefge.damage, 4, 3)
 	var damage = result.damage
 	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)
@@ -127,7 +111,7 @@ func _on_attack_pressed() -> void:
 func end_fight(result: String):
 	print("Fight ended with result: ", result)
 	
-	# Update State based on result
+	# Update Statefge based on result
 	match result:
 		"enemy_died":
 			print("Player won the fight!")
@@ -137,8 +121,8 @@ func end_fight(result: String):
 		"error":
 			print("Fight ended due to error")
 	
-	# Save current health back to State
-	State.current_health = current_player_health
+	# Save current health back to Statefge
+	Statefge.current_health = current_player_health
 	
 	# Get the battle scene path from stored state
 	var stored_state = GameManager.get_battle_state()

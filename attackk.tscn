@@ -1,14 +1,14 @@
-[gd_scene load_steps=32 format=3 uid="uid://bmhxn83kvb147"]
+[gd_scene load_steps=32 format=3 uid="uid://cj5qw8lphspkx"]
 
-[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="1_7j4lf"]
-[ext_resource type="Script" uid="uid://b7quonml1venj" path="res://battle_2.gd" id="1_gwdth"]
-[ext_resource type="Texture2D" uid="uid://bkesxn2jqwuqv" path="res://project assets/Assets only for a demo/Characters/Protagonist/Almost Angry.png" id="2_7j4lf"]
-[ext_resource type="Texture2D" uid="uid://oyel0g4ctjre" path="res://project assets/Assets only for a demo/Demons/DeSum_Yatsufusa_Artwork.png" id="3_gwdth"]
-[ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="4_nrb8v"]
-[ext_resource type="Script" uid="uid://byua6u5h8v3g7" path="res://DamageCalculator.gd" id="5_3yin5"]
-[ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="6_3yin5"]
-[ext_resource type="Script" uid="uid://wg2s7ul25loo" path="res://State.gd" id="7_nrb8v"]
-[ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="7_qxvvv"]
+[ext_resource type="Script" uid="uid://cnj0138rvoii5" path="res://attackk.gd" id="1_lp7mq"]
+[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="2_mfbs0"]
+[ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="3_kwqed"]
+[ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="4_jrar1"]
+[ext_resource type="Script" uid="uid://ysjaeutcwxq4" path="res://damagecak.gd" id="5_mfbs0"]
+[ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="6_o41ln"]
+[ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="7_ivxog"]
+[ext_resource type="Script" uid="uid://bvpwap22jsuvc" path="res://statekame.gd" id="8_127h8"]
+[ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="9_qchmo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_til4h"]
 bg_color = Color(0, 0, 0, 1)
@@ -229,14 +229,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_gwdth")
+script = ExtResource("1_lp7mq")
 
 [node name="BBG" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 1536.0
 offset_bottom = 1024.0
 scale = Vector2(0.750499, 0.632423)
-texture = ExtResource("1_7j4lf")
+texture = ExtResource("2_mfbs0")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -245,18 +245,18 @@ offset_top = 1.0
 offset_right = 1978.0
 offset_bottom = 1081.0
 scale = Vector2(0.58296, 0.595359)
-texture = ExtResource("6_3yin5")
+texture = ExtResource("3_kwqed")
 
 [node name="enemy" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 453.0
 offset_top = 167.0
 offset_right = 3705.0
-offset_bottom = 3537.0
+offset_bottom = 3758.0
 scale = Vector2(0.0799707, 0.0799707)
 mouse_filter = 2
-texture = ExtResource("3_gwdth")
-script = ExtResource("5_3yin5")
+texture = ExtResource("4_jrar1")
+script = ExtResource("5_mfbs0")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -269,7 +269,7 @@ offset_right = 1980.0
 offset_bottom = 1080.0
 rotation = 0.00767529
 scale = Vector2(0.5821, 0.59976)
-texture = ExtResource("4_nrb8v")
+texture = ExtResource("6_o41ln")
 
 [node name="Attack normally" type="Label" parent="Control"]
 layout_mode = 0
@@ -282,15 +282,15 @@ text = "Attack normally"
 
 [node name="protagonist" type="TextureRect" parent="Control"]
 layout_mode = 0
-offset_left = -5.0
-offset_top = 67.0
-offset_right = 1019.0
-offset_bottom = 1091.0
-scale = Vector2(0.449114, 0.449114)
+offset_left = -7.0
+offset_top = 101.0
+offset_right = 1017.0
+offset_bottom = 1125.0
+scale = Vector2(0.415201, 0.415201)
 localize_numeral_system = false
 mouse_filter = 2
-texture = ExtResource("2_7j4lf")
-script = ExtResource("7_nrb8v")
+texture = ExtResource("7_ivxog")
+script = ExtResource("8_127h8")
 
 [node name="CommandButtons" type="VBoxContainer" parent="Control"]
 layout_mode = 0
@@ -489,7 +489,7 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0.744319, 3.63387e-06, 8.66354e-07, 1)
 theme_override_font_sizes/font_size = 30
 
-[node name="TurnMessage" parent="." instance=ExtResource("7_qxvvv")]
+[node name="TurnMessage" parent="." instance=ExtResource("9_qchmo")]
 layout_mode = 1
 offset_left = -4.0
 offset_top = -6.0

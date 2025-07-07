@@ -1,9 +1,10 @@
-[gd_scene load_steps=31 format=3 uid="uid://mrfa0tufb8yj"]
+[gd_scene load_steps=32 format=3 uid="uid://mrfa0tufb8yj"]
 
 [ext_resource type="Script" uid="uid://mnurfjdsahlb" path="res://kaimy.gd" id="1_ndw73"]
 [ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="3_5jrya"]
 [ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="4_gas8w"]
 [ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="5_47du4"]
+[ext_resource type="Script" uid="uid://ban1t4dxqxbv7" path="res://damagecckam.gd" id="5_jotu4"]
 [ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="6_mi5yt"]
 [ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="7_jotu4"]
 [ext_resource type="Script" uid="uid://bvpwap22jsuvc" path="res://statekame.gd" id="7_mi5yt"]
@@ -255,6 +256,7 @@ offset_bottom = 3758.0
 scale = Vector2(0.0799707, 0.0799707)
 mouse_filter = 2
 texture = ExtResource("7_jotu4")
+script = ExtResource("5_jotu4")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0

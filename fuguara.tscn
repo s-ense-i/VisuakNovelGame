@@ -1,11 +1,13 @@
-[gd_scene load_steps=30 format=3 uid="uid://i4b05c4a6mmd"]
+[gd_scene load_steps=32 format=3 uid="uid://i4b05c4a6mmd"]
 
 [ext_resource type="Script" uid="uid://7emptdx882qm" path="res://fuguara.gd" id="1_vtx4s"]
 [ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="3_3om8u"]
 [ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="4_nfpig"]
+[ext_resource type="Script" uid="uid://dfad638vnuotv" path="res://damageccfge.gd" id="5_edj58"]
 [ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="5_mf8wa"]
 [ext_resource type="Texture2D" uid="uid://kf5fvuccsaks" path="res://project assets/Assets only for a demo/Characters/Male Friend/Smiling Opened Eyes Buddy.png" id="6_lk858"]
 [ext_resource type="Texture2D" uid="uid://fbgf0upagop4" path="res://project assets/Assets only for a demo/Demons/DeSum_Katakirauwa_Artwork.png" id="7_edj58"]
+[ext_resource type="Script" uid="uid://nhhn4vwlulmk" path="res://statefge.gd" id="7_lk858"]
 [ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="8_6akba"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_til4h"]
@@ -254,6 +256,7 @@ offset_bottom = 3537.0
 scale = Vector2(0.0799707, 0.0799707)
 mouse_filter = 2
 texture = ExtResource("7_edj58")
+script = ExtResource("5_edj58")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -287,7 +290,7 @@ scale = Vector2(0.41185, 0.41185)
 localize_numeral_system = false
 mouse_filter = 2
 texture = ExtResource("6_lk858")
-script = ExtResource("1_vtx4s")
+script = ExtResource("7_lk858")
 
 [node name="CommandButtons" type="VBoxContainer" parent="Control"]
 layout_mode = 0
