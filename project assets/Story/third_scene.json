@@ -321,8 +321,8 @@
   },
 {
 	"move_start": {
-		"character": "player2",
-		"path": [[8,1],[7,1]],
+		"character": "player",
+		"path": [[8,1],[7,1], [6,1]],
 		"duration": 1.5,
 		"wait": true
 	}
@@ -335,7 +335,7 @@
 {
 	"move_start": {
 		"character": "player2",
-		"path": [[8,3],[7,3], [6,3], [5,3]],
+		"path": [[8,5],[7,5],[5,1]],
 		"duration": 1.5,
 		"wait": true
 	}
@@ -362,8 +362,29 @@
   "wait": true
 },
 {
-	"speaker": "PigEnemy",
-	"text": "Ill go and relax in your stock…",
-  },
+	"move_start": {
+		"character": "bird",
+		"path": [[5,5],[4,5], [3,5], [2,5],[1,5], [0,5], [-1,5]],
+		"duration": 1.5,
+		"wait": true
+	}
+	
+},
+{
+	"speaker": "Narration",
+	"text": "You've survived!",
+	"show_only": "protoganist"	
+},
+{
+	"speaker": "kami",
+	"text": " This was intense. I feel like I couldn't get used to this kind of adrenaline.",
+	"animation": "SadOpened",
+	"replace_character": "protoganist"
+},
+{
+	"speaker": "Fujiwara",
+	"text": "This was pretty mediocre; I didn't feel much adrenaline. Maybe im just too good?",
+	"animation": "SmilingOpened",
+},
 
 ]

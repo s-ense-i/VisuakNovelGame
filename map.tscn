@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b34uwp84fp1q4" path="res://enemy.tscn" id="7_oysan"]
 [ext_resource type="Texture2D" uid="uid://fbgf0upagop4" path="res://project assets/Assets only for a demo/Demons/DeSum_Katakirauwa_Artwork.png" id="8_sb2pt"]
 [ext_resource type="Texture2D" uid="uid://du4iknyfbelde" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artworksecond.png" id="9_ooc2g"]
-[ext_resource type="Texture2D" uid="uid://c0dr3lrdo5dc" path="res://project assets/Assets only for a demo/Sprites/Export-1 Yatsufusa.png" id="10_6qsgm"]
+[ext_resource type="Texture2D" uid="uid://c0dr3lrdo5dc" path="res://project assets/Assets only for a demo/Demons/Sprites/Export-1 Yatsufusa.png" id="10_6qsgm"]
 [ext_resource type="Texture2D" uid="uid://1astaax38fbm" path="res://project assets/RF_Catacombs_v1.0/torch_2.png" id="12_2wwcf"]
 [ext_resource type="PackedScene" uid="uid://t4mc0i620wdx" path="res://character.tscn" id="13_ooc2g"]
 [ext_resource type="Texture2D" uid="uid://bqbljruperbwk" path="res://project assets/RF_Catacombs_v1.0/torch_3.png" id="13_wbpbn"]
@@ -1217,6 +1217,7 @@ layer_0/z_index = 1
 script = ExtResource("4_iw27f")
 
 [node name="CommandMenu" parent="." instance=ExtResource("4_p5pve")]
+visible = false
 
 [node name="Player" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true
