@@ -8,6 +8,7 @@ var current_player_health = 0
 var current_enemy_health = 0
 var is_defending = false
 var extra_turn: bool = false
+var round_count := 0
 
 func initialize_battle(enemy_data: BattleEnemyData_1):
 	enemy = enemy_data
@@ -52,42 +53,38 @@ func enemy_turn():
 	var move_power = enemy.damage
 	var attacker_stat = 4
 	var defender_stat = 4
-	var result = damagecckam.calculate_damage(move_power, attacker_stat, defender_stat)
+	
+	var enemy_extra_turn_range = Vector2(20, 30)
+	var result = DamageCalculator.calculate_damage(move_power, attacker_stat, defender_stat, enemy_extra_turn_range)
+	
 	var damage = result["damage"]
 	var is_crit = result["is_crit"]
 	show_damage_number(damage, true)
-	
+
 	if is_crit:
 		await show_enemy_crit()
-	
+
 	if is_defending:
 		damage /= 2
 		is_defending = false
 		$AnimationPlayer.play("mini_shake")
 	else:
 		$AnimationPlayer.play("shake")
-	
-	damage = result["damage"]
+
 	current_player_health -= damage
-	set_health($HP2/ProgressBar, current_player_health, Statekame.max_health)
+	set_health($HP2/ProgressBar, current_player_health, State.max_health)
 	await $AnimationPlayer.animation_finished
-	
-	if current_player_health <= 0:
-		$AnimationPlayer.play("player_died")
-		await $AnimationPlayer.animation_finished
-		await get_tree().create_timer(0.25).timeout
-		end_fight("player_died")
-	else:
-		await get_tree().create_timer(1.0).timeout
-		await show_player_turn()
+
+	await get_tree().create_timer(1.0).timeout
+	await show_player_turn()
+
 		
 func _on_attack_pressed() -> void:
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
-	var result = damagecckam.calculate_damage(Statekame.damage, 4, 3)
+	var result = DamageCalculator.calculate_damage(State.damage, 4, 3)
 	var damage = result.damage
-	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)
 	current_enemy_health = max(0, current_enemy_health - damage)
 	set_health($HP/ProgressBar, current_enemy_health, enemy.health)
@@ -99,17 +96,9 @@ func _on_attack_pressed() -> void:
 		await $AnimationPlayer.animation_finished
 		await get_tree().create_timer(0.25).timeout
 		end_fight("enemy_died")
-		return
-	
-	if is_extra_turn:
-		print("🎁 Extra Turn - damage =", damage)
-		show_extra_turn()
-		return
-	
-	await show_enemy_turn()
-	$UIAnimationPlayer.play("fade_in_ui")
-	await $UIAnimationPlayer.animation_finished
-	enemy_turn()
+	else:
+		end_fight("round_ended")  # نهاية الفايت بعد الضربتين
+
 
 # FIXED: Proper fight ending that returns to battle scene
 func end_fight(result: String):

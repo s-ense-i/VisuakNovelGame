@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cnj0138rvoii5" path="res://attackk.gd" id="1_lp7mq"]
 [ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="2_mfbs0"]
 [ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="3_kwqed"]
-[ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="4_jrar1"]
+[ext_resource type="Texture2D" uid="uid://fbgf0upagop4" path="res://project assets/Assets only for a demo/Demons/DeSum_Katakirauwa_Artwork.png" id="4_lp7mq"]
 [ext_resource type="Script" uid="uid://ysjaeutcwxq4" path="res://damagecak.gd" id="5_mfbs0"]
 [ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="6_o41ln"]
 [ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="7_ivxog"]
@@ -255,7 +255,7 @@ offset_right = 3705.0
 offset_bottom = 3758.0
 scale = Vector2(0.0799707, 0.0799707)
 mouse_filter = 2
-texture = ExtResource("4_jrar1")
+texture = ExtResource("4_lp7mq")
 script = ExtResource("5_mfbs0")
 
 [node name="Control" type="Control" parent="."]

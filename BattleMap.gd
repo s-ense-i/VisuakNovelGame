@@ -553,16 +553,16 @@ func get_enemy_data(enemy_name: String) -> BattleEnemyData_1:
 	match enemy_name.to_lower():
 		"yatufusta", "yatsufusa":
 			enemy_data.enemy_name = "Yatufusta"
-			enemy_data.health = 30
+			enemy_data.health = 24
 			enemy_data.damage = 15
 		"bird", "birdenemy":
 			enemy_data.enemy_name = "Bird"
-			enemy_data.health = 30
-			enemy_data.damage = 15
+			enemy_data.health = 22
+			enemy_data.damage = 10
 		"pig", "pigenemy":
 			enemy_data.enemy_name = "Pig"
-			enemy_data.health = 30
-			enemy_data.damage = 15
+			enemy_data.health = 32
+			enemy_data.damage = 10
 		_:
 			push_warning("Unknown enemy: " + enemy_name)
 			return null

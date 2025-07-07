@@ -5,7 +5,7 @@ static func calculate_damage(
 	move_power: int,
 	attacker_stat: int,
 	defender_stat: int,
-	extra_turn_range: Vector2 = Vector2(18, 22)
+	extra_turn_range: Vector2 = Vector2(10, 20)
 ) -> Dictionary:
 	var base_damage = move_power * (attacker_stat / float(defender_stat)) * 0.85
 

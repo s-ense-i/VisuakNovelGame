@@ -267,4 +267,18 @@
 	"text": "Caladrius is about to attack, its going for me i guess!",
 	"animation": "MoreSerious",
   },
+{
+	"speaker": "kami",
+	"text": "Caladrius is about to attack, its going for me i guess!",
+	"animation": "MoreSerious",
+  },
+{
+	"fight": "pig",
+	"fight_scene": "res://attackk.tscn"
+  },
+{
+	"speaker": "kami",
+	"text": "Caladrius is about to attack, its going for me i guess!",
+	"animation": "MoreSerious",
+  },
 ]

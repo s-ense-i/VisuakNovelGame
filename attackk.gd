@@ -2,6 +2,7 @@ extends Control
 
 # Remove the signal - we don't need it with proper scene switching
 # signal fight_ended
+var round_count := 0
 
 var enemy: BattleEnemyData_1
 var current_player_health = 0
@@ -14,11 +15,11 @@ func initialize_battle(enemy_data: BattleEnemyData_1):
 	print("Battle initialized with enemy: ", enemy.enemy_name)
 	
 	if enemy:
-		current_player_health = Statekame.current_health
+		current_player_health = Statefge.current_health
 		current_enemy_health = enemy.health
 		
 		set_health($HP/ProgressBar, current_enemy_health, enemy.health)
-		set_health($HP2/ProgressBar, current_player_health, Statekame.max_health)
+		set_health($HP2/ProgressBar, current_player_health, Statefge.max_health)
 
 func _ready():
 	randomize()
@@ -48,70 +49,66 @@ func enemy_turn():
 	var move_power = enemy.damage
 	var attacker_stat = 4
 	var defender_stat = 4
-	var result = damagecak.calculate_damage(move_power, attacker_stat, defender_stat)
+	
+	var enemy_extra_turn_range = Vector2(20, 30)
+	var result = damagecak.calculate_damage(move_power, attacker_stat, defender_stat, enemy_extra_turn_range)
+	
 	var damage = result["damage"]
 	var is_crit = result["is_crit"]
 	show_damage_number(damage, true)
-	
+
 	if is_crit:
 		await show_enemy_crit()
-	
+
 	if is_defending:
 		damage /= 2
 		is_defending = false
 		$AnimationPlayer.play("mini_shake")
 	else:
 		$AnimationPlayer.play("shake")
-	
-	damage = result["damage"]
+
 	current_player_health -= damage
-	set_health($HP2/ProgressBar, current_player_health, Statekame.max_health)
+	set_health($HP2/ProgressBar, current_player_health, State.max_health)
 	await $AnimationPlayer.animation_finished
-	
-	if current_player_health <= 0:
-		$AnimationPlayer.play("player_died")
-		await $AnimationPlayer.animation_finished
-		await get_tree().create_timer(0.25).timeout
-		end_fight("player_died")
-	else:
-		await get_tree().create_timer(1.0).timeout
-		await show_player_turn()
-		
+
+	await get_tree().create_timer(1.0).timeout
+	await show_player_turn()
 func _on_attack_pressed() -> void:
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
-	var result = damagecak.calculate_damage(Statekame.damage, 4, 3)
+	var result = damagecak.calculate_damage(State.damage, 4, 3)
 	var damage = result.damage
-	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)
 	current_enemy_health = max(0, current_enemy_health - damage)
 	set_health($HP/ProgressBar, current_enemy_health, enemy.health)
 	$AnimationPlayer.play("enemy_damaged")
 	await $AnimationPlayer.animation_finished
-	
+
+	round_count += 1  # زود عدد الجولات
+
 	if current_enemy_health <= 0:
 		$AnimationPlayer.play("enemy_died")
 		await $AnimationPlayer.animation_finished
 		await get_tree().create_timer(0.25).timeout
 		end_fight("enemy_died")
 		return
-	
-	if is_extra_turn:
-		print("🎁 Extra Turn - damage =", damage)
-		show_extra_turn()
+
+	# ✅ لو دي أول ضربة من اللاعب، نديله Extra Turn
+	if round_count == 1:
+		await show_extra_turn()
+		$UIAnimationPlayer.play("fade_in_ui")
+		await $UIAnimationPlayer.animation_finished
 		return
 	
-	await show_enemy_turn()
-	$UIAnimationPlayer.play("fade_in_ui")
-	await $UIAnimationPlayer.animation_finished
-	enemy_turn()
+	end_fight("round_ended")  # نهاية القتال بعد الضربتين
+
 
 # FIXED: Proper fight ending that returns to battle scene
 func end_fight(result: String):
 	print("Fight ended with result: ", result)
 	
-	# Update Statekame based on result
+	# Update Statefge based on result
 	match result:
 		"enemy_died":
 			print("Player won the fight!")
@@ -121,8 +118,8 @@ func end_fight(result: String):
 		"error":
 			print("Fight ended due to error")
 	
-	# Save current health back to Statekame
-	Statekame.current_health = current_player_health
+	# Save current health back to Statefge
+	Statefge.current_health = current_player_health
 	
 	# Get the battle scene path from stored state
 	var stored_state = GameManager.get_battle_state()
