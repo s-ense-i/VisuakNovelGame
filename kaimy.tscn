@@ -1,12 +1,12 @@
 [gd_scene load_steps=31 format=3 uid="uid://mrfa0tufb8yj"]
 
-[ext_resource type="Script" uid="uid://b7quonml1venj" path="res://battle_2.gd" id="1_mi5yt"]
-[ext_resource type="Resource" uid="uid://j5an2x3k83aw" path="res://enemy.tres" id="2_jotu4"]
+[ext_resource type="Script" uid="uid://mnurfjdsahlb" path="res://kaimy.gd" id="1_ndw73"]
 [ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="3_5jrya"]
 [ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="4_gas8w"]
 [ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="5_47du4"]
 [ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="6_mi5yt"]
 [ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="7_jotu4"]
+[ext_resource type="Script" uid="uid://bvpwap22jsuvc" path="res://statekame.gd" id="7_mi5yt"]
 [ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://turn_message.tscn" id="8_286ih"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_til4h"]
@@ -228,8 +228,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_mi5yt")
-enemy = ExtResource("2_jotu4")
+script = ExtResource("1_ndw73")
 
 [node name="BBG" type="TextureRect" parent="."]
 layout_mode = 0
@@ -289,6 +288,7 @@ scale = Vector2(0.415201, 0.415201)
 localize_numeral_system = false
 mouse_filter = 2
 texture = ExtResource("6_mi5yt")
+script = ExtResource("7_mi5yt")
 
 [node name="CommandButtons" type="VBoxContainer" parent="Control"]
 layout_mode = 0

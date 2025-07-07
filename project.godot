@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 Fade="*res://fade_layer.tscn"
 SceneManager="*res://SceneManager.gd"
 State="*res://State.gd"
+BattleEnemyData="*res://BattleEnemyData.gd"
+GameManager="*res://GameManager.gd"
+Statekame="*res://statekame.gd"
+Statefge="*res://statefge.gd"
 
 [dialogic]
 

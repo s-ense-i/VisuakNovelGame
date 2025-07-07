@@ -1,4 +1,4 @@
-# main_dialogue.gd - FIXED VERSION
+# main_dialogue.gd - ENHANCED VERSION WITH END SCENE SUPPORT
 extends Node2D
 
 @onready var Background= %Background
@@ -15,6 +15,7 @@ var visible_characters: Array[int] = []
 var transition_effect: String = "fade"
 var dialogue_file: String = "res://project assets/Story/first_scene.json"
 var scene_initialized: bool = false
+var target_scene: String = ""  # NEW: Store target scene for end scene transitions
 
 func _ready() -> void:
 	# Hide everything initially
@@ -159,6 +160,21 @@ func process_current_line():
 
 	var line = DialogueLines[dialogue_index]
 	
+	# NEW: Handle end scene transitions
+	if line.has("endscene"):
+		target_scene = line["endscene"]
+		transition_effect = line.get("transition", "fade")
+		scene_initialized = false  # Reset for scene transition
+		
+		# Hide dialogue UI and characters before transitioning
+		dialogue_ui.hide_speaker_box()
+		dialogue_ui.hide_speaker_name()
+		character.hide_all_characters()
+		
+		print("Transitioning to scene: ", target_scene)
+		SceneManager.transition_out(transition_effect)
+		return
+	
 	if line.has("next_scene"):
 		var next_scene= line["next_scene"]
 		dialogue_file= "res://project assets/Story/" + next_scene + ".json" if !next_scene.is_empty() else ""
@@ -271,10 +287,15 @@ func _on_choice_selected(anchor: String):
 		process_current_line()
 	else:
 		printerr("Failed to find anchor: " + anchor)
-		
-
 
 func _on_transition_out_cpmpleted():
+	# NEW: Handle end scene transitions
+	if not target_scene.is_empty():
+		print("Changing to scene: ", target_scene)
+		get_tree().change_scene_to_file(target_scene)
+		target_scene = ""  # Reset target scene
+		return
+	
 	if dialogue_file.is_empty():
 		print("End")
 		return
@@ -304,7 +325,6 @@ func show_background_characters():
 
 	BackgroundEffect3.visible = true
 	BackgroundEffect3.play("default")
-
 
 func _on_transition_in_cpmpleted():
 	# Start the visual sequence instead of immediately processing dialogue

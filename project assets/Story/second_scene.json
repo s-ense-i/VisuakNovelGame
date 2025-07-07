@@ -298,4 +298,8 @@
 {
 	"anchor": "continue_story_1-1"
   },
+{
+  "endscene": "res://map.tscn",
+  "transition": "fade"
+}
 ]

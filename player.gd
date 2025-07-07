@@ -31,7 +31,7 @@ func _ready():
 
 	pathfinder = PathFinder.new(tile_map, walkable_cells)
 
-	add_to_group("players")  # ✅ لازم قبل أي استخدام لـ get_players()
+	add_to_group("players") 
 
 
 func _physics_process(delta):

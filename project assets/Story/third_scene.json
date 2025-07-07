@@ -127,22 +127,144 @@
 {
 	"anchor": "continue_story1"
   },
-  {
+{
 	"speaker": "Narration",
 	"text": "BATTLE STARTS!",
-	"show_only":"protoganist",	
-  },
-  {
+	"show_only": "protoganist"	
+},
+{
 	"speaker": "Narration",
 	"text": "Tutorial Bot: Welcome to the real-life story. We are the definitive upgrade to the original game! Here are some of the changes we've made.",
-  },
-  {
+},
+{
 	"speaker": "Narration",
 	"text": "Firstly, you will only use your bodies to attack, defend or interact with the demons! Our immersion system allows you to throw punches and kicks with near-realistic detail. Just use your body as you would in real life!",
+},
+{
+	"move_start": {
+		"character": "yatufusta",
+		"path": [[5,3],[6,3], [7,3], [8,3]],
+		"duration": 1.5,
+		"wait": true
+	}
+	
+},
+{
+	"fight": "yatufusta",
+	"fight_scene": "res://battle_2.tscn"
   },
   {
-	"speaker": "Narration",
-	"text": "Firstly, you will only use your bodies to attack, defend or interact with the demons! Our immersion system allows you to throw punches and kicks with near-realistic detail. Just use your body as you would in real life!",
+	"action": "show_character",
+	"character": ["bird", "pig","yatufusta"]
   },
+{
+	"speaker": "yatufusta",
+	"text": "Grrrrr!",
+},
+{
+	"speaker": "protoganist",
+	"text": "The damage from Yatsufusa feels kind of real.",
+	"animation": "Angry",
+	"replace_character": "yatufusta"
+},
+{
+  "choices": [
+	{
+	  "text": "Guys, this feels strange; I can feel the pain.",
+	  "goto": "choice11"
+	},
+	{
+	  "text": "This is a lot more immersive than i thought…", 
+	  "goto": "choice22"
+	},
+  ],
+},
+  {
+	"anchor": "choice11",},
+	
+	{
+	"speaker": "kami",
+	"text": "Is it really that immersive?",
+	"animation": "MoreSerious",
+  },
+  {
+	"speaker": "fujiwara",
+	"text": ": Wow! If it's that immersive, I want to go next!",
+	"animation": "SmilingClosed",
+	"replace_character": "kami"
+  },
+{
+	"goto": "continue_story11"
+  },
+  {
+	"anchor": "choice22",},
+	
+	{
+	"speaker": "kami",
+	"text": "Is it really that immersive?",
+	"animation": "MoreSerious",
+  },
+  {
+	"speaker": "fujiwara",
+	"text": "No need to hype it up: I’m already itching to go!",
+	"animation": "SmilingClosed",
+	"replace_character": "kami"
+  },
+{
+	"goto": "continue_story11"
+  },
+{
+	"anchor": "continue_story11"
+  },
+{
+	"move_start": {
+		"character": "pig",
+		"path": [[5,1],[6,1], [7,1], [8,1]],
+		"duration": 1.5,
+		"wait": true
+	}
+	
+},
 
+{
+	"fight": "pig",
+	"fight_scene": "res://fuguara.tscn"
+  },
+{
+	"action": "show_character",
+	"character": ["bird", "pig","yatufusta"]
+  },
+{
+	"speaker": "fujiwara",
+	"text": "It doesn't feel that different from the usual gameplay. (Protagonist Name), are you overreacting?",
+	"animation": "SmilingOpened",
+  },
+{
+	"speaker": "kami",
+	"text": "Caladrius is about to attack, its going for me i guess!",
+	"animation": "MoreSerious",
+  },
+{
+	"move_start": {
+		"character": "bird",
+		"path": [[5,5],[6,5], [7,5], [8,5]],
+		"duration": 1.5,
+		"wait": true
+	}
+	
+},
+
+{
+	"fight": "bird",
+	"fight_scene": "res://kaimy.tscn"
+  },
+{
+	"action": "show_character",
+	"character": ["bird", "pig","yatufusta"]
+  },
+{
+	"speaker": "kami",
+	"text": "Caladrius is about to attack, its going for me i guess!",
+	"animation": "MoreSerious",
+  },
 ]

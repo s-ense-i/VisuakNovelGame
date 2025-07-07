@@ -11,9 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://du4iknyfbelde" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artworksecond.png" id="9_ooc2g"]
 [ext_resource type="Texture2D" uid="uid://c0dr3lrdo5dc" path="res://project assets/Assets only for a demo/Sprites/Export-1 Yatsufusa.png" id="10_6qsgm"]
 [ext_resource type="Texture2D" uid="uid://1astaax38fbm" path="res://project assets/RF_Catacombs_v1.0/torch_2.png" id="12_2wwcf"]
-[ext_resource type="PackedScene" uid="uid://xu5ilh4owv26" path="res://dialogue_ui.tscn" id="13_6qsgm"]
 [ext_resource type="PackedScene" uid="uid://t4mc0i620wdx" path="res://character.tscn" id="13_ooc2g"]
 [ext_resource type="Texture2D" uid="uid://bqbljruperbwk" path="res://project assets/RF_Catacombs_v1.0/torch_3.png" id="13_wbpbn"]
+[ext_resource type="PackedScene" uid="uid://xu5ilh4owv26" path="res://dialogue_ui.tscn" id="14_2wwcf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sb2pt"]
 texture = ExtResource("2_oysan")
@@ -1072,7 +1072,7 @@ texture_region_size = Vector2i(75, 75)
 tile_size = Vector2i(80, 80)
 sources/0 = SubResource("TileSetAtlasSource_71pa8")
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ooc2g"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_2wwcf"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -1083,7 +1083,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_2wwcf"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_wbpbn"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -1207,7 +1207,7 @@ script = ExtResource("1_wijl4")
 y_sort_enabled = true
 tile_set = SubResource("TileSet_urblq")
 format = 2
-layer_0/tile_data = PackedInt32Array(7, 1376256, 1, 8, 1441792, 1, 65543, 3080192, 24, 131079, 3014656, 21, 65544, 3080192, 18, 131080, 3080192, 21, 196615, 3080192, 20, 262151, 3014656, 17, 196616, 3014656, 20, 262152, 3014656, 23, 327687, 3014656, 23, 393223, 3080192, 24, 327688, 3014656, 20, 393224, 3080192, 24, 458759, 1376256, 1, 458760, 1441792, 1, 9, 1310720, 1, 10, 1376256, 1, 65545, 3014656, 20, 131081, 3014656, 17, 65546, 3014656, 23, 131082, 3014656, 17, 196617, 3014656, 23, 262153, 3080192, 18, 196618, 3080192, 20, 262154, 3080192, 21, 327689, 3080192, 20, 393225, 3014656, 21, 327690, 3014656, 23, 393226, 3014656, 21, 458761, 1310720, 1, 458762, 1376256, 1, 11, 1441792, 1, 12, 1310720, 1, 65547, 3014656, 20, 131083, 3014656, 17, 65548, 3080192, 20, 131084, 3080192, 21, 196619, 3014656, 20, 262155, 3014656, 23, 196620, 3080192, 20, 262156, 3080192, 21, 327691, 3014656, 20, 393227, 3014656, 21, 327692, 3014656, 23, 393228, 3014656, 21, 458763, 1441792, 1, 458764, 1310720, 1, 13, 1376256, 1, 14, 1441792, 1, 65549, 3080192, 24, 131085, 3014656, 23, 65550, 1507328, 3, 131086, 1507328, 4, 196621, 3014656, 18, 262157, 3014656, 20, 196622, 1507328, 5, 262158, 1507328, 3, 327693, 3014656, 23, 393229, 3080192, 24, 327694, 1507328, 4, 393230, 1507328, 5, 458765, 1376256, 1, 458766, 1441792, 1, 0, 1310720, 1, 65536, 1245184, 3, 131072, 1245184, 4, 196608, 1245184, 5, 262144, 1245184, 3, 327680, 1245184, 4, 393216, 1245184, 5, 458752, 1310720, 1, 1, 1376256, 1, 2, 1441792, 1, 65537, 3080192, 24, 131073, 3014656, 21, 65538, 3080192, 20, 131074, 3014656, 23, 196609, 3014656, 18, 262145, 3080192, 24, 196610, 3080192, 23, 262146, 3080192, 21, 327681, 3014656, 20, 393217, 3080192, 24, 327682, 3014656, 23, 393218, 3080192, 21, 458753, 1376256, 1, 458754, 1441792, 1, 3, 1310720, 1, 4, 1376256, 1, 65539, 3014656, 17, 131075, 3014656, 21, 65540, 3014656, 17, 131076, 3014656, 23, 196611, 3014656, 20, 262147, 3014656, 17, 196612, 3014656, 23, 262148, 3080192, 21, 327683, 3014656, 17, 393219, 3014656, 21, 327684, 3080192, 20, 393220, 3014656, 21, 458755, 1310720, 1, 458756, 1376256, 1, 5, 1441792, 1, 6, 1310720, 1, 65541, 3014656, 20, 131077, 3014656, 17, 65542, 3080192, 18, 131078, 3080192, 21, 196613, 3080192, 23, 262149, 3080192, 21, 196614, 3080192, 21, 262150, 3080192, 23, 327685, 3014656, 23, 393221, 3014656, 21, 327686, 3014656, 20, 393222, 3080192, 18, 458757, 1441792, 1, 458758, 1310720, 1)
+layer_0/tile_data = PackedInt32Array(7, 1376256, 1, 8, 1441792, 1, 65543, 3080192, 24, 131079, 3014656, 21, 65544, 3080192, 18, 131080, 3080192, 21, 196615, 3080192, 20, 262151, 3014656, 17, 196616, 3014656, 20, 262152, 3014656, 23, 327687, 3014656, 23, 393223, 3080192, 24, 327688, 3014656, 20, 393224, 3080192, 24, 458759, 1376256, 1, 458760, 1441792, 1, 9, 1310720, 1, 10, 1376256, 1, 65545, 3014656, 20, 131081, 3014656, 21, 65546, 3014656, 23, 131082, 3014656, 17, 196617, 3014656, 21, 262153, 3014656, 21, 196618, 3080192, 20, 262154, 3080192, 21, 327689, 3080192, 20, 393225, 3014656, 21, 327690, 3014656, 23, 393226, 3014656, 21, 458761, 1310720, 1, 458762, 1376256, 1, 11, 1441792, 1, 12, 1310720, 1, 65547, 3014656, 20, 131083, 3014656, 17, 65548, 3080192, 20, 131084, 3080192, 21, 196619, 3014656, 20, 262155, 3014656, 23, 196620, 3080192, 20, 262156, 3080192, 21, 327691, 3014656, 20, 393227, 3014656, 21, 327692, 3014656, 23, 393228, 3014656, 21, 458763, 1441792, 1, 458764, 1310720, 1, 13, 1376256, 1, 14, 1441792, 1, 65549, 3080192, 24, 131085, 3014656, 23, 65550, 1507328, 3, 131086, 1507328, 4, 196621, 3014656, 18, 262157, 3014656, 20, 196622, 1507328, 5, 262158, 1507328, 3, 327693, 3014656, 23, 393229, 3080192, 24, 327694, 1507328, 4, 393230, 1507328, 5, 458765, 1376256, 1, 458766, 1441792, 1, 0, 1310720, 1, 65536, 1245184, 3, 131072, 1245184, 4, 196608, 1245184, 5, 262144, 1245184, 3, 327680, 1245184, 4, 393216, 1245184, 5, 458752, 1310720, 1, 1, 1376256, 1, 2, 1441792, 1, 65537, 3080192, 24, 131073, 3014656, 21, 65538, 3080192, 20, 131074, 3014656, 23, 196609, 3014656, 18, 262145, 3080192, 24, 196610, 3080192, 23, 262146, 3080192, 21, 327681, 3014656, 20, 393217, 3080192, 24, 327682, 3014656, 23, 393218, 3080192, 21, 458753, 1376256, 1, 458754, 1441792, 1, 3, 1310720, 1, 4, 1376256, 1, 65539, 3014656, 17, 131075, 3014656, 21, 65540, 3014656, 17, 131076, 3014656, 23, 196611, 3014656, 20, 262147, 3014656, 17, 196612, 3014656, 23, 262148, 3080192, 21, 327683, 3014656, 17, 393219, 3014656, 21, 327684, 3080192, 20, 393220, 3014656, 21, 458755, 1310720, 1, 458756, 1376256, 1, 5, 1441792, 1, 6, 1310720, 1, 65541, 3014656, 20, 65542, 3080192, 18, 131078, 3080192, 21, 196614, 3080192, 21, 262150, 3080192, 23, 327685, 3014656, 23, 393221, 3014656, 21, 327686, 3014656, 20, 393222, 3080192, 18, 458757, 1441792, 1, 458758, 1310720, 1, 131077, 3014656, 21, 196613, 3014656, 21, 262149, 3014656, 21)
 
 [node name="MoveOverlay" type="TileMap" parent="."]
 position = Vector2(1, 1)
@@ -1221,55 +1221,48 @@ script = ExtResource("4_iw27f")
 [node name="Player" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true
 z_index = 1
-<<<<<<< HEAD
-position = Vector2(819, 229)
-=======
-position = Vector2(988, 189)
->>>>>>> 44d78fb2ea6f36034b992d25dc6ad396259157eb
+position = Vector2(732, 132)
 
 [node name="Player3" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true
 z_index = 1
-<<<<<<< HEAD
-position = Vector2(818, 345)
-=======
-position = Vector2(991, 316)
->>>>>>> 44d78fb2ea6f36034b992d25dc6ad396259157eb
+position = Vector2(733, 246)
 
 [node name="Player2" parent="." instance=ExtResource("3_e0an3")]
 unique_name_in_owner = true
 z_index = 1
-<<<<<<< HEAD
-position = Vector2(820, 460)
-=======
-position = Vector2(989, 437)
->>>>>>> 44d78fb2ea6f36034b992d25dc6ad396259157eb
+position = Vector2(732, 390)
 
 [node name="Enemy1" parent="." instance=ExtResource("7_oysan")]
+unique_name_in_owner = true
 z_index = 1
-position = Vector2(495, 217)
+position = Vector2(419, 121)
 
 [node name="animatedsprite2d" type="AnimatedSprite2D" parent="Enemy1"]
+position = Vector2(10, -23)
 scale = Vector2(0.03, 0.03)
-sprite_frames = SubResource("SpriteFrames_ooc2g")
+sprite_frames = SubResource("SpriteFrames_2wwcf")
 animation = &"spawn"
 
 [node name="Enemy2" parent="." instance=ExtResource("7_oysan")]
+unique_name_in_owner = true
 z_index = 1
-position = Vector2(505, 427)
+position = Vector2(426, 434)
 
 [node name="animatedsprite2d" type="AnimatedSprite2D" parent="Enemy2"]
-scale = Vector2(0.07, 0.07)
-sprite_frames = SubResource("SpriteFrames_2wwcf")
+position = Vector2(0, -67)
+scale = Vector2(0.08, 0.08)
+sprite_frames = SubResource("SpriteFrames_wbpbn")
 animation = &"spawn"
 flip_h = true
 
 [node name="Enemy3" parent="." instance=ExtResource("7_oysan")]
+unique_name_in_owner = true
 z_index = 1
-position = Vector2(520, 334)
+position = Vector2(445, 281)
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="Enemy3"]
-position = Vector2(-14, -2)
+position = Vector2(-14, -56)
 sprite_frames = SubResource("SpriteFrames_4v3wx")
 animation = &"spawn"
 autoplay = "spawn"
@@ -1322,23 +1315,20 @@ sprite_frames = SubResource("SpriteFrames_4on3e")
 autoplay = "default"
 frame_progress = 0.194133
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer2"]
+[node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -313.0
-offset_top = -69.0
-offset_right = -273.0
-offset_bottom = -29.0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="CharacterSprite" parent="CanvasLayer2/Control" instance=ExtResource("13_ooc2g")]
+[node name="CharacterSprite" parent="CanvasLayer/Control" instance=ExtResource("13_ooc2g")]
 unique_name_in_owner = true
-position = Vector2(616, 484)
-scale = Vector2(0.8, 0.8)
+position = Vector2(335, 372)
+scale = Vector2(0.78, 0.78)
 
-[node name="DialogueUi" parent="CanvasLayer2" instance=ExtResource("13_6qsgm")]
+[node name="DialogueUi" parent="CanvasLayer" instance=ExtResource("14_2wwcf")]
 unique_name_in_owner = true
-anchors_preset = 12
-anchor_top = 1.0
-grow_vertical = 0
+offset_top = -1.0
+offset_bottom = -1.0

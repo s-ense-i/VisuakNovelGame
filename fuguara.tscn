@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://i4b05c4a6mmd"]
+[gd_scene load_steps=30 format=3 uid="uid://i4b05c4a6mmd"]
 
-[ext_resource type="Script" uid="uid://b7quonml1venj" path="res://battle_2.gd" id="1_lk858"]
-[ext_resource type="Resource" uid="uid://j5an2x3k83aw" path="res://enemy.tres" id="2_edj58"]
+[ext_resource type="Script" uid="uid://7emptdx882qm" path="res://fuguara.gd" id="1_vtx4s"]
 [ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="3_3om8u"]
 [ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="4_nfpig"]
 [ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="5_mf8wa"]
@@ -228,8 +227,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_lk858")
-enemy = ExtResource("2_edj58")
+script = ExtResource("1_vtx4s")
 
 [node name="BBG" type="TextureRect" parent="."]
 layout_mode = 0
@@ -289,6 +287,7 @@ scale = Vector2(0.41185, 0.41185)
 localize_numeral_system = false
 mouse_filter = 2
 texture = ExtResource("6_lk858")
+script = ExtResource("1_vtx4s")
 
 [node name="CommandButtons" type="VBoxContainer" parent="Control"]
 layout_mode = 0

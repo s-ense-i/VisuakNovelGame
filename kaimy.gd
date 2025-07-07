@@ -14,11 +14,11 @@ func initialize_battle(enemy_data: BattleEnemyData_1):
 	print("Battle initialized with enemy: ", enemy.enemy_name)
 	
 	if enemy:
-		current_player_health = State.current_health
+		current_player_health = Statekame.current_health
 		current_enemy_health = enemy.health
 		
 		set_health($HP/ProgressBar, current_enemy_health, enemy.health)
-		set_health($HP2/ProgressBar, current_player_health, State.max_health)
+		set_health($HP2/ProgressBar, current_player_health, Statekame.max_health)
 
 func _ready():
 	randomize()
@@ -63,7 +63,7 @@ func enemy_turn():
 	
 	damage = result["damage"]
 	current_player_health -= damage
-	set_health($HP2/ProgressBar, current_player_health, State.max_health)
+	set_health($HP2/ProgressBar, current_player_health, Statekame.max_health)
 	await $AnimationPlayer.animation_finished
 	
 	if current_player_health <= 0:
@@ -79,7 +79,7 @@ func _on_attack_pressed() -> void:
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
-	var result = DamageCalculator.calculate_damage(State.damage, 4, 3)
+	var result = DamageCalculator.calculate_damage(Statekame.damage, 4, 3)
 	var damage = result.damage
 	var is_extra_turn = result.is_extra_turn
 	show_damage_number(damage, false)
@@ -109,7 +109,7 @@ func _on_attack_pressed() -> void:
 func end_fight(result: String):
 	print("Fight ended with result: ", result)
 	
-	# Update State based on result
+	# Update Statekame based on result
 	match result:
 		"enemy_died":
 			print("Player won the fight!")
@@ -119,8 +119,8 @@ func end_fight(result: String):
 		"error":
 			print("Fight ended due to error")
 	
-	# Save current health back to State
-	State.current_health = current_player_health
+	# Save current health back to Statekame
+	Statekame.current_health = current_player_health
 	
 	# Get the battle scene path from stored state
 	var stored_state = GameManager.get_battle_state()

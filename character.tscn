@@ -13,41 +13,43 @@ script = ExtResource("1_pjt0s")
 
 [node name="protoganist" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+position = Vector2(-63, 0)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("2_pjt0s")
 animation = &"idle"
 
 [node name="kami" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(797, 0)
+position = Vector2(829, 0)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("2_wa5vi")
 animation = &"SmilingOpened"
 
 [node name="Fujiwara" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(797, 0)
+position = Vector2(829, 0)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("4_wfnr8")
 animation = &"UnamusedBuddy"
 
 [node name="Yatufusta" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-148, 0)
+position = Vector2(-204, 0)
 scale = Vector2(0.15, 0.15)
 sprite_frames = ExtResource("5_px5sl")
 animation = &"idle"
 
 [node name="BirdEnemy" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-83, 0)
+position = Vector2(-139, 0)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("6_yxww1")
 animation = &"idle"
+flip_h = true
 
 [node name="PigEnemy" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-83, 0)
+position = Vector2(-139, 0)
 scale = Vector2(0.13, 0.13)
 sprite_frames = ExtResource("7_wdpcj")
 animation = &"idle"

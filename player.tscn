@@ -109,7 +109,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_onrkg"]
 radius = 16.0
-height = 84.0
+height = 52.0
 
 [node name="Player" type="CharacterBody2D"]
 input_pickable = true
@@ -123,5 +123,5 @@ animation = &"idle"
 autoplay = "walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(7, -28)
+position = Vector2(7, -36)
 shape = SubResource("CapsuleShape2D_onrkg")
