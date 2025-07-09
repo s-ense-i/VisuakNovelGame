@@ -13,18 +13,17 @@ config_version=5
 config/name="Devil survivor 2"
 run/main_scene="uid://cygy41joryndn"
 config/features=PackedStringArray("4.4", "Mobile")
-config/icon="res://icon.svg"
 
 [autoload]
 
-Fade="*res://fade_layer.tscn"
-SceneManager="*res://SceneManager.gd"
-State="*res://State.gd"
-BattleEnemyData="*res://BattleEnemyData.gd"
-GameManager="*res://GameManager.gd"
-Statekame="*res://statekame.gd"
-Statefge="*res://statefge.gd"
-EnemyManager="*res://EnemyManager.gd"
+Fade="*res://Scenes/Game/fade_layer.tscn"
+SceneManager="*res://Scripts/Singletons/SceneManager.gd"
+State="*res://Scripts/Singletons/State.gd"
+BattleEnemyData="*res://Scripts/Singletons/BattleEnemyData.gd"
+GameManager="*res://Scripts/Singletons/GameManager.gd"
+Statekame="*res://Scripts/Singletons/statekame.gd"
+Statefge="*res://Scripts/Singletons/statefge.gd"
+EnemyManager="*res://Scripts/Singletons/EnemyManager.gd"
 
 [dialogic]
 

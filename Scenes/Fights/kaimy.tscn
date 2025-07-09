@@ -1,0 +1,506 @@
+[gd_scene load_steps=32 format=3 uid="uid://mrfa0tufb8yj"]
+
+[ext_resource type="Script" uid="uid://mnurfjdsahlb" path="res://Scripts/Normal/kaimy.gd" id="1_1spn3"]
+[ext_resource type="Texture2D" uid="uid://caxnj0lv7xbjn" path="res://project assets/Assets only for a demo/Backgrounds/424c0841-0250-41e1-9180-90463220e1e8.png" id="2_lef2o"]
+[ext_resource type="Texture2D" uid="uid://c6p7mq2muuhie" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview6.png" id="3_grhui"]
+[ext_resource type="Texture2D" uid="uid://o4hs1nf6ryvi" path="res://project assets/Assets only for a demo/Demons/DeSum_Caladrius_Artwork.png" id="4_2sc0x"]
+[ext_resource type="Script" uid="uid://ban1t4dxqxbv7" path="res://Scripts/Normal/damagecckam.gd" id="5_3j752"]
+[ext_resource type="Texture2D" uid="uid://5w3ib8bpt4a8" path="res://project assets/Assets only for a demo/School_assets (not needed for now)/Screen ui command menu preview.png" id="6_050kd"]
+[ext_resource type="Texture2D" uid="uid://cy83v33f7f8ba" path="res://project assets/Assets only for a demo/Characters/Female Lead/More Serious.png" id="7_0o2a3"]
+[ext_resource type="Script" uid="uid://bvpwap22jsuvc" path="res://Scripts/Singletons/statekame.gd" id="8_40vxa"]
+[ext_resource type="PackedScene" uid="uid://bq8gcolcwaa6c" path="res://Scenes/Fights/turn_message.tscn" id="9_rec77"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_til4h"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxvvv"]
+bg_color = Color(0.960784, 0.478431, 0.101961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nrb8v"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3yin5"]
+bg_color = Color(0.960784, 0.478431, 0.101961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxd7w"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_teya6"]
+bg_color = Color(0.721569, 0.0470588, 0.823529, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uju8r"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0pfn"]
+bg_color = Color(0.721569, 0.0470588, 0.823529, 1)
+
+[sub_resource type="Animation" id="Animation_qxvvv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("enemy:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/protagonist:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_til4h"]
+resource_name = "enemy_damaged"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("enemy:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.233333, 0.3, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_hxd7w"]
+resource_name = "enemy_died"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("enemy:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3yin5"]
+resource_name = "mini_shake"
+
+[sub_resource type="Animation" id="Animation_teya6"]
+resource_name = "player_died"
+
+[sub_resource type="Animation" id="Animation_nrb8v"]
+resource_name = "shake"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/protagonist:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.233333, 0.333333, 0.433333, 0.566667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nrb8v"]
+_data = {
+&"RESET": SubResource("Animation_qxvvv"),
+&"enemy_damaged": SubResource("Animation_til4h"),
+&"enemy_died": SubResource("Animation_hxd7w"),
+&"mini_shake": SubResource("Animation_3yin5"),
+&"player_died": SubResource("Animation_teya6"),
+&"shake": SubResource("Animation_nrb8v")
+}
+
+[sub_resource type="Animation" id="Animation_x0pfn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_noiud"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_vong4"]
+resource_name = "fade_in_ui"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_uju8r"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_oiieq"]
+resource_name = "fade_out_ui"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5o1yk"]
+resource_name = "new_animation"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oiieq"]
+_data = {
+&"RESET": SubResource("Animation_x0pfn"),
+&"fade_in": SubResource("Animation_noiud"),
+&"fade_in_ui": SubResource("Animation_vong4"),
+&"fade_out": SubResource("Animation_uju8r"),
+&"fade_out_ui": SubResource("Animation_oiieq"),
+&"new_animation": SubResource("Animation_5o1yk")
+}
+
+[node name="Battle2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1spn3")
+
+[node name="BBG" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1536.0
+offset_bottom = 1024.0
+scale = Vector2(0.750499, 0.632423)
+texture = ExtResource("2_lef2o")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 1978.0
+offset_bottom = 1081.0
+scale = Vector2(0.58296, 0.595359)
+texture = ExtResource("3_grhui")
+
+[node name="enemy" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 453.0
+offset_top = 167.0
+offset_right = 3705.0
+offset_bottom = 3758.0
+scale = Vector2(0.0799707, 0.0799707)
+mouse_filter = 2
+texture = ExtResource("4_2sc0x")
+script = ExtResource("5_3j752")
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CommandOverlay" type="TextureRect" parent="Control"]
+layout_mode = 1
+offset_right = 1980.0
+offset_bottom = 1080.0
+rotation = 0.00767529
+scale = Vector2(0.5821, 0.59976)
+texture = ExtResource("6_050kd")
+
+[node name="Attack normally" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 358.0
+offset_top = 461.0
+offset_right = 791.0
+offset_bottom = 577.0
+scale = Vector2(1.25475, 1.15772)
+text = "Attack normally"
+
+[node name="protagonist" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_left = -7.0
+offset_top = 101.0
+offset_right = 1017.0
+offset_bottom = 1125.0
+scale = Vector2(0.415201, 0.415201)
+localize_numeral_system = false
+mouse_filter = 2
+texture = ExtResource("7_0o2a3")
+script = ExtResource("8_40vxa")
+
+[node name="CommandButtons" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 361.0
+offset_top = 142.0
+offset_right = 673.0
+offset_bottom = 216.0
+
+[node name="Attack" type="Button" parent="Control/CommandButtons"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Attack"
+alignment = 0
+
+[node name="Guard" type="Button" parent="Control/CommandButtons"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Guard"
+alignment = 0
+
+[node name="HP" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 437.0
+offset_top = 18.0
+offset_right = 622.0
+offset_bottom = 45.0
+scale = Vector2(0.6971, 0.822565)
+
+[node name="ProgressBar" type="ProgressBar" parent="HP"]
+custom_minimum_size = Vector2(100, 8)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_til4h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qxvvv")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="HP/ProgressBar"]
+layout_mode = 0
+offset_left = 130.541
+offset_top = 10.9414
+offset_right = 182.541
+offset_bottom = 33.9414
+text = "50/100"
+
+[node name="HP2" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 441.0
+offset_top = 577.0
+offset_right = 626.0
+offset_bottom = 604.0
+scale = Vector2(0.6971, 0.822565)
+
+[node name="ProgressBar" type="ProgressBar" parent="HP2"]
+custom_minimum_size = Vector2(100, 8)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_nrb8v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3yin5")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="HP2/ProgressBar"]
+layout_mode = 0
+offset_left = 130.541
+offset_top = 10.9414
+offset_right = 182.541
+offset_bottom = 33.9414
+text = "50/100"
+
+[node name="MP" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 621.0
+offset_top = 19.0
+offset_right = 661.0
+offset_bottom = 59.0
+scale = Vector2(2.42373, 0.930013)
+
+[node name="ProgressBar" type="ProgressBar" parent="MP"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hxd7w")
+theme_override_styles/fill = SubResource("StyleBoxFlat_teya6")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MP/ProgressBar"]
+layout_mode = 0
+offset_left = 38.7832
+offset_top = 11.8278
+offset_right = 90.7832
+offset_bottom = 34.8278
+scale = Vector2(0.275468, 0.696481)
+text = "50/100"
+
+[node name="MP2" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 622.0
+offset_top = 580.0
+offset_right = 662.0
+offset_bottom = 620.0
+scale = Vector2(2.42373, 0.930013)
+
+[node name="ProgressBar" type="ProgressBar" parent="MP2"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_uju8r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_x0pfn")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MP2/ProgressBar"]
+layout_mode = 0
+offset_left = 38.7832
+offset_top = 11.8278
+offset_right = 90.7832
+offset_bottom = 34.8278
+scale = Vector2(0.275468, 0.696481)
+text = "50/100"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_nrb8v")
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 323)
+
+[node name="ExtraTurnLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.0
+offset_right = 20.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="EnemyTurnLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.708189, 2.64719e-06, 5.77569e-07, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="PlayerTurnLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(2.88785e-06, 0, 0.724565, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="EnemyCritLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.744319, 3.63387e-06, 8.66354e-07, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="TurnMessage" parent="." instance=ExtResource("9_rec77")]
+layout_mode = 1
+offset_left = -4.0
+offset_top = -6.0
+offset_right = -4.0
+offset_bottom = -6.0
+
+[node name="UIAnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Control/CommandOverlay")
+libraries = {
+&"": SubResource("AnimationLibrary_oiieq")
+}
+
+[connection signal="pressed" from="Control/CommandButtons/Attack" to="." method="_on_attack_pressed"]
+[connection signal="pressed" from="Control/CommandButtons/Guard" to="." method="_on_guard_pressed"]

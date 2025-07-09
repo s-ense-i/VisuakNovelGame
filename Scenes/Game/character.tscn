@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://t4mc0i620wdx"]
+
+[ext_resource type="Script" uid="uid://cljlah6x6hfcw" path="res://Scripts/Normal/character_sprite.gd" id="1_pjt0s"]
+[ext_resource type="SpriteFrames" uid="uid://3j0modncvljn" path="res://Scenes/Characters/Protoganist.tres" id="2_pjt0s"]
+[ext_resource type="SpriteFrames" uid="uid://cwnmsodul5i0w" path="res://Scenes/Characters/Kami.tres" id="2_wa5vi"]
+[ext_resource type="SpriteFrames" uid="uid://dob7xr3c23vof" path="res://Scenes/Characters/fujiwara.tres" id="4_wfnr8"]
+[ext_resource type="SpriteFrames" uid="uid://7q8t2yp24qkw" path="res://Scenes/Characters/yatufusta.tres" id="5_px5sl"]
+[ext_resource type="SpriteFrames" uid="uid://ews2f0makq1l" path="res://Scenes/Characters/BirdEnemy.tres" id="6_yxww1"]
+[ext_resource type="SpriteFrames" uid="uid://mo8v17lb5oni" path="res://Scenes/Characters/PigEnemy.tres" id="7_wdpcj"]
+
+[node name="CharacterSprite" type="Node2D"]
+script = ExtResource("1_pjt0s")
+
+[node name="protoganist" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-63, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_pjt0s")
+animation = &"idle"
+
+[node name="kami" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(829, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_wa5vi")
+animation = &"SmilingOpened"
+
+[node name="Fujiwara" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(829, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("4_wfnr8")
+animation = &"UnamusedBuddy"
+
+[node name="Yatufusta" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-204, 0)
+scale = Vector2(0.15, 0.15)
+sprite_frames = ExtResource("5_px5sl")
+animation = &"idle"
+
+[node name="BirdEnemy" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-139, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("6_yxww1")
+animation = &"idle"
+flip_h = true
+
+[node name="PigEnemy" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-139, 0)
+scale = Vector2(0.13, 0.13)
+sprite_frames = ExtResource("7_wdpcj")
+animation = &"idle"

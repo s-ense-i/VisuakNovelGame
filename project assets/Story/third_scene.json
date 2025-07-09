@@ -150,7 +150,7 @@
 },
 {
 	"fight": "yatufusta",
-	"fight_scene": "res://battle_2.tscn"
+	"fight_scene": "res://Scenes/Fights/battle_2.tscn"
   },
   {
 	"action": "show_character",
@@ -227,7 +227,7 @@
 
 {
 	"fight": "pig",
-	"fight_scene": "res://fuguara.tscn"
+	"fight_scene": "res://Scenes/Fights/fuguara.tscn"
   },
 {
 	"action": "show_character",
@@ -256,7 +256,7 @@
 
 {
 	"fight": "bird",
-	"fight_scene": "res://kaimy.tscn"
+	"fight_scene": "res://Scenes/Fights/kaimy.tscn"
   },
 {
 	"action": "show_character",
@@ -295,7 +295,7 @@
 
 {
 	"fight": "yatufusta",
-	"fight_scene": "res://attackp.tscn"
+	"fight_scene": "res://Scenes/Fights/attackp.tscn"
   },
 {
 	"action": "show_character",
@@ -342,7 +342,7 @@
 },
 {
 	"fight": "pig",
-	"fight_scene": "res://attackk.tscn"
+	"fight_scene": "res://Scenes/Fights/attackk.tscn"
   },
 {
 	"action": "show_character",

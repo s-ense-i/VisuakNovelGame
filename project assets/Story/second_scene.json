@@ -299,7 +299,7 @@
 	"anchor": "continue_story_1-1"
   },
 {
-  "endscene": "res://map.tscn",
+  "endscene": "res://Scenes/Game/map.tscn",
   "transition": "fade"
 }
 ]

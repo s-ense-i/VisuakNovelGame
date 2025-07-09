@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmveudghkhih1"]
+
+[ext_resource type="Script" uid="uid://drncu66he55n8" path="res://Scripts/Singletons/fade_layer.gd" id="1_jy74b"]
+
+[sub_resource type="Animation" id="Animation_1guse"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_quh1b"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_du30n"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lwj5q"]
+_data = {
+&"RESET": SubResource("Animation_1guse"),
+&"fade_in": SubResource("Animation_quh1b"),
+&"fade_out": SubResource("Animation_du30n")
+}
+
+[node name="FadeLayer" type="CanvasLayer"]
+script = ExtResource("1_jy74b")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+&"": SubResource("AnimationLibrary_lwj5q")
+}
