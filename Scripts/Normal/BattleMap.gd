@@ -28,7 +28,8 @@ extends Node2D
 var fight_scene_path = "res://battle.tscn" # Update with actual path
 var dialogue_paused_for_fight = false
 var current_enemy_data: BattleEnemyData_1 = null
-
+var current_fight_scene_path: String = ""
+var movement_completed: bool = false
 
 var current_player_controlled: String = ""
 var movement_grid_visible: bool = false
@@ -157,6 +158,10 @@ func _on_movement_tile_clicked(tile_pos: Vector2i, player: Node):
 		player.current_tile = tile_pos
 	
 	print("Player moved to: ", tile_pos)
+	
+	movement_completed = true
+	command_menu.show_for_player(current_player_controlled)
+	command_menu.disable_move_button()
 					
 func initialize_characters():
 	# Hide all enemies initially
@@ -457,7 +462,11 @@ func slide_characters_out():
 	character.hide_all_characters(false)
 	
 func process_current_line():
+	movement_completed = false
+	current_player_controlled = ""
+	
 	set_input_blocked(true)
+	
 	dialogue_ui.DialogueLines.text = ""
 	dialogue_ui.SpeakerName.text = ""
 	
@@ -465,6 +474,7 @@ func process_current_line():
 	dialogue_ui.hide_speaker_name()
 	
 	if not scene_initialized or dialogue_index >= DialogueLines.size():
+		end_dialogue_sequence()
 		return
 		
 	var line = DialogueLines[dialogue_index]
@@ -498,9 +508,24 @@ func process_current_line():
 	if line.has("fade_out_enemy"):
 		handle_fade_out_enemy(line)
 		return
-	# Handle actions before dialogue
+	
+	# Handle PlayerMovement
 	if line.has("PlayerMovement"):
+		print("Processing PlayerMovement line: ", line)
 		current_player_controlled = line["PlayerMovement"]
+		
+		# Store the fight scene path if specified
+		if line.has("Player_fight_scene"):
+			current_fight_scene_path = line["Player_fight_scene"]
+			print("✓ Stored Player_fight_scene: ", current_fight_scene_path)
+		elif line.has("fight_scene"):
+			current_fight_scene_path = line["fight_scene"]
+			print("✓ Stored fight_scene: ", current_fight_scene_path)
+		else:
+			print("✗ No fight scene specified in dialogue line")
+		
+		# Reset movement status
+		movement_completed = false
 		
 		# Slide out UI and characters
 		await slide_ui_out()
@@ -508,10 +533,11 @@ func process_current_line():
 		
 		# Show command menu for specified player
 		command_menu.show_for_player(current_player_controlled)
+		command_menu.enable_move_button()
+		
+		# Do NOT increment dialogue_index here; wait for fight to complete
 		return
 		
-	
-	
 	if line.has("action"):
 		handle_action(line)
 		return
@@ -935,8 +961,6 @@ func call_fight_scene():
 		resume_dialogue()
 		return
 	
-	# Store current character visibility states
-	store_character_visibility_states()
 	
 	# Store current dialogue state in a singleton/autoload
 	# You'll need to create a GameManager autoload for this
@@ -994,15 +1018,33 @@ func _on_fight_ended():
 func _on_attack_selected(player_name: String):
 	print("Attack selected for player: ", player_name)
 	
-	# Check if current dialogue line has a fight scene specified
-	if dialogue_index > 0 && dialogue_index <= DialogueLines.size():
-		var current_line = DialogueLines[dialogue_index - 1]  # Get the line that opened the menu
-		if current_line.has("fight_scene"):
-			fight_scene_path = current_line["fight_scene"]
-			print("Using specified fight scene: ", fight_scene_path)
+	# Check if we have a specific fight scene path from the dialogue
+	if current_fight_scene_path != "":
+		fight_scene_path = current_fight_scene_path
+		print("Using stored fight scene: ", fight_scene_path)
+	else:
+		fight_scene_path = "res://Scenes/Fights/attackp.tscn"
+		print("Using default fight scene: ", fight_scene_path)
 	
-	# Trigger the fight with the current enemy (you may need to adjust this)
-	trigger_fight("")  # Pass empty string or get enemy from current line
+	# Store the current state
+	GameManager.store_battle_state({
+		"dialogue_index": dialogue_index,
+		"scene_path": scene_file_path,
+		"dialogue_lines": DialogueLines,
+		"enemy_data": current_enemy_data,
+		"is_player_attack": true,
+		"character_visibility": {
+			"yatufusta": yatufusta.visible,
+			"bird": bird.visible,
+			"pig": pig.visible,
+			"player1": player1.visible,
+			"player2": player2.visible,
+			"player3": player3.visible
+		}
+	})
+	
+	# Call the fight scene
+	call_fight_scene()
 	
 func resume_dialogue():
 	dialogue_paused_for_fight = false
@@ -1011,55 +1053,86 @@ func resume_dialogue():
 	# Continue dialogue from current position
 	process_current_line()
 func _on_return_from_fight():
+	print("=== RETURNING FROM FIGHT ===")
+	
 	# Immediately block inputs and hide UI during transition
 	set_input_blocked(true)
-	dialogue_ui.hide_all_ui()
+	command_menu.hide()
 	
 	# Get stored state
 	var stored_state = GameManager.get_battle_state()
 	if stored_state:
-		# Clear the dialogue UI completely before loading new state
-		dialogue_ui.DialogueLines.text = ""
-		dialogue_ui.SpeakerName.text = ""
+		print("Found stored state: ", stored_state)
 		
-		# Load state data
-		dialogue_index = stored_state.get("dialogue_index", 0)
-		DialogueLines = stored_state.get("dialogue_lines", [])
-		current_enemy_data = stored_state.get("enemy_data", null)
-		
-		# Restore character states before showing anything
-		restore_character_visibility_states()
-		
-		# Clear stored state
-		GameManager.clear_battle_state()
+		# Check if this was a player attack scene
+		if stored_state.get("is_player_attack", false):
+			print("✓ This was a player attack scene")
+			
+			# Slide UI and characters back in
+			await slide_characters_in()
+			await slide_ui_in()
+			
+			# Load state data
+			dialogue_index = stored_state.get("dialogue_index", 0)
+			DialogueLines = stored_state.get("dialogue_lines", [])
+			current_enemy_data = stored_state.get("enemy_data", null)
+			
+			print("✓ Continuing dialogue from index: ", dialogue_index)
+			
+			# Clear stored state
+			GameManager.clear_battle_state()
+			
+			# Wait one frame to ensure everything is settled
+			await get_tree().process_frame
+			
+			# Process the current line fresh (don't replay previous line)
+			if dialogue_index < DialogueLines.size():
+				print("✓ Processing next dialogue line")
+				# Force reset the dialogue UI
+				dialogue_ui.DialogueLines.visible_ratio = 0
+				dialogue_ui.animate_text = false
+				
+				# Process the current line properly
+				await process_current_line()
+			else:
+				print("✗ No more dialogue lines to process")
+		else:
+			print("✗ This was NOT a player attack scene - handling normal fight return")
+			# Handle normal fight scene return (existing logic)
+			# Clear the dialogue UI completely before loading new state
+			dialogue_ui.DialogueLines.text = ""
+			dialogue_ui.SpeakerName.text = ""
+			
+			# Load state data
+			dialogue_index = stored_state.get("dialogue_index", 0)
+			DialogueLines = stored_state.get("dialogue_lines", [])
+			current_enemy_data = stored_state.get("enemy_data", null)
+			
+			# Restore character states before showing anything
+			restore_character_visibility_states()
+			
+			# Clear stored state
+			GameManager.clear_battle_state()
+			
+			# Wait one frame to ensure everything is settled
+			await get_tree().process_frame
+			
+			# Process current line fresh (don't replay previous line)
+			if dialogue_index < DialogueLines.size():
+				# Force reset the dialogue UI
+				dialogue_ui.DialogueLines.visible_ratio = 0
+				dialogue_ui.animate_text = false
+				
+				# Process the current line properly
+				await process_current_line()
+	else:
+		print("✗ No stored state found")
 	
-	# Wait one frame to ensure everything is settled
-	await get_tree().process_frame
-	
-	# Process current line fresh (don't replay previous line)
-	if dialogue_index < DialogueLines.size():
-		# Force reset the dialogue UI
-		dialogue_ui.DialogueLines.visible_ratio = 0
-		dialogue_ui.animate_text = false
-		
-		# Process the current line properly
-		await process_current_line()
-	
+	print("=== RETURN COMPLETE ===")
 	set_input_blocked(false)
-	
-func store_character_visibility_states():
-	var visibility_states = {
-		"yatufusta": yatufusta.visible,
-		"bird": bird.visible,
-		"pig": pig.visible,
-		"player1": player1.visible,
-		"player2": player2.visible,
-		"player3": player3.visible
-	}
-	GameManager.store_character_visibility(visibility_states)
 
 func restore_character_visibility_states():
-	var visibility_states = GameManager.get_character_visibility()
+	var visibility_states = GameManager.get_battle_state().get("character_visibility", {})
 	if visibility_states.is_empty():
 		print("No character visibility states to restore")
 		return
@@ -1070,37 +1143,78 @@ func restore_character_visibility_states():
 	if visibility_states.has("yatufusta"):
 		yatufusta.visible = visibility_states["yatufusta"]
 		if yatufusta.visible:
-			# Play idle animation instead of spawn since they're already spawned
-			if yatufusta.sprite_frames.has_animation("idle"):
-				yatufusta.play("idle")
-			else:
-				yatufusta.play("default")  # Fallback to default animation
+			yatufusta.play("idle" if yatufusta.sprite_frames.has_animation("idle") else "default")
 			print("Restored yatufusta visibility: ", yatufusta.visible)
 	
 	if visibility_states.has("bird"):
 		bird.visible = visibility_states["bird"]
 		if bird.visible:
-			# Play idle animation instead of spawn
-			if bird.sprite_frames.has_animation("idle"):
-				bird.play("idle")
-			else:
-				bird.play("default")  # Fallback to default animation
+			bird.play("idle" if bird.sprite_frames.has_animation("idle") else "default")
 			print("Restored bird visibility: ", bird.visible)
 	
 	if visibility_states.has("pig"):
 		pig.visible = visibility_states["pig"]
 		if pig.visible:
-			# Play idle animation instead of spawn
-			if pig.sprite_frames.has_animation("idle"):
-				pig.play("idle")
-			else:
-				pig.play("default")  # Fallback to default animation
+			pig.play("idle" if pig.sprite_frames.has_animation("idle") else "default")
 			print("Restored pig visibility: ", pig.visible)
 	
-	# Restore player visibility (usually always visible, but just in case)
+	# Restore player visibility
 	if visibility_states.has("player1"):
 		player1.visible = visibility_states["player1"]
 	if visibility_states.has("player2"):
 		player2.visible = visibility_states["player2"]
 	if visibility_states.has("player3"):
 		player3.visible = visibility_states["player3"]
+		
+func slide_ui_in():
+	# Store original position if not already stored
+	if not has_meta("original_ui_position"):
+		set_meta("original_ui_position", dialogue_ui.position)
+	
+	# Set initial position (off-screen)
+	dialogue_ui.position.y = get_meta("original_ui_position").y + 200
+	dialogue_ui.show()
+	
+	# Slide up dialogue UI
+	var tween = create_tween()
+	tween.tween_property(dialogue_ui, "position:y", get_meta("original_ui_position").y, 0.3)
+	await tween.finished
+
+func slide_characters_in():
+	# Get all character nodes from the CharacterSprite scene
+	var characters = [
+		character.protoganist,
+		character.kami,
+		character.fujiwara,
+		character.Yatufusta,
+		character.PigEnemy,
+		character.BirdEnemy
+	]
+	
+	# First make all characters visible but off-screen
+	for char_node in characters:
+		var viewport_center = get_viewport().size.x / 2
+		var slide_right = char_node.global_position.x > viewport_center
+		var slide_distance = 300 * (1 if slide_right else -1)
+		
+		# Set initial off-screen position
+		char_node.position.x += slide_distance
+		char_node.visible = true
+	
+	# Now animate them sliding in
+	var tweens = []
+	for char_node in characters:
+		if char_node.visible:
+			var tween = create_tween()
+			var viewport_center = get_viewport().size.x / 2
+			var slide_right = char_node.global_position.x > viewport_center
+			var slide_distance = 300 * (1 if slide_right else -1)
+			
+			tweens.append(tween)
+			tween.tween_property(char_node, "position:x", 
+				char_node.position.x - slide_distance, 
+				0.3)
+	
+	# Wait for all character slides to complete
+	for t in tweens:
+		await t.finished

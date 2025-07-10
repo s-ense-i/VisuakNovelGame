@@ -1,31 +1,29 @@
 # GameManager.gd
 extends Node
 
-var stored_battle_state: Dictionary = {}
+var battle_state: Dictionary = {}
 
 func store_battle_state(state: Dictionary):
-	stored_battle_state = state
-	print("Battle state stored: ", state.keys())
-	store_enemy_states()
+	
+	battle_state = state.duplicate(true)
 
 func get_battle_state() -> Dictionary:
-	return stored_battle_state
+	return battle_state.duplicate(true)
 
 func clear_battle_state():
-	stored_battle_state.clear()
-	print("Battle state cleared")
+	battle_state.clear()
 
 func has_battle_state() -> bool:
-	return not stored_battle_state.is_empty()
+	return not battle_state.is_empty()
 
 func store_character_visibility(character_states: Dictionary):
-	if not stored_battle_state.has("character_visibility"):
-		stored_battle_state["character_visibility"] = {}
-	stored_battle_state["character_visibility"] = character_states
+	if not battle_state.has("character_visibility"):
+		battle_state["character_visibility"] = {}
+	battle_state["character_visibility"] = character_states
 	print("Character visibility stored: ", character_states)
 
 func get_character_visibility() -> Dictionary:
-	return stored_battle_state.get("character_visibility", {})
+	return battle_state.get("character_visibility", {})
 	
 func store_enemy_states():
 	var enemy_data = {}
@@ -37,12 +35,12 @@ func store_enemy_states():
 			"damage": enemy.damage,
 			"is_defeated": enemy.is_defeated
 		}
-	stored_battle_state["enemy_states"] = enemy_data
+	battle_state["enemy_states"] = enemy_data
 	print("Enemy states stored")
 
 func restore_enemy_states():
-	if stored_battle_state.has("enemy_states"):
-		var enemy_data = stored_battle_state["enemy_states"]
+	if battle_state.has("enemy_states"):
+		var enemy_data = battle_state["enemy_states"]
 		for enemy_name in enemy_data.keys():
 			var data = enemy_data[enemy_name]
 			var enemy = EnemyManager.get_enemy_data(enemy_name)
@@ -50,3 +48,4 @@ func restore_enemy_states():
 				enemy.current_health = data.get("current_health", enemy.max_health)
 				enemy.is_defeated = data.get("is_defeated", false)
 		print("Enemy states restored")
+		

@@ -13,8 +13,10 @@ var current_player_name: String = ""
 func _ready():
 	visible = false
 	
+	# Connect all button signals
 	move_button.pressed.connect(_on_move_pressed)
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
+	attack_button.pressed.connect(_on_attack_pressed)  # Add this line
 
 func _on_move_pressed():
 	visible = false

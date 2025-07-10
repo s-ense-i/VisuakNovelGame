@@ -289,7 +289,7 @@
 	"text": "Protagonist, it's your turn!",},
 {	
 	"PlayerMovement": "protagonist",
-	"fight_scene": "res://Scenes/Fights/attackp.tscn",
+	"Player_fight_scene": "res://Scenes/Fights/attackp.tscn",
 },
 
 {

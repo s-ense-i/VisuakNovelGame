@@ -121,7 +121,7 @@ func _on_attack_pressed() -> void:
 
 # FIXED: Proper fight ending that returns to battle scene
 func end_fight(result: String):
-	print("Fight ended with result: ", result)
+	print("Attack scene ended with result: ", result)
 	
 	# Update State based on result
 	match result:
