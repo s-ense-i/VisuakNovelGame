@@ -135,6 +135,7 @@
 {
 	"speaker": "Narration",
 	"text": "Tutorial Bot: Welcome to the real-life story. We are the definitive upgrade to the original game! Here are some of the changes we've made.",
+	"Hide_character": "kami"
 },
 {
 	"speaker": "Narration",
@@ -289,7 +290,7 @@
 	"text": "Protagonist, it's your turn!",},
 {	
 	"PlayerMovement": "protagonist",
-	"Player_fight_scene": "res://Scenes/Fights/attackp.tscn",
+	"fight_scene": "res://Scenes/Fights/attackp.tscn",
 },
 
 {

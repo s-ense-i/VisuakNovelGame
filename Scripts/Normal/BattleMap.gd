@@ -462,6 +462,17 @@ func slide_characters_out():
 	character.hide_all_characters(false)
 	
 func process_current_line():
+	print("Processing line: ", dialogue_index)
+	
+	if dialogue_index >= DialogueLines.size():
+		print("Dialogue index out of range: ", dialogue_index)
+		end_dialogue_sequence()
+		return
+	
+	var line = DialogueLines[dialogue_index]
+	print("Current line content: ", line)
+	
+	
 	movement_completed = false
 	current_player_controlled = ""
 	
@@ -477,7 +488,6 @@ func process_current_line():
 		end_dialogue_sequence()
 		return
 		
-	var line = DialogueLines[dialogue_index]
 	
 	# Handle choices first
 	if line.has("choices"):
@@ -936,7 +946,7 @@ func get_enemy_data(enemy_name: String) -> BattleEnemyData_1:
 			enemy_data.damage = 10
 		"pig", "pigenemy":
 			enemy_data.enemy_name = "Pig"
-			enemy_data.health = 55
+			enemy_data.health = 30
 			enemy_data.damage = 10
 		_:
 			push_warning("Unknown enemy: " + enemy_name)
@@ -1054,80 +1064,60 @@ func resume_dialogue():
 	process_current_line()
 func _on_return_from_fight():
 	print("=== RETURNING FROM FIGHT ===")
-	
-	# Immediately block inputs and hide UI during transition
+
+	# تأكد من إلغاء حظر الإدخال وإخفاء القائمة
 	set_input_blocked(true)
 	command_menu.hide()
-	
-	# Get stored state
+
+	# احصل على الحالة المحفوظة
 	var stored_state = GameManager.get_battle_state()
 	if stored_state:
-		print("Found stored state: ", stored_state)
-		
-		# Check if this was a player attack scene
-		if stored_state.get("is_player_attack", false):
-			print("✓ This was a player attack scene")
-			
-			# Slide UI and characters back in
-			await slide_characters_in()
-			await slide_ui_in()
-			
-			# Load state data
-			dialogue_index = stored_state.get("dialogue_index", 0)
-			DialogueLines = stored_state.get("dialogue_lines", [])
-			current_enemy_data = stored_state.get("enemy_data", null)
-			
-			print("✓ Continuing dialogue from index: ", dialogue_index)
-			
-			# Clear stored state
-			GameManager.clear_battle_state()
-			
-			# Wait one frame to ensure everything is settled
-			await get_tree().process_frame
-			
-			# Process the current line fresh (don't replay previous line)
-			if dialogue_index < DialogueLines.size():
-				print("✓ Processing next dialogue line")
-				# Force reset the dialogue UI
-				dialogue_ui.DialogueLines.visible_ratio = 0
-				dialogue_ui.animate_text = false
-				
-				# Process the current line properly
-				await process_current_line()
-			else:
-				print("✗ No more dialogue lines to process")
+		print("✓ Found stored state: ", stored_state)
+
+		# استعادة حالة الحوار
+		dialogue_index = stored_state.get("dialogue_index", 0)
+		DialogueLines = stored_state.get("dialogue_lines", [])
+		current_enemy_data = stored_state.get("enemy_data", null)
+
+		# استعادة حالة ظهور الشخصيات
+		restore_character_visibility_states()
+
+		# تأكد من تحميل ملف الحوار إذا لم يكن محملًا
+		if DialogueLines.is_empty():
+			DialogueLines = load_dialogue(dialogue_file)
+			print("✓ Reloaded dialogue file")
+
+		# امسح الحالة المحفوظة
+		GameManager.clear_battle_state()
+
+		# انتظر إطارًا واحدًا لضمان استقرار المشهد
+		await get_tree().process_frame
+
+		# أعد إظهار واجهة الحوار
+		dialogue_ui.show()
+		dialogue_ui.show_speaker_box()
+		dialogue_ui.show_speaker_name()
+
+		# أعد تعيين النص لضمان تحديثه
+		dialogue_ui.DialogueLines.text = ""
+		dialogue_ui.SpeakerName.text = ""
+		dialogue_ui.DialogueLines.visible_ratio = 0
+		dialogue_ui.animate_text = false
+
+		# ابدأ معالجة السطر الحالي من الحوار
+		if dialogue_index < DialogueLines.size():
+			print("✓ Processing dialogue line: ", dialogue_index)
+			await process_current_line()
 		else:
-			print("✗ This was NOT a player attack scene - handling normal fight return")
-			# Handle normal fight scene return (existing logic)
-			# Clear the dialogue UI completely before loading new state
-			dialogue_ui.DialogueLines.text = ""
-			dialogue_ui.SpeakerName.text = ""
-			
-			# Load state data
-			dialogue_index = stored_state.get("dialogue_index", 0)
-			DialogueLines = stored_state.get("dialogue_lines", [])
-			current_enemy_data = stored_state.get("enemy_data", null)
-			
-			# Restore character states before showing anything
-			restore_character_visibility_states()
-			
-			# Clear stored state
-			GameManager.clear_battle_state()
-			
-			# Wait one frame to ensure everything is settled
-			await get_tree().process_frame
-			
-			# Process current line fresh (don't replay previous line)
-			if dialogue_index < DialogueLines.size():
-				# Force reset the dialogue UI
-				dialogue_ui.DialogueLines.visible_ratio = 0
-				dialogue_ui.animate_text = false
-				
-				# Process the current line properly
-				await process_current_line()
+			print("✗ No more dialogue lines to process")
+			end_dialogue_sequence()
 	else:
 		print("✗ No stored state found")
-	
+		# إذا لم توجد حالة محفوظة، ابدأ من البداية
+		dialogue_index = 0
+		DialogueLines = load_dialogue(dialogue_file)
+		await process_current_line()
+
 	print("=== RETURN COMPLETE ===")
 	set_input_blocked(false)
 
@@ -1136,36 +1126,47 @@ func restore_character_visibility_states():
 	if visibility_states.is_empty():
 		print("No character visibility states to restore")
 		return
-	
+
 	print("Restoring character visibility states: ", visibility_states)
-	
-	# Restore enemy visibility
+
+	# استعادة ظهور الأعداء
 	if visibility_states.has("yatufusta"):
 		yatufusta.visible = visibility_states["yatufusta"]
 		if yatufusta.visible:
-			yatufusta.play("idle" if yatufusta.sprite_frames.has_animation("idle") else "default")
+			yatufusta.play("idle")
 			print("Restored yatufusta visibility: ", yatufusta.visible)
-	
+
 	if visibility_states.has("bird"):
 		bird.visible = visibility_states["bird"]
 		if bird.visible:
-			bird.play("idle" if bird.sprite_frames.has_animation("idle") else "default")
+			bird.play("idle")
 			print("Restored bird visibility: ", bird.visible)
-	
+
 	if visibility_states.has("pig"):
 		pig.visible = visibility_states["pig"]
 		if pig.visible:
-			pig.play("idle" if pig.sprite_frames.has_animation("idle") else "default")
+			pig.play("idle")
 			print("Restored pig visibility: ", pig.visible)
-	
-	# Restore player visibility
+
+	# استعادة ظهور اللاعبين
 	if visibility_states.has("player1"):
 		player1.visible = visibility_states["player1"]
+		if player1.visible:
+			player1.play("idle")
+
 	if visibility_states.has("player2"):
 		player2.visible = visibility_states["player2"]
+		if player2.visible:
+			player2.play("idle")
+
 	if visibility_states.has("player3"):
 		player3.visible = visibility_states["player3"]
-		
+		if player3.visible:
+			player3.play("idle")
+
+	# تأكد من إظهار الشخصيات في مشهد الحوار
+	character.show_all_characters()
+
 func slide_ui_in():
 	# Store original position if not already stored
 	if not has_meta("original_ui_position"):
@@ -1218,3 +1219,4 @@ func slide_characters_in():
 	# Wait for all character slides to complete
 	for t in tweens:
 		await t.finished
+	################################################################

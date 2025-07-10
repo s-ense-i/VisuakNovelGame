@@ -4,7 +4,23 @@ extends Node
 var battle_state: Dictionary = {}
 
 func store_battle_state(state: Dictionary):
-	
+	battle_state = {
+		"dialogue_index": state.get("dialogue_index", 0),
+		"scene_path": state.get("scene_path", ""),
+		"dialogue_lines": state.get("dialogue_lines", []),
+		"enemy_data": state.get("enemy_data", null),
+		"is_player_attack": state.get("is_player_attack", false),
+		"character_visibility": {
+			"yatufusta": state.get("yatufusta_visible", false),
+			"bird": state.get("bird_visible", false),
+			"pig": state.get("pig_visible", false),
+			"player1": state.get("player1_visible", true),
+			"player2": state.get("player2_visible", true),
+			"player3": state.get("player3_visible", true)
+		}
+	}
+	print("Battle state stored: ", battle_state)
+
 	battle_state = state.duplicate(true)
 
 func get_battle_state() -> Dictionary:

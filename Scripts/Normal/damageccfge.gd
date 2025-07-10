@@ -9,9 +9,10 @@ static func calculate_damage(
 ) -> Dictionary:
 	var base_damage = move_power * (attacker_stat / float(defender_stat)) * 0.85
 
-	var is_crit = randi() % 100 < 8
-	if is_crit:
-		base_damage *= 1.8
+	# ❌ تم حذف الكريتيكال هيت نهائيًا
+	# var is_crit = randi() % 100 < 8
+	# if is_crit:
+	#     base_damage *= 1.8
 
 	var rng = randf_range(0.85, 1.15)
 	var final_damage = base_damage * rng
@@ -22,5 +23,5 @@ static func calculate_damage(
 	return {
 		"damage": damage,
 		"is_extra_turn": in_extra_range,
-		"is_crit": is_crit  # ✅ أضفنا ده
+		"is_crit": false  # ✅ دايمًا false علشان لو في كود تاني بيعتمد عليه
 	}

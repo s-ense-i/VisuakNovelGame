@@ -4,7 +4,8 @@ var enemy: BattleEnemyData_1
 var current_player_health = 0
 var current_enemy_health = 0
 var is_defending = false
-var attack_count := 0  # عدد مرات الهجوم
+var attack_count := 0
+var is_busy := false  # 💡 لمنع الضغط المزدوج
 
 func initialize_battle(enemy_data: BattleEnemyData_1):
 	enemy = enemy_data
@@ -21,6 +22,8 @@ func _ready():
 	randomize()
 	print("Fight scene ready")
 	
+	disable_buttons()  # ⛔ غلق الأزرار في البداية
+	
 	var stored_state = GameManager.get_battle_state()
 	if stored_state and stored_state.has("enemy_data"):
 		initialize_battle(stored_state["enemy_data"])
@@ -36,6 +39,7 @@ func set_health(progress_bar, health, max_health):
 		progress_bar.get_node("Label").text = "%d/%d" % [health, max_health]
 
 func enemy_turn():
+	disable_buttons()
 	if current_player_health <= 0:
 		$AnimationPlayer.play("player_died")
 		await $AnimationPlayer.animation_finished
@@ -48,11 +52,11 @@ func enemy_turn():
 	var defender_stat = 4
 	var result = damageccfge.calculate_damage(move_power, attacker_stat, defender_stat)
 	var damage = result["damage"]
-	var is_crit = result["is_crit"]
+	#var is_crit = result["is_crit"]
 	show_damage_number(damage, true)
 	
-	if is_crit:
-		await show_enemy_crit()
+	#if is_crit:
+		#await show_enemy_crit()
 	
 	if is_defending:
 		damage /= 2
@@ -73,8 +77,14 @@ func enemy_turn():
 	else:
 		await get_tree().create_timer(1.0).timeout
 		await show_player_turn()
+		enable_buttons()  # ✅ رجّع الأزرار بعد دور العدو
 
 func _on_attack_pressed() -> void:
+	if is_busy:
+		return
+	is_busy = true
+	disable_buttons()
+
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
 	
@@ -91,13 +101,22 @@ func _on_attack_pressed() -> void:
 	if attack_count == 1:
 		print("🎁 First attack → Extra Turn")
 		await show_extra_turn()
+		enable_buttons()
+		is_busy = false
 		return
 	elif attack_count == 2:
 		print("✅ Second attack → Ending fight regardless of result")
 		end_fight("round_finished")
 		return
+	
+	is_busy = false
 
 func _on_guard_pressed() -> void:
+	if is_busy:
+		return
+	is_busy = true
+	disable_buttons()
+
 	is_defending = true
 	$UIAnimationPlayer.play("fade_out_ui")
 	await $UIAnimationPlayer.animation_finished
@@ -106,6 +125,7 @@ func _on_guard_pressed() -> void:
 	$UIAnimationPlayer.play("fade_in_ui")
 	await $UIAnimationPlayer.animation_finished
 	enemy_turn()
+	is_busy = false
 
 func end_fight(result: String):
 	print("Fight ended with result: ", result)
@@ -162,3 +182,16 @@ func show_damage_number(amount: int, is_player: bool):
 		$HP.add_child(damage_label)
 		damage_label.position = Vector2(100, -30)
 	damage_label.get_node("AnimationPlayer").play("popup")
+
+# ✅ أدوات التحكم
+func disable_buttons():
+	if $Control/CommandButtons/Attack:
+		$Control/CommandButtons/Attack.disabled = true
+	if $Control/CommandButtons/Guard:
+		$Control/CommandButtons/Guard.disabled = true
+
+func enable_buttons():
+	if $Control/CommandButtons/Attack:
+		$Control/CommandButtons/Attack.disabled = false
+	if $Control/CommandButtons/Guard:
+		$Control/CommandButtons/Guard.disabled = false
