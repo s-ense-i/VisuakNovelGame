@@ -8,7 +8,6 @@ extends Node2D
 @onready var PigEnemy = %PigEnemy
 @onready var BirdEnemy = %BirdEnemy
 
-
 # Enhanced Animation settings - increased slide distance for off-screen effect
 var slide_duration: float = 0.4 # Slightly longer for better effect
 var slide_distance: float = 400.0  # Increased from 200 to ensure off-screen
@@ -47,6 +46,10 @@ var replaced_characters = {}
 
 # Track animation tweens to prevent conflicts
 var active_tweens = {}
+var dialogue_ui: Node = null
+
+func set_dialogue_ui(ui: Node):
+	dialogue_ui = ui
 
 func _ready() -> void:
 	self.modulate.a=0
@@ -95,6 +98,18 @@ func update_character_facing():
 			  " (", "right" if char_node.flip_h else "left", " side)",
 			  " flip_h:", char_node.flip_h)
 
+func is_current_line_narration() -> bool:
+	var main_dialogue = get_parent()
+	if main_dialogue and main_dialogue.has_method("get") and main_dialogue.get("current_line_is_narration"):
+		return main_dialogue.current_line_is_narration
+	return false
+
+# Add this helper function to ensure narration UI stays hidden
+func ensure_narration_ui_hidden():
+	if is_current_line_narration() and dialogue_ui:
+		dialogue_ui.hide_speaker_box()
+		dialogue_ui.hide_speaker_name()
+		
 func get_visible_character_nodes() -> Array[AnimatedSprite2D]:
 	"""Get array of currently visible character nodes"""
 	var visible_chars: Array[AnimatedSprite2D] = []
@@ -122,6 +137,9 @@ func get_character_slide_direction(character_node: AnimatedSprite2D) -> bool:
 
 # ENHANCED: Function to create sliding entrance animation with consistent facing
 func slide_character_in(character_node: AnimatedSprite2D, target_position: Vector2, from_right: bool = true):
+	
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
 	# Calculate sprite width properly for AnimatedSprite2D
 	var sprite_width = 100.0  # Default fallback width
 	if character_node.sprite_frames and character_node.sprite_frames.has_animation(character_node.animation):
@@ -161,11 +179,15 @@ func slide_character_in(character_node: AnimatedSprite2D, target_position: Vecto
 	
 	tween.finished.connect(func(): 
 		active_tweens.erase(character_name)
+		ensure_narration_ui_hidden()
 		update_character_facing()
 	)
 
 # ENHANCED: Function to slide character out based on their screen position
 func slide_character_out(character_node: AnimatedSprite2D, force_direction: String = "auto"):
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
+		
 	var char_name = get_character_name_from_node(character_node)
 	if active_tweens.has(char_name):
 		return
@@ -207,6 +229,7 @@ func slide_character_out(character_node: AnimatedSprite2D, force_direction: Stri
 	tween.finished.connect(func(): 
 		character_node.visible = false
 		active_tweens.erase(char_name)
+		ensure_narration_ui_hidden()
 		update_character_facing()
 	)
 # Helper function to get character name from node
@@ -274,6 +297,10 @@ func update_recent_speakers(speaker_name: Character.Name):
 func replace_character(character_to_replace: Character.Name, new_character: Character.Name, animation: String = "idle"):
 	print("Replacing ", Character.Name.keys()[character_to_replace], " with ", Character.Name.keys()[new_character])
 	
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
+		
+	ensure_narration_ui_hidden()
 	# Track the replacement
 	character_replacements[character_to_replace] = new_character
 	replaced_characters[new_character] = character_to_replace
@@ -334,6 +361,8 @@ func replace_character(character_to_replace: Character.Name, new_character: Char
 	
 	# Wait for the slide out to progress, then slide in the new character
 	await get_tree().create_timer(slide_duration * 0.4).timeout
+	
+	ensure_narration_ui_hidden()
 	
 	# Show the new character with sliding animation from appropriate direction
 	match new_character:
@@ -398,7 +427,9 @@ func replace_character(character_to_replace: Character.Name, new_character: Char
 		
 	# Wait for slide in to complete, then dim other characters
 	await get_tree().create_timer(slide_duration).timeout
+	ensure_narration_ui_hidden()
 	dim_non_speakers(new_character)
+
 
 # Helper functions remain the same
 func should_character_be_visible(character_name: Character.Name) -> bool:
@@ -426,6 +457,8 @@ func dim_non_speakers(current_speaker: Character.Name):
 # ENHANCED: Show speaker with consistent auto-facing
 func show_speaker(character_name: Character.Name, animation: String = "idle"):
 	print("show_speaker called with: ", Character.Name.keys()[character_name], " animation: ", animation)
+	
+	ensure_narration_ui_hidden()
 	
 	update_recent_speakers(character_name)
 	
@@ -458,6 +491,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				
 				# Update facing after delay
 				await get_tree().create_timer(0.1).timeout
+				if dialogue_ui:
+						dialogue_ui.force_hide_for_animation()
 				update_character_facing()
 			else:
 				var replacement = get_actual_character_to_show(Character.Name.protoganist)
@@ -499,6 +534,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 			
 			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
+			if dialogue_ui:
+				dialogue_ui.force_hide_for_animation()
 			update_character_facing()
 		
 		Character.Name.fujiwara:
@@ -540,6 +577,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 			
 			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
+			if dialogue_ui:
+				dialogue_ui.force_hide_for_animation()
 			update_character_facing()
 		
 		Character.Name.yatufusta:
@@ -584,6 +623,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				fujiwara.play("idle")
 				
 			await get_tree().create_timer(0.1).timeout
+			if dialogue_ui:
+				dialogue_ui.force_hide_for_animation()
 			update_character_facing()
 			
 		Character.Name.PigEnemy:
@@ -633,6 +674,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				
 			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
+			if dialogue_ui:
+				dialogue_ui.force_hide_for_animation()
 			update_character_facing()
 			
 		Character.Name.BirdEnemy:
@@ -686,6 +729,8 @@ func show_speaker(character_name: Character.Name, animation: String = "idle"):
 				
 			# Update facing after delay
 			await get_tree().create_timer(0.1).timeout
+			if dialogue_ui:
+				dialogue_ui.force_hide_for_animation()
 			update_character_facing()	
 
 func highlight_speaker(character_name: Character.Name):
@@ -721,6 +766,10 @@ func highlight_speaker(character_name: Character.Name):
 func show_narration_mode():
 	print("Narration mode: preserving current character visibility and dimming all")
 	
+	if dialogue_ui:
+		dialogue_ui.hide_speaker_box()
+		dialogue_ui.hide_speaker_name()
+		
 	if protoganist.visible:
 		protoganist.modulate = Color(0.7, 0.7, 0.7)
 		if not protagonist_frames_set:
@@ -772,12 +821,17 @@ func show_narration_mode():
 func show_only_character(character_name: Character.Name, animation: String = "idle"):
 	print("Showing only: ", Character.Name.keys()[character_name])
 	
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
+		
+	ensure_narration_ui_hidden()
 	# Hide others with sliding animation based on their positions
 	hide_all_characters(true)
 	
 	# Wait for hide animations to start
 	await get_tree().create_timer(slide_duration * 0.4).timeout
 	
+	ensure_narration_ui_hidden()
 	# Show and highlight only the specified character
 	match character_name:
 		Character.Name.protoganist:
@@ -824,6 +878,7 @@ func show_only_character(character_name: Character.Name, animation: String = "id
 	
 	# Wait for slide in to complete, then update facing
 	await get_tree().create_timer(slide_duration).timeout
+	ensure_narration_ui_hidden()
 	update_character_facing()
 
 # Keep your existing parse_dialogue_line function
@@ -903,6 +958,11 @@ func reset_for_new_scene():
 # ENHANCED: Hide character with consistent auto-facing update
 func hide_character(character_name: Character.Name, animate: bool = true):
 	print("Hiding character: ", Character.Name.keys()[character_name])
+	
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
+		
+	ensure_narration_ui_hidden()
 	
 	match character_name:
 		Character.Name.protoganist:

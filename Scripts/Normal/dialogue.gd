@@ -15,7 +15,9 @@ var visible_characters: Array[int] = []
 var transition_effect: String = "fade"
 var dialogue_file: String = "res://project assets/Story/first_scene.json"
 var scene_initialized: bool = false
-var target_scene: String = ""  # NEW: Store target scene for end scene transitions
+var target_scene: String = "" 
+var processing_line: bool = false
+var current_line_is_narration: bool = false
 
 func _ready() -> void:
 	# Hide everything initially
@@ -44,6 +46,8 @@ func _ready() -> void:
 	BackgroundEffect2.visible = false
 	BackgroundEffect3.visible = false
 
+	
+	character.set_dialogue_ui(dialogue_ui)
 
 func start_scene_sequence():
 	"""Start the visual sequence: background -> character -> dialogue"""
@@ -115,23 +119,61 @@ func _input(event):
 	if not scene_initialized:
 		return
 		
+	# Ignore all input if we're waiting for a choice
 	if waiting_for_choice:
 		return
-
+	
+	# Only process the "next_line" action presses (ignore releases and other inputs)
+	if not event.is_action_pressed("next_line"):
+		return
+	
 	var line = DialogueLines[dialogue_index]
 	var has_choices = line.has("choices")
-
-	if event.is_action_pressed("next_line") and not has_choices:
-		if dialogue_ui.animate_text:
-			dialogue_ui.skip_animation_text()
-		elif dialogue_index < len(DialogueLines) - 1:
-			dialogue_index += 1
-			process_current_line()
-		else:
-			print("End of dialogue")
+	var is_narration = current_line_is_narration
+	
+	# Case 1: If text is currently animating, allow skipping the animation
+	if dialogue_ui.animate_text:
+		# For narration lines, ensure speaker box stays hidden when skipping
+		if is_narration:
 			dialogue_ui.hide_speaker_box()
 			dialogue_ui.hide_speaker_name()
-			character.hide_all_characters()
+		dialogue_ui.skip_animation_text()
+		return
+	
+	# Case 2: If we're still processing a line (character animations, etc.), ignore input
+	if processing_line:
+		# For narration lines, ensure speaker box stays hidden during rapid clicks
+		if is_narration:
+			dialogue_ui.hide_speaker_box()
+			dialogue_ui.hide_speaker_name()
+		print("Still processing line - ignoring input")
+		return
+	
+	# Case 3: If there are choices, don't advance (should be handled by choice selection)
+	if has_choices:
+		return
+	
+	# Case 4: Normal line advancement
+	if dialogue_index < len(DialogueLines) - 1:
+		# Immediately block further input until processing is complete
+		processing_line = true
+		
+		# For narration lines, ensure speaker box stays hidden
+		if is_narration:
+			dialogue_ui.hide_speaker_box()
+			dialogue_ui.hide_speaker_name()
+		
+		# Advance to next line
+		dialogue_index += 1
+		
+		# Process the next line (this will reset processing_line when done)
+		process_current_line()
+	else:
+		# End of dialogue
+		print("End of dialogue")
+		dialogue_ui.hide_speaker_box()
+		dialogue_ui.hide_speaker_name()
+		character.hide_all_characters()
 
 func load_dialogue(file_path):
 	if not FileAccess.file_exists(file_path):
@@ -158,8 +200,12 @@ func process_current_line():
 		print("Dialogue index out of bounds")
 		return
 
+	# NEW: Set processing flag to block input
+	processing_line = true
+	
 	var line = DialogueLines[dialogue_index]
 	
+	current_line_is_narration = (line.get("speaker", "") == "Narration")
 	# NEW: Handle end scene transitions
 	if line.has("endscene"):
 		target_scene = line["endscene"]
@@ -173,6 +219,7 @@ func process_current_line():
 		
 		print("Transitioning to scene: ", target_scene)
 		SceneManager.transition_out(transition_effect)
+		processing_line = false  # Reset processing flag
 		return
 	
 	if line.has("next_scene"):
@@ -181,6 +228,7 @@ func process_current_line():
 		transition_effect= line.get("transition", "fade")
 		scene_initialized = false  # Reset for next scene
 		SceneManager.transition_out(transition_effect)
+		processing_line = false  # Reset processing flag
 		return
 	
 	if line.has("location"):
@@ -212,16 +260,17 @@ func process_current_line():
 			
 			if character_to_replace_enum != -1 and new_character_enum != -1:
 				var animation = line.get("animation", "idle")
-				character.replace_character(character_to_replace_enum, new_character_enum, animation)
+				await character.replace_character(character_to_replace_enum, new_character_enum, animation)
 		elif line.has("replace_character") and line.has("new_character"):
 			var character_to_replace_enum = Character.get_enum_from_string(line["replace_character"])
 			var new_character_enum = Character.get_enum_from_string(line["new_character"])
 			
 			if character_to_replace_enum != -1 and new_character_enum != -1:
 				var animation = line.get("animation", "idle")
-				character.replace_character(character_to_replace_enum, new_character_enum, animation)
+				await character.replace_character(character_to_replace_enum, new_character_enum, animation)
 		
 		dialogue_ui.display_choices(line["choices"])
+		processing_line = false  # Reset processing flag after choices are displayed
 	else:
 		waiting_for_choice = false
 		print("Processing line: ", dialogue_index, " - ", line)
@@ -233,7 +282,7 @@ func process_current_line():
 			var show_only_char = line["show_only"]
 			var show_only_enum = Character.get_enum_from_string(show_only_char)
 			if show_only_enum != -1:
-				character.show_only_character(show_only_enum, animation)
+				await character.show_only_character(show_only_enum, animation)
 			else:
 				push_warning("Unknown character in show_only: " + show_only_char)
 
@@ -261,15 +310,18 @@ func process_current_line():
 						var replace_enum = Character.get_enum_from_string(line["replace_character"])
 						if replace_enum != -1:
 							print("Replacing ", line["replace_character"], " with ", line["speaker"])
-							character.replace_character(replace_enum, character_enum, animation)
+							await character.replace_character(replace_enum, character_enum, animation)
 						else:
-							character.show_speaker(character_enum, animation)
+							await character.show_speaker(character_enum, animation)
 					else:
-						character.show_speaker(character_enum, animation)
+						await character.show_speaker(character_enum, animation)
 			else:
 				push_warning("Unknown character name in dialogue: " + line["speaker"])
 
 		dialogue_ui.change_line(line["speaker"], line["text"])
+		
+		# NEW: Reset processing flag after all animations are complete
+		processing_line = false
 
 func get_anchor_position(anchor: String) -> int:
 	for i in range(DialogueLines.size()):
@@ -281,6 +333,9 @@ func get_anchor_position(anchor: String) -> int:
 
 func _on_choice_selected(anchor: String):
 	waiting_for_choice = false
+	processing_line = false  # NEW: Reset processing flag when choice is selected
+	if dialogue_ui:
+		dialogue_ui.force_hide_for_animation()
 	var anchor_pos = get_anchor_position(anchor)
 	if anchor_pos != -1:
 		dialogue_index = anchor_pos

@@ -5,6 +5,8 @@ signal choice_selected
 @onready var SpeakerName = %SpeakerName
 @onready var SpeakerBox = %SpeakerBox
 @onready var choice_list = %Choiceslist
+
+var is_narration: bool = false
 const ANIMATION_SPEED : int = 30
 var animate_text : bool = false
 var current_visible_characters : int = 0
@@ -24,12 +26,20 @@ func _process(delta: float) -> void:
 			animate_text = false	
 
 func change_line(speaker: String, line: String):
+	is_narration = (speaker == "Narration")
 	SpeakerName.text = speaker
 	current_visible_characters = 0
 	DialogueLines.text = line
 	DialogueLines.visible_characters = 0
 	animate_text = true
-	# Make sure dialogue is visible when changing lines
+	
+	if is_narration:
+		hide_speaker_box()
+		hide_speaker_name()
+	else:
+		show_speaker_box()
+		show_speaker_name()
+	
 	DialogueLines.show()
 	
 func skip_animation_text():
@@ -84,3 +94,8 @@ func hide_all_ui():
 func show_all_ui():
 	show_speaker_box()
 	show_speaker_name()
+	
+func force_hide_for_animation():
+	if is_narration:
+		hide_speaker_box()
+		hide_speaker_name()

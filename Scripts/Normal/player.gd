@@ -10,6 +10,8 @@ const MAX_MOVE_CLICKS := 2
 var current_tile: Vector2i
 var pathfinder: PathFinder
 
+var is_player_controlled: bool = false
+var movement_grid_active: bool = false
 # JSON Movement System Variables
 var scripted_move_path: Array[Vector2i] = []
 var scripted_move_speed: float = 100.0
@@ -41,7 +43,6 @@ func _physics_process(delta):
 	# Handle regular player movement
 	if state == PlayerState.MOVING and move_path.size() > 0:
 		var next_tile = move_path[0]
-		var tile_size = tile_map.tile_set.tile_size
 		var next_pos = tile_map.map_to_local(next_tile)
 		var direction = (next_pos - global_position).normalized()
 		velocity = direction * move_speed
@@ -56,11 +57,18 @@ func _physics_process(delta):
 				velocity = Vector2.ZERO
 				anim.play("idle")
 				move_overlay.clear()
-				command_menu.open()
-	else:
-		velocity = Vector2.ZERO
-		move_and_slide()
+				if is_player_controlled:
+					command_menu.open()
 
+func enable_player_control():
+	is_player_controlled = true
+	movement_grid_active = true
+	show_movement_range()
+
+func disable_player_control():
+	is_player_controlled = false
+	movement_grid_active = false
+	move_overlay.clear()
 # JSON Movement System - Required Methods
 func start_movement(path: Array, duration: float = 1.0):
 	"""Start scripted movement from JSON dialogue system"""
@@ -179,17 +187,40 @@ func _unhandled_input(event):
 				anim.play("walk")
 				move_overlay.clear()
 
-func _on_move_selected():
+func _on_move_selected(player_name: String):
 	if battlemap.selected_player != self:
 		return
+	
 	if move_clicks < MAX_MOVE_CLICKS:
 		state = PlayerState.MOVING
+		is_player_controlled = true
+		movement_grid_active = true
 		show_movement_range()
 		command_menu.close()
 		move_clicks += 1
 		if move_clicks >= MAX_MOVE_CLICKS:
 			command_menu.disable_move_button()
 
+# In player.gd:
+
+func handle_movement_click(tile_pos: Vector2i):
+	if state != PlayerState.MOVING and is_player_controlled:
+		var path = []
+		for p in pathfinder.find_path(current_tile, tile_pos):
+			path.append(Vector2i(p))
+		
+		if path.size() > 0:
+			move_path = path
+			state = PlayerState.MOVING
+			anim.play("walk")
+			
+			# Hide movement grid
+			get_parent().tile_map.hide_movement_grid()
+			
+			# Disconnect this handler
+			if get_parent().tile_map.tile_clicked.is_connected(handle_movement_click):
+				get_parent().tile_map.tile_clicked.disconnect(handle_movement_click)
+			
 func _on_end_turn_selected():
 	if battlemap.selected_player != self:
 		return

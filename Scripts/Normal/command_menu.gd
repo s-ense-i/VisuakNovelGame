@@ -1,10 +1,14 @@
 extends CanvasLayer
 
-signal move_selected
+signal move_selected(player_name: String)
+signal attack_selected(player_name: String)
 signal end_turn_selected
 
 @onready var move_button = $Panel/VBoxContainer/Move
 @onready var end_turn_button = $"Panel/VBoxContainer/End Turn"
+@onready var attack_button = $Panel/VBoxContainer/Attack
+
+var current_player_name: String = ""
 
 func _ready():
 	visible = false
@@ -14,11 +18,19 @@ func _ready():
 
 func _on_move_pressed():
 	visible = false
-	move_selected.emit()
+	move_selected.emit(current_player_name)
 
+func _on_attack_pressed():
+	visible = false
+	attack_selected.emit(current_player_name)
+	
 func _on_end_turn_pressed():
 	visible = false
 	end_turn_selected.emit()
+
+func show_for_player(player_name: String):
+	current_player_name = player_name
+	visible = true
 
 func open():
 	visible = true

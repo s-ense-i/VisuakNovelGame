@@ -285,18 +285,13 @@
 	"animation": "SmilingClosed",
   },
 {
-	"move_start": {
-		"character": "player3",
-		"path": [[8,3],[7,3], [6,3], [5,3]],
-		"duration": 1.5,
-		"wait": true
-	}
+	"speaker": "fujiwara",
+	"text": "Protagonist, it's your turn!",},
+{	
+	"PlayerMovement": "protagonist",
+	"fight_scene": "res://Scenes/Fights/attackp.tscn",
 },
 
-{
-	"fight": "yatufusta",
-	"fight_scene": "res://Scenes/Fights/attackp.tscn"
-  },
 {
 	"action": "show_character",
 	"character": ["bird", "pig","yatufusta"]
@@ -319,31 +314,16 @@
 	"text": ": All right, it's my turn. I want to know how powerful Caladrius is, so I'll go and meet him and have a little talk with my fists.",
 	"animation": "SmilingClosed",
   },
-{
-	"move_start": {
-		"character": "player",
-		"path": [[8,1],[7,1], [6,1]],
-		"duration": 1.5,
-		"wait": true
-	}
-},
+
 {
 	"speaker": "fujiwara",
 	"text": "Damn it! I can't reach this bird!",
 	"animation": "DisinterestedBuddy",
   },
-{
-	"move_start": {
-		"character": "player2",
-		"path": [[8,5],[7,5],[5,1]],
-		"duration": 1.5,
-		"wait": true
-	}
+{	
+	"PlayerMovement": "Player1",
+	"fight_scene": "res://Scenes/Fights/attackk.tscn",
 },
-{
-	"fight": "pig",
-	"fight_scene": "res://Scenes/Fights/attackk.tscn"
-  },
 {
 	"action": "show_character",
 	"character": ["bird", "pig"]
